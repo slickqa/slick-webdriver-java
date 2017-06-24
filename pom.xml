@@ -5,7 +5,7 @@
     <groupId>com.slickqa</groupId>
     <artifactId>slick-webdriver-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-1</version>
     <name>Slick Webdriver wrapper for Java</name>
 
     <url>http://github.com/slickqa/slick-webdriver-java</url>

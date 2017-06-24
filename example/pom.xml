@@ -5,7 +5,7 @@
     <groupId>com.slickqa.webdriver</groupId>
     <artifactId>example</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-1</version>
     <name>Example of how to use com.slickqa:slick-webdriver-java</name>
 
     <licenses>
