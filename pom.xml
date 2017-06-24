@@ -6,7 +6,8 @@
     <artifactId>slick-webdriver-java</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-1</version>
-    <name>Slick Webdriver wrapper for Java</name>
+    <name>Slick Webdriver for Java</name>
+    <description>This is a wrapper and utilities for using webdriver / selenium in Java.</description>
 
     <url>http://github.com/slickqa/slick-webdriver-java</url>
     <issueManagement>
