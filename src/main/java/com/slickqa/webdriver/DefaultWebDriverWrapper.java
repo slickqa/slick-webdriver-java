@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
@@ -729,7 +730,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         logger.debug("Saving current page HTML source, output file will be {}", src_file.getAbsolutePath());
 
         try {
-            FileUtils.writeStringToFile(src_file, getPageSource());
+            FileUtils.writeStringToFile(src_file, getPageSource(), Charset.defaultCharset());
         } catch (IOException ex) {
             logger.error("Unable to save the current page HTML source to the file '" + src_file.getAbsolutePath() + "': ", ex);
         }
