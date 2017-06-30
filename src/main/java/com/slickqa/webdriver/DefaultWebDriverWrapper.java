@@ -52,15 +52,20 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 return driver;
             } else if (caps.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())) {
                 if (caps.getPlatform() == Platform.WINDOWS) {
+                    DesiredCapabilities createCaps = DesiredCapabilities.firefox();
+                    createCaps.setAcceptInsecureCerts(true);
                     FirefoxProfile profile = new FirefoxProfile();
                     profile.setPreference("app.update.auto", false);
-
-                    return new FirefoxDriver(profile);
+                    createCaps.setCapability(FirefoxDriver.PROFILE, profile);
+                    return new FirefoxDriver(createCaps);
                 } else {
+                    DesiredCapabilities createCaps = DesiredCapabilities.firefox();
+                    createCaps.setAcceptInsecureCerts(true);
                     FirefoxProfile profile = new FirefoxProfile();
                     profile.setPreference("app.update.auto", false);
                     profile.setAssumeUntrustedCertificateIssuer(false);
-                    return new FirefoxDriver(profile);
+                    profile.setPreference("app.update.auto", false);
+                    return new FirefoxDriver(createCaps);
                 }
             } else if (caps.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())) {
                 return new InternetExplorerDriver();
