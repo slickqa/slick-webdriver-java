@@ -343,6 +343,23 @@ public interface WebDriverWrapper
 	void waitFor(Class<? extends SelfAwarePage> page, int timeout);
 
 	/**
+	 * Wait the default timeout for page to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
+	 * method.
+	 *
+	 * @param page an instance of the page SelfAwarePage
+	 */
+	void waitFor(SelfAwarePage page);
+
+	/**
+	 * Wait a max of the provided timeout for page to exist.  Page provided must implement the SelfAwarePage's
+	 * isCurrentPage method.
+	 *
+	 * @param page an instance of the page SelfAwarePage
+	 * @param timeout The amount of time (in seconds) to wait for the page to exist.
+	 */
+	void waitFor(SelfAwarePage page, int timeout);
+
+	/**
 	 * Wait for an element to exist a max of the default timeout.
 	 *
 	 * @param element The element to wait for.
@@ -645,4 +662,17 @@ public interface WebDriverWrapper
      * @return an instance of the page initialized with the browser object.
      */
     <T extends PageWithActions> T on(Class<T> page);
+
+	/**
+	 * Use actions on a PageWithActions.  Basically any instance of a class (page) that implements the interface
+	 * PageWithActions.  We will call the initializePage method on the page instance. Example would look like
+	 * this:
+	 * <code>
+	 *     browser.on(MyExamplePage).doSomething("interesting");
+	 * </code>
+	 *
+	 * @param page an instance of the page.
+	 * @return Class the class of the instantiated page
+	 */
+	<T extends PageWithActions> T on (T page);
 }

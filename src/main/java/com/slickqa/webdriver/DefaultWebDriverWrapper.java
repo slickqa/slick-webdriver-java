@@ -387,24 +387,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         logger.debug("Waiting for page '{}' a max of {} seconds.", page.getName(), p_timeout);
         try {
             SelfAwarePage page_instance = page.newInstance();
-            Date start_time = new Date();
-            Calendar end_time = Calendar.getInstance();
-            end_time.add(Calendar.SECOND, p_timeout);
-            while (Calendar.getInstance().before(end_time) && !page_instance.isCurrentPage(this)) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException ex) {
-                }
-            }
-            if (!page_instance.isCurrentPage(this)) {
-                logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getName(), p_timeout);
-                logger.error("Current page URL: {}", driver.getCurrentUrl());
-                logger.error("Current page title: {}", driver.getTitle());
-                saveHTMLSource();
-                takeScreenShot();
-                throw new NoSuchElementException("Couldn't find page '" + page.getName() + "' after " + p_timeout + " seconds.");
-            }
-            logger.info("Found page '{}' after {} seconds.", page.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+            waitFor(page_instance, p_timeout);
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
@@ -413,6 +396,32 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
         }
     }
+
+    @Override
+    public void waitFor(SelfAwarePage page) { waitFor(page, timeout); }
+
+    @Override
+    public void waitFor(SelfAwarePage page, int p_timeout) {
+        Date start_time = new Date();
+        Calendar end_time = Calendar.getInstance();
+        end_time.add(Calendar.SECOND, p_timeout);
+        while (Calendar.getInstance().before(end_time) && !page.isCurrentPage(this)) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ex) {
+            }
+        }
+        if (!page.isCurrentPage(this)) {
+            logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getClass().getName(), p_timeout);
+            logger.error("Current page URL: {}", driver.getCurrentUrl());
+            logger.error("Current page title: {}", driver.getTitle());
+            saveHTMLSource();
+            takeScreenShot();
+            throw new NoSuchElementException("Couldn't find page '" + page.getClass().getName() + "' after " + p_timeout + " seconds.");
+        }
+        logger.info("Found page '{}' after {} seconds.", page.getClass().getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+    }
+
 
     @Override
     public <T> void handlePage(Class<? extends SelfAwarePage<T>> page, T context) throws Exception {
@@ -908,6 +917,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
         try {
             PageWithActions page_instance = page.newInstance();
+            logger.info("Calling initializePage for page '{}'.", page.getName());
             page_instance.initializePage(this);
             logger.info("Returning instance of page '{}'.", page.getName());
             return (T) page_instance;
@@ -918,5 +928,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
         }
+    }
+
+    @Override
+    public <T extends PageWithActions> T on (T page) {
+        logger.info("Calling initializePage for page '{}'.", page.getClass().getName());
+        page.initializePage(this);
+        return (T) page;
     }
 }
