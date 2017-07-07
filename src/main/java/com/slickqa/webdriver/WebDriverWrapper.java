@@ -50,6 +50,22 @@ public interface WebDriverWrapper
 	 */
 	void click(PageElement locator, int timeout);
 
+
+	/**
+	 * Click on a hidden web page element, waiting a maximum of the default timeout for the element to exist.
+	 *
+	 * @param locator The page element instance that describes how to find the element to click.
+	 */
+	void clickHiddenElement(PageElement locator);
+
+	/**
+	 * Click on a hidden web page element, waiting a maximum of the amount of time passed in for the element to exist.
+	 *
+	 * @param locator The hiddent page element instance that describes how to find the element to click.
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void clickHiddenElement(PageElement locator, int timeout);
+
 	/**
 	 * Double click on a web page element, waiting a maximum of the default timeout for the element to exist.
 	 *
