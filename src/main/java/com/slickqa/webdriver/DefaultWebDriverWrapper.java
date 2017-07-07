@@ -24,6 +24,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
@@ -78,6 +79,8 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 PhantomJSDriver driver = new PhantomJSDriver(phantomcaps);
                 driver.manage().window().setSize(new Dimension(1920, 1080));
                 return driver;
+            } else if (caps.getBrowserName().equals(DesiredCapabilities.safari().getBrowserName())) {
+                return new SafariDriver();
             } else {
                 return new FirefoxDriver();
             }
@@ -177,6 +180,21 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 logger.warn("Got a stale element exception trying to click, retrying.", e);
             }
         }
+    }
+
+    @Override
+    public void clickHiddenElement(PageElement locator) {
+        clickHiddenElement(locator, timeout);
+    }
+
+    @Override
+    public void clickHiddenElement(PageElement locator, int p_timeout) {
+        logger.debug("Clicking on hidden element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        WebDriver webDriver = getDriver();
+        By findByMethod = locator.getFinder();
+        WebElement element = webDriver.findElement(findByMethod);
+        JavascriptExecutor executor = (JavascriptExecutor)webDriver;
+        executor.executeScript("arguments[0].click()", element);
     }
 
     @Override
