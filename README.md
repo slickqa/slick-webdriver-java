@@ -14,6 +14,9 @@ INTERFACES
 >
 >
 CLASSES
+> -DefaultWebDriverWrapper
+> - Wraps WebDriver to provide some easier to use functionality.  For instance methods that interact with elements (i.e. click) will first wait for the element to exist and then click on it.  It will also provide logging on each action performed.
+>
 > -PageElement
 > - Provides a nice way to encapsulate webdriver functionality for locating elements on a Page.  Allows your Page class to have a line like this:
 > - public static PageElement textResultStats = new PageElement("Results Statistics", FindBy.id("resultStats"));
