@@ -1,9 +1,8 @@
 package com.slickqa.webdriver;
 
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 /**
  *
@@ -11,7 +10,7 @@ import org.slf4j.ext.XLoggerFactory;
  */
 public class CapabilitiesFactory
 {
-	private static XLogger logger = XLoggerFactory.getXLogger("test." + CapabilitiesFactory.class.getName());
+	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("test." + CapabilitiesFactory.class.getName());
 
 	public static DesiredCapabilities getCapabilitiesFor(String browserName, String remoteUrl)
 	{

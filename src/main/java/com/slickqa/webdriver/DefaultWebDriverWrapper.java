@@ -26,9 +26,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
-import org.slf4j.helpers.MessageFormatter;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -39,7 +37,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     private WebDriver driver;
     private Capabilities driver_capabilities;
     private int timeout;
-    private static XLogger logger = XLoggerFactory.getXLogger("test." + DefaultWebDriverWrapper.class.getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("test." + DefaultWebDriverWrapper.class.getName());
     private int screenshot_counter;
     private int htmlsource_counter;
     private static String original_browser_window_handle = "";
@@ -527,7 +525,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             }
         }
         if (!wdelement.isDisplayed()) {
-            throw new ElementNotVisibleException(MessageFormatter.format("Waited {} seconds for element {} found by {} to become visible, and it never happened.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()}).getMessage());
+            throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " + element.getFindByDescription() + " to become visible, and it never happened.");
         }
         logger.debug("Element '{}' was found visisble after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
@@ -873,7 +871,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             }
         }
         if (wdelement.isDisplayed()) {
-            throw new ElementNotVisibleException(MessageFormatter.format("Waited {} seconds for element {} found by {} to become invisible, and it never happened.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()}).getMessage());
+            throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " +  element.getName() + "to become invisible, and it never happened.");
         }
 
         logger.debug("Element '{}' was not found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
@@ -901,7 +899,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             }
         }
         if (element.exists(driver, 1)) {
-            throw new NoSuchElementException(MessageFormatter.format("Waited {} seconds for element {} found by {} to no longer exist, and it never happened.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()}).getMessage());
+            throw new NoSuchElementException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " + element.getFindByDescription() + " to no longer exist, and it never happened.");
         }
 
         logger.debug("Element '{}' no longer exists after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
