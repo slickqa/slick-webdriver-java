@@ -1,10 +1,9 @@
 package com.slickqa.webdriver;
 
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 /**
  *
@@ -16,7 +15,7 @@ public class FrameContainer implements WebContainer
 	private String frameId = null;
 	private PageElement framePageElement;
 	private boolean noFrameId = false;
-	private static XLogger logger = XLoggerFactory.getXLogger("test." + FrameContainer.class.getName());
+	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("test." + FrameContainer.class.getName());
 
 	public FrameContainer(String frameId)
 	{

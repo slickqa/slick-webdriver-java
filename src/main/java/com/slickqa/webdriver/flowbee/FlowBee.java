@@ -2,8 +2,7 @@ package com.slickqa.webdriver.flowbee;
 
 import com.slickqa.webdriver.SelfAwarePage;
 import com.slickqa.webdriver.WebDriverWrapper;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +16,7 @@ import java.util.Iterator;
 public class FlowBee {
 
     private WebDriverWrapper m_browser;
-    private static XLogger logger = XLoggerFactory.getXLogger("test." + FlowBee.class.getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(FlowBee.class);
 
     public FlowBee(WebDriverWrapper p_browser) {
         m_browser = p_browser;
