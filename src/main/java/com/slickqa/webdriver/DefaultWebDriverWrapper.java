@@ -122,7 +122,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
             saveHTMLSource();
-            takeScreenShot();
+            takeScreenShot("no-such-element");
             throw ex;
         }
         return element;
@@ -148,12 +148,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     public void setCheckboxState(PageElement locator, boolean checked, int p_timeout) {
         WebElement element = getElement(locator, p_timeout);
         if (checked) {
-            logger.debug("setting checkbox element state to true with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+            logger.info("setting checkbox element state to true with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
             if (!element.isSelected()) {
                 element.click();
             }
         } else {
-            logger.debug("setting checkbox element state to false with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+            logger.info("setting checkbox element state to false with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
             if (element.isSelected()) {
                 element.click();
             }
@@ -167,7 +167,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void click(PageElement locator, int p_timeout) {
-        logger.debug("Clicking on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Clicking on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         //waitForVisible(locator);
 
         for(int tries = 0; tries < 3; tries++) {
@@ -187,7 +187,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void clickHiddenElement(PageElement locator, int p_timeout) {
-        logger.debug("Clicking on hidden element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Clicking on hidden element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         WebDriver webDriver = getDriver();
         By findByMethod = locator.getFinder();
         WebElement element = webDriver.findElement(findByMethod);
@@ -203,7 +203,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     @Override
     public void doubleClick(PageElement locator, int p_timeout) {
         WebElement element = getElement(locator, p_timeout);
-        logger.debug("Double clicking element '{}' located by '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Double clicking element '{}' located by '{}'.", locator.getName(), locator.getFindByDescription());
         /*
          Actions builder = new Actions(driver);
          Action dblclick = builder.doubleClick(element).build();
@@ -243,7 +243,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void clear(PageElement locator, int p_timeout) {
-        logger.debug("Clearing the text from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Clearing the text from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         getElement(locator, p_timeout).clear();
     }
 
@@ -254,7 +254,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void submit(PageElement locator, int p_timeout) {
-        logger.debug("Submitting an element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Submitting an element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         getElement(locator, p_timeout).submit();
     }
 
@@ -262,7 +262,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     public void type(PageElement locator, String text, int p_timeout, boolean should_log) {
         clear(locator, p_timeout);
         if (should_log == true) {
-            logger.debug("Typing text '{}' in element with name '{}' and found '{}'.", new Object[]{
+            logger.info("Typing text '{}' in element with name '{}' and found '{}'.", new Object[]{
                         text, locator.getName(), locator.getFindByDescription()
                     });
         }
@@ -286,7 +286,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public String getText(PageElement locator) {
-        logger.debug("Getting text from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Getting text from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         return getText(locator, timeout);
     }
 
@@ -297,7 +297,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void setSelected(PageElement locator, int p_timeout) {
-        logger.debug("Setting selected element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Setting selected element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         WebElement element = getElement(locator, p_timeout);
         if (!element.isSelected()) {
             element.click();
@@ -311,7 +311,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean isSelected(PageElement locator, int p_timeout) {
-        logger.debug("Checking if is selected element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Checking if is selected element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         return getElement(locator, p_timeout).isSelected();
     }
 
@@ -327,7 +327,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public String getAttribute(PageElement locator, int p_timeout, String attribute) {
-        logger.debug("Getting attribute '" + attribute + "' from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Getting attribute '" + attribute + "' from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         return getElement(locator, p_timeout).getAttribute(attribute);
     }
 
@@ -372,19 +372,19 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void goTo(String url) {
-        logger.debug("Going to page '{}'.", url);
+        logger.info("Going to page '{}'.", url);
         driver.get(url);
     }
 
     @Override
     public void goBack() {
-        logger.debug("Going back in the browser.");
+        logger.info("Going back in the browser.");
         driver.navigate().back();
     }
 
     @Override
     public void goForward() {
-        logger.debug("Going forward in the browser.");
+        logger.info("Going forward in the browser.");
         driver.navigate().forward();
     }
 
@@ -400,7 +400,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitFor(Class<? extends SelfAwarePage> page, int p_timeout) {
-        logger.debug("Waiting for page '{}' a max of {} seconds.", page.getName(), p_timeout);
+        logger.info("Waiting for page '{}' a max of {} seconds.", page.getName(), p_timeout);
         try {
             SelfAwarePage page_instance = page.newInstance();
             waitFor(page_instance, p_timeout);
@@ -432,10 +432,10 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
             saveHTMLSource();
-            takeScreenShot();
+            takeScreenShot("page-not-found");
             throw new NoSuchElementException("Couldn't find page '" + page.getClass().getName() + "' after " + p_timeout + " seconds.");
         }
-        logger.info("Found page '{}' after {} seconds.", page.getClass().getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.debug("Found page '{}' after {} seconds.", page.getClass().getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
 
@@ -486,7 +486,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void selectByOptionValue(PageElement selectList, String optionValue, int p_timeout) {
-        logger.debug("Selecting option with value '{}' of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{optionValue, selectList.getName(), selectList.getFinder(), p_timeout});
+        logger.info("Selecting option with value '{}' of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{optionValue, selectList.getName(), selectList.getFinder(), p_timeout});
         Select selectInput = new Select(getElement(selectList, p_timeout));
         selectInput.selectByValue(optionValue);
     }
@@ -498,10 +498,10 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitFor(PageElement element, int p_timeout) {
-        logger.debug("Waiting for element '{}' a max of {} seconds.", element.getName(), p_timeout);
+        logger.info("Waiting for element '{}' a max of {} seconds.", element.getName(), p_timeout);
         Date start_time = new Date();
         getElement(element, p_timeout);
-        logger.info("Found element '{}' after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.debug("Found element '{}' after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
@@ -511,17 +511,17 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitForVisible(PageElement element, int p_timeout) {
-        logger.debug("Waiting a max of {} seconds for element '{}' found by {} to become visible.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        logger.info("Waiting a max of {} seconds for element '{}' found by {} to become visible.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
         Calendar end_time = Calendar.getInstance();
         Date start_time = end_time.getTime();
         end_time.add(Calendar.SECOND, p_timeout);
         WebElement wdelement = getElement(element, p_timeout);
-        logger.debug("Found element '{}' after {} seconds, waiting for it to become visible.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.info("Found element '{}' after {} seconds, waiting for it to become visible.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
         while (!wdelement.isDisplayed() && (Calendar.getInstance().before(end_time))) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
-                logger.debug("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
+                logger.warn("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
             }
         }
         if (!wdelement.isDisplayed()) {
@@ -545,15 +545,15 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean exists(Class<? extends SelfAwarePage> page) {
-        logger.debug("Checking for existence of page '{}'.", page.getName());
+        logger.info("Checking for existence of page '{}'.", page.getName());
 
         try {
             SelfAwarePage page_instance = page.newInstance();
             if (!page_instance.isCurrentPage(this)) {
-                logger.debug("Checked for page '{}' , but it does not exist.", page.getName());
+                logger.info("Checked for page '{}' , but it does not exist.", page.getName());
                 return false;
             }
-            logger.info("Found page '{}'.", page.getName());
+            logger.debug("Found page '{}'.", page.getName());
             return true;
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
@@ -566,19 +566,19 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public String getWindowHandle() {
-        logger.debug("Getting current browser window handle");
+        logger.info("Getting current browser window handle");
         return driver.getWindowHandle();
     }
 
     @Override
     public Set<String> getWindowHandles() {
-        logger.debug("Getting all browser window handles");
+        logger.info("Getting all browser window handles");
         return driver.getWindowHandles();
     }
 
     @Override
     public void switchToWindowByHandle(String windowHandle) {
-        logger.debug("Switching to the window with handle '{}'.", windowHandle);
+        logger.info("Switching to the window with handle '{}'.", windowHandle);
         driver.switchTo().window(windowHandle);
     }
 
@@ -592,7 +592,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.SECOND, p_timeout);
         String switchToHandle = "";
-        logger.debug("Looking for the window with the URL containing '{}'.", partialWindowURL);
+        logger.info("Looking for the window with the URL containing '{}'.", partialWindowURL);
 
         while (true) {
             if (Calendar.getInstance().after(endTime)) {
@@ -637,7 +637,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.SECOND, p_timeout);
         String switchToHandle = "";
-        logger.debug("Looking for the window with the URL matching '{}'.", windowURL);
+        logger.info("Looking for the window with the URL matching '{}'.", windowURL);
 
         while (true) {
             if (Calendar.getInstance().after(endTime)) {
@@ -674,13 +674,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void closeWindow() {
-        logger.debug("Closing current browser window");
+        logger.info("Closing current browser window");
         driver.close();
     }
 
     @Override
     public void closeWindow(String windowHandle) {
-        logger.debug("Closing the the window with handle '{}'.", windowHandle);
+        logger.info("Closing the the window with handle '{}'.", windowHandle);
         switchToWindowByHandle(windowHandle);
         closeWindow();
     }
@@ -702,9 +702,9 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             elementVisible = wdelement.isDisplayed();
 
             if (elementVisible) {
-                logger.debug("Found visible element with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
+                logger.info("Found visible element with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
             } else {
-                logger.debug("Element was NOT VISIBLE with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
+                logger.info("Element was NOT VISIBLE with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
             }
         } else {
             elementVisible = false;
@@ -823,7 +823,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public String getFirstSelectOptionText(PageElement selectList, int p_timeout) {
-        logger.debug("Getting first selected option as text from of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{selectList.getName(), selectList.getFinder(), p_timeout});
+        logger.info("Getting first selected option as text from of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{selectList.getName(), selectList.getFinder(), p_timeout});
         Select selectInput = new Select(getElement(selectList, p_timeout));
         return selectInput.getFirstSelectedOption().getText();
     }
@@ -836,7 +836,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     @Override
     public void hover(PageElement locator, int p_timeout) {
         WebElement element = getElement(locator, p_timeout);
-        logger.debug("Hovering mouse over element '{}' located by '{}'.", locator.getName(), locator.getFindByDescription());
+        logger.info("Hovering mouse over element '{}' located by '{}'.", locator.getName(), locator.getFindByDescription());
         Actions builder = new Actions(driver);
         Action hover = builder.moveToElement(element, 2, 2).build();
         hover.perform();
@@ -849,7 +849,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitForNotVisible(PageElement element, int p_timeout) {
-        logger.debug("Waiting a max of {} seconds for element '{}' found by {} to become invisible.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        logger.info("Waiting a max of {} seconds for element '{}' found by {} to become invisible.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
 
         Calendar end_time = Calendar.getInstance();
         Date start_time = end_time.getTime();
@@ -865,7 +865,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    logger.debug("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
+                    logger.error("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
                 }
             } catch (StaleElementReferenceException e) {
             }
@@ -874,7 +874,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " +  element.getName() + "to become invisible, and it never happened.");
         }
 
-        logger.debug("Element '{}' was not found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.info("Element '{}' was not found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
@@ -884,18 +884,18 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitForDoesNotExist(PageElement element, int p_timeout) {
-        logger.debug("Waiting a max of {} seconds for element '{}' found by {} to no longer exist.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        logger.info("Waiting a max of {} seconds for element '{}' found by {} to no longer exist.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
 
         Calendar end_time = Calendar.getInstance();
         Date start_time = end_time.getTime();
         end_time.add(Calendar.SECOND, p_timeout);
-        logger.debug("Waiting for element '{}' to no longer exist.", element.getName());
+        logger.info("Waiting for element '{}' to no longer exist.", element.getName());
 
         while (element.exists(driver, 0) && (Calendar.getInstance().before(end_time))) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
-                logger.debug("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
+                logger.error("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
             }
         }
         if (element.exists(driver, 1)) {
@@ -912,14 +912,14 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void waitForTextNotEmpty(PageElement element, int p_timeout) {
-        logger.debug("Waiting a maximum of {} seconds for element '{}' found by {} to exist and for it's text to be not empty.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        logger.info("Waiting a maximum of {} seconds for element '{}' found by {} to exist and for it's text to be not empty.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
         Date beginning = new Date();
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.SECOND, p_timeout);
         do {
             String elementText = getText(element, p_timeout);
             if (elementText != null && !elementText.isEmpty()) {
-                logger.info("Found element '{}' with text '{}' after {} seconds.", new Object[]{element.getName(), elementText, (((new Date()).getTime() - beginning.getTime()) / 1000)});
+                logger.debug("Found element '{}' with text '{}' after {} seconds.", new Object[]{element.getName(), elementText, (((new Date()).getTime() - beginning.getTime()) / 1000)});
                 return;
             }
         } while (Calendar.getInstance().before(endTime));
@@ -929,7 +929,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public <T extends PageWithActions> T on(Class<T> page) {
-        logger.debug("Creating instance of page '{}'.", page.getName());
+        logger.info("Creating instance of page '{}'.", page.getName());
 
         try {
             PageWithActions page_instance = page.newInstance();
