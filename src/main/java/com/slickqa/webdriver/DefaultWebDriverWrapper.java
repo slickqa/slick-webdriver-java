@@ -121,7 +121,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             logger.error("Element with name {} and found {} was not found after {} seconds.", locator.getName(), locator.getFindByDescription(), p_timeout);
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
-            saveHTMLSource();
+            saveHTMLSource("no-such-element");
             takeScreenShot("no-such-element");
             throw ex;
         }
@@ -431,7 +431,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getClass().getName(), p_timeout);
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
-            saveHTMLSource();
+            saveHTMLSource("page-not-found");
             takeScreenShot("page-not-found");
             throw new NoSuchElementException("Couldn't find page '" + page.getClass().getName() + "' after " + p_timeout + " seconds.");
         }
