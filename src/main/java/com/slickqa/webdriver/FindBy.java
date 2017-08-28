@@ -71,7 +71,7 @@ public abstract class FindBy extends By
 	    return new FindByHrefContains(hrefContainsValue);
 	}
 
-        /**
+	/**
 	 * Find an input by it's value.  This must match exactly.
 	 *
 	 * @param valueText The exact value of the value attribute.

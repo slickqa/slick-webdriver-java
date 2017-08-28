@@ -2,6 +2,8 @@ package com.slickqa.webdriver;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
@@ -27,29 +29,48 @@ public class PageElement
     private WebContainer container;
     private WebElement cache;
     private Date lastCacheSave;
+    private int elementIndex = -1;
 
     public PageElement(String name, WebContainer container, By finder) {
         this.name = name;
         this.container = container;
         this.finder = finder;
-	this.cache = null;
-	this.lastCacheSave = null;
+	    this.cache = null;
+	    this.lastCacheSave = null;
     }
 
     public PageElement(String name, By finder) {
         this.name = name;
         this.finder = finder;
         this.container = null;
-	this.cache = null;
-	this.lastCacheSave = null;
+	    this.cache = null;
+	    this.lastCacheSave = null;
+    }
+
+    public PageElement(String name, By finder, int elementIndex) {
+        this.name = name;
+        this.finder = finder;
+        this.container = null;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.elementIndex = elementIndex;
     }
 
     public PageElement(By finder) {
         name = finder.toString();
         this.finder = finder;
         this.container = null;
-	this.cache = null;
-	this.lastCacheSave = null;
+	    this.cache = null;
+	    this.lastCacheSave = null;
+    }
+
+    public PageElement(By finder, int elementIndex) {
+        name = finder.toString();
+        this.finder = finder;
+        this.container = null;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.elementIndex = elementIndex;
     }
 
 	/**
@@ -65,7 +86,9 @@ public class PageElement
 			this.container = null;
 			this.cache = element;
 			this.lastCacheSave = null;
-	}
+            this.elementIndex = -1;
+
+    }
 
     public By getFinder() {
         return finder;
@@ -99,7 +122,18 @@ public class PageElement
         do {
             try {
                 if (container == null) {
-                    element = browser.findElement(finder);
+                    if (elementIndex == -1) {
+                        element = browser.findElement(finder);
+                    }
+                    else {
+                        List<WebElement> elements = browser.findElements(finder);
+                        if (elements.size() != (elementIndex + 1)) {
+                            element = null;
+                        }
+                        else {
+                            element = elements.get(elementIndex);
+                        }
+                    }
                 } else {
                     element = container.findElement(browser, this);
                 }
@@ -128,7 +162,12 @@ public class PageElement
         } while (Calendar.getInstance().before(endTime) && element == null);
 
         if (element == null) {
-            throw new NoSuchElementException("Was unable to find element " + getName() + ", to be found by " + getFindByDescription());
+            if (elementIndex == -1) {
+                throw new NoSuchElementException("Was unable to find element " + getName() + ", to be found by " + getFindByDescription());
+            }
+            else {
+                throw new NoSuchElementException("Was unable to find element " + getName() + ", to be found by " + getFindByDescription() + " at index: " + elementIndex);
+            }
         }
 		cache = element;
 		lastCacheSave = new Date();
