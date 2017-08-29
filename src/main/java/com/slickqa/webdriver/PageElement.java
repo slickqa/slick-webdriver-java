@@ -127,7 +127,7 @@ public class PageElement
                     }
                     else {
                         List<WebElement> elements = browser.findElements(finder);
-                        if (elements.size() != (elementIndex + 1)) {
+                        if (elements.size() < (elementIndex + 1)) {
                             element = null;
                         }
                         else {
