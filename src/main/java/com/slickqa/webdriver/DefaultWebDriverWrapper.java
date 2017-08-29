@@ -438,12 +438,52 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         logger.debug("Found page '{}' after {} seconds.", page.getClass().getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
+    @Override
+    public void waitForPage(PageInFlowInterface page) { waitForPage(page, timeout); }
+
+    @Override
+    public void waitForPage(PageInFlowInterface page, int p_timeout) {
+        Date start_time = new Date();
+        Calendar end_time = Calendar.getInstance();
+        end_time.add(Calendar.SECOND, p_timeout);
+        page.setBrowserWrapper(this);
+        while (Calendar.getInstance().before(end_time) && !page.isCurrentPage()) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ex) {
+            }
+        }
+        if (!page.isCurrentPage()) {
+            logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getClass().getName(), p_timeout);
+            logger.error("Current page URL: {}", driver.getCurrentUrl());
+            logger.error("Current page title: {}", driver.getTitle());
+            saveHTMLSource("page-not-found");
+            takeScreenShot("page-not-found");
+            throw new NoSuchElementException("Couldn't find page '" + page.getClass().getName() + "' after " + p_timeout + " seconds.");
+        }
+        logger.debug("Found page '{}' after {} seconds.", page.getClass().getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+    }
+
 
     @Override
     public <T> void handlePage(Class<? extends SelfAwarePage<T>> page, T context) throws Exception {
         try {
             SelfAwarePage<T> page_instance = page.newInstance();
             page_instance.handlePage(this, context);
+        } catch (InstantiationException ex) {
+            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
+            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
+        } catch (IllegalAccessException ex) {
+            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
+            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
+        }
+    }
+
+    @Override
+    public <T> void handlePageInFlow(Class<? extends PageInFlowInterface<T>> page, T context) throws Exception {
+        try {
+            PageInFlowInterface<T> page_instance = page.newInstance();
+            page_instance.handlePage(context);
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
@@ -499,9 +539,6 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     @Override
     public void waitFor(PageElement element, int p_timeout) {
         logger.info("Waiting for element '{}' a max of {} seconds.", element.getName(), p_timeout);
-        Date start_time = new Date();
-        getElement(element, p_timeout);
-        logger.debug("Found element '{}' after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
