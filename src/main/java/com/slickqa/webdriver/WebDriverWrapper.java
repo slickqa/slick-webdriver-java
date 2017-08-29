@@ -1,6 +1,7 @@
 package com.slickqa.webdriver;
 
 import org.openqa.selenium.WebDriver;
+
 import java.util.Set;
 
 /**
@@ -376,6 +377,23 @@ public interface WebDriverWrapper
 	void waitFor(SelfAwarePage page, int timeout);
 
 	/**
+	 * Wait the default timeout for page to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
+	 * method.
+	 *
+	 * @param page an instance of the page SelfAwarePage
+	 */
+	void waitForPage(PageInFlowInterface page);
+
+	/**
+	 * Wait a max of the provided timeout for page to exist.  Page provided must implement the SelfAwarePage's
+	 * isCurrentPage method.
+	 *
+	 * @param page an instance of the page SelfAwarePage
+	 * @param timeout The amount of time (in seconds) to wait for the page to exist.
+	 */
+	void waitForPage(PageInFlowInterface page, int timeout);
+
+	/**
 	 * Wait for an element to exist a max of the default timeout.
 	 *
 	 * @param element The element to wait for.
@@ -442,6 +460,17 @@ public interface WebDriverWrapper
      * @throws Exception if the page's handlePage throws an exception.
 	 */
 	<T> void handlePage(Class<? extends SelfAwarePage<T>> page, T context) throws Exception;
+
+	/**
+	 * "Handle" the page, or call the page's handlePage method, passing in the context object provided.  This usually
+	 * means filling out a form on the page, or clicking a particular link based on information in the context object.
+	 *
+	 * @param page The page to "handle".
+	 * @param context The context object (type determined by the page class)
+	 * @param <T> The type is determined by the page's handlePage method parameter
+	 * @throws Exception if the page's handlePage throws an exception.
+	 */
+	<T> void handlePageInFlow(Class<? extends PageInFlowInterface<T>> page, T context) throws Exception;
 
 	/**
 	 * Check to see if the page that bet browser is on is described by the following self aware page class.
