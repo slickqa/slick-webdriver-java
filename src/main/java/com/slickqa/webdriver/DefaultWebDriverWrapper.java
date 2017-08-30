@@ -160,7 +160,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
      * @param locator The PageElement to use to locate the WebElement
      * @return p_timeout the max time to wait for the WebElement to exist
      */
-    public ArrayList<PageElement> getElements(PageElements locator, int p_timeout) {
+    public ArrayList<PageElement> getElements(PageElement locator, int p_timeout) {
         ArrayList<PageElement> elements;
         try {
             elements = locator.getElements(driver, p_timeout);
@@ -1004,12 +1004,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public ArrayList<PageElement> getPageElements(PageElements locator) {
+    public ArrayList<PageElement> getPageElements(PageElement locator) {
         return getPageElements(locator, timeout);
     }
 
     @Override
-    public ArrayList<PageElement> getPageElements(PageElements locator, int p_timeout) {
+    public ArrayList<PageElement> getPageElements(PageElement locator, int p_timeout) {
         ArrayList<PageElement> elements = new ArrayList<PageElement>();
         logger.info("Finding elements found '{}'.", locator.getFindByDescription());
 
