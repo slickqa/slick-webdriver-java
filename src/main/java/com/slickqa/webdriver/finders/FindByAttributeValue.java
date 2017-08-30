@@ -24,7 +24,7 @@ public class FindByAttributeValue extends AbstractFindByParentBy
 	@Override
 	public String toString()
 	{
-		return String.format("By attribute '%s' with value '%s text '%s'.", attribute, value);
+		return String.format("By attribute '%s' with value '%s.", attribute, value);
 	}
 
 	@Override

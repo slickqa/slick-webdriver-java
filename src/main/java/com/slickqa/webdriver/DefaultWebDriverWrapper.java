@@ -28,6 +28,7 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.logging.log4j.LogManager;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of the WebDriverWrapper interface
@@ -160,8 +161,8 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
      * @param locator The PageElement to use to locate the WebElement
      * @return p_timeout the max time to wait for the WebElement to exist
      */
-    public ArrayList<PageElement> getElements(PageElement locator, int p_timeout) {
-        ArrayList<PageElement> elements;
+    public List<PageElement> getElements(PageElement locator, int p_timeout) {
+        List<PageElement> elements;
         try {
             elements = locator.getElements(driver, p_timeout);
         } catch (NoSuchElementException ex) {
@@ -1004,13 +1005,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public ArrayList<PageElement> getPageElements(PageElement locator) {
+    public List<PageElement> getPageElements(PageElement locator) {
         return getPageElements(locator, timeout);
     }
 
     @Override
-    public ArrayList<PageElement> getPageElements(PageElement locator, int p_timeout) {
-        ArrayList<PageElement> elements = new ArrayList<PageElement>();
+    public List<PageElement> getPageElements(PageElement locator, int p_timeout) {
+        List<PageElement> elements = new ArrayList<PageElement>();
         logger.info("Finding elements found '{}'.", locator.getFindByDescription());
 
         for(int tries = 0; tries < 3; tries++) {
