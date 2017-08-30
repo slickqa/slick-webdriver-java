@@ -2,6 +2,7 @@ package com.slickqa.webdriver;
 
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -54,6 +55,8 @@ public interface WebDriverWrapper
 
 	/**
 	 * Click on a hidden web page element, waiting a maximum of the default timeout for the element to exist.
+	 * Occassionally there are elements that you are unable to access and as a last resort you can use this method.
+	 * It essentially uses a JavaScriptExecutor instance to click on the element.
 	 *
 	 * @param locator The page element instance that describes how to find the element to click.
 	 */
@@ -61,6 +64,8 @@ public interface WebDriverWrapper
 
 	/**
 	 * Click on a hidden web page element, waiting a maximum of the amount of time passed in for the element to exist.
+	 * Occassionally there are elements that you are unable to access and as a last resort you can use this method.
+	 * It essentially uses a JavaScriptExecutor instance to click on the element.
 	 *
 	 * @param locator The hiddent page element instance that describes how to find the element to click.
 	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
@@ -83,47 +88,28 @@ public interface WebDriverWrapper
 	void doubleClick(PageElement locator, int timeout);
 
 	/**
-	 * Submit a web page element, waiting a maximum of the default timeout for the element to exist.
+	 * Submit a web page element (calls the submit method), waiting a maximum of the default timeout for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to submit.
 	 */
 	void submit(PageElement locator);
 
 	/**
-	 * Submit a web page element, waiting a maximum of the amount of time passed in for the element to exist.
+	 * Submit a web page element (calls the submit method), waiting a maximum of the amount of time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to submit.
 	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
 	 */
 	void submit(PageElement locator, int timeout);
 
-	/**
-	 * Type text on an element in a page, waiting a maximum of the amount of time passed in for the element to exist.
-	 *
-	 * @param locator The page element instance that describes how to find the element to type in.
-	 * @param text The text to type.
-	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
-         * @param should_log Whether we should log what we are typing or not
-	 */
-	void type(PageElement locator, String text, int timeout, boolean should_log);
-
     /**
-	 * Type text on an element in a page, waiting a maximum of the amount of time passed in for the element to exist.
+	 * Type text in an element in a page, waiting a maximum of the amount of time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to type in.
 	 * @param text The text to type.
 	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
 	 */
     void type(PageElement locator, String text, int timeout);
-
-    /**
-	 * Type text on an element in a page, waiting a maximum of the default timeout for the element to exist.
-	 *
-	 * @param locator The page element instance that describes how to find the element to type in.
-	 * @param text The text to type.
-     * @param should_log Whether we should log what we are typing or not
-	 */
-	void type(PageElement locator, String text, boolean should_log);
 
 	/**
 	 * Type text on an element in a page, waiting a maximum of the default timeout for the element to exist.
@@ -151,14 +137,14 @@ public interface WebDriverWrapper
 	String getText(PageElement locator, int timeout);
 
 	/**
-	 * Get the value of an attribute, waiting a maximum of the default timeout for the element to exist.
+	 * Checks whether an input checkbox or radio element is currently selected.  If it is not then click on it to select it, waiting a maximum of the default timeout for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to get the attribute value from.
 	 */
     void setSelected(PageElement locator);
 
 	/**
-	 * Select an input of type checkbox, waiting a maximum of the default timeout for the element to exist.
+	 * Checks whether an input element checkbox or radio element is currently selected.  If it is not then click on it to select it, waiting a maximum of the amount of time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to select.
      * @param timeout The max amount of time to wait for locator to exist.
@@ -166,7 +152,7 @@ public interface WebDriverWrapper
     void setSelected(PageElement locator, int timeout);
 
 	/**
-	 * Select an input of type checkbox, waiting a maximum of the default timeout for the element to exist.
+	 * Checks if an input element of type checkbox or radio is currently selected, waiting a maximum of the default timeout for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to select.
      * @return true if the checkbox element is selected, false otherwise
@@ -174,7 +160,7 @@ public interface WebDriverWrapper
     boolean isSelected(PageElement locator);
 
 	/**
-	 * Check if an input of type checkbox is selected, waiting a maximum of the default timeout for the element to exist.
+	 * Check if an input element of type checkbox or radio is selected, waiting a maximum of the time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to check.
      * @param timeout The max amount of time to wait for locator to exist.
@@ -183,7 +169,7 @@ public interface WebDriverWrapper
     boolean isSelected(PageElement locator, int timeout);
 
 	/**
-	 * Check if an element is enabled
+	 * Check if an element is enabled, waiting a maximum of the default timeout for the element to exist
 	 *
 	 * @param locator The page element instance that describes how to find the element to check
 	 * @return boolean
@@ -191,7 +177,7 @@ public interface WebDriverWrapper
 	boolean isEnabled(PageElement locator);
 
 	/**
-	 * Check if an element is enabled
+	 * Check if an element is enabled, waiting a maximum of the time passed in for the element to exist
 	 *
 	 * @param locator The page element instance that describes how to find the element to check
 	 * @param timeout The maximum amount of time to wait for the element to exist in seconds
@@ -217,7 +203,7 @@ public interface WebDriverWrapper
 	void setCheckboxState(PageElement locator, boolean checked, int timeout);
 
 	/**
-	 * Check if an input of type checkbox is selected, waiting a maximum of the default timeout for the element to exist.
+	 * Get the value of an attribute, waiting a maximum of the amount of time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to check.
 	 * @param attribute The name of the attribute to retrieve the value for.
@@ -226,7 +212,7 @@ public interface WebDriverWrapper
 	String getAttribute(PageElement locator, String attribute);
 
 	/**
-	 * Get the value of an attribute, waiting a maximum of the amount of time passed in for the element to exist.
+	 * Get the value of an attribute, waiting a maximum of the default timeout for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to get the attribute value from.
 	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
@@ -280,14 +266,6 @@ public interface WebDriverWrapper
 	 */
 	String getPageTitle();
 
-    /**
-	 * Get the title of the current page in the browser.
-	 *
-     * @param should_log Whether we should log what we are doing.
-	 * @return The title of the current page displayed in the browser.
-	 */
-	String getPageTitle(boolean should_log);
-
 	/**
 	 * Get the html source of the current page in the browser.
 	 *
@@ -295,28 +273,12 @@ public interface WebDriverWrapper
 	 */
 	String getPageSource();
 
-    /**
-	 * Get the html source of the current page in the browser.
-	 *
-     * @param should_log if false the method won't log messages.
-	 * @return The html source of the current page displayed in the browser.
-	 */
-	String getPageSource(boolean should_log);
-
 	/**
 	 * Get the url of the current page in the browser.
 	 *
 	 * @return The url of the current page displayed in the browser.
 	 */
 	String getPageUrl();
-
-    /**
-	 * Get the url of the current page in the browser.
-	 *
-     * @param  should_log Whether we should log what we are doing.
-	 * @return The url of the current page displayed in the browser.
-	 */
-	String getPageUrl(boolean should_log);
 
 	/**
 	 * Tell the browser to go to a specific URL.
@@ -343,7 +305,7 @@ public interface WebDriverWrapper
 	WebDriver getDriver();
 
 	/**
-	 * Wait the default timeout for page to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
+	 * Wait the default timeout for the page that implements SelfAwarePage to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
 	 * method.
 	 *
 	 * @param page The class object of the SelfAwarePage to wait for.
@@ -351,8 +313,7 @@ public interface WebDriverWrapper
 	void waitFor(Class<? extends SelfAwarePage> page);
 
 	/**
-	 * Wait a max of the provided timeout for page to exist.  Page provided must implement the SelfAwarePage's
-	 * isCurrentPage method.
+	 * Wait a max of the provided timeout for the SelfAwarePage to exist.  Page provided must implement the SelfAwarePage's isCurrentPage method.
 	 *
 	 * @param page The class object of the SelfAwarePage to wait for.
 	 * @param timeout The amount of time (in seconds) to wait for the page to exist.
@@ -360,16 +321,14 @@ public interface WebDriverWrapper
 	void waitFor(Class<? extends SelfAwarePage> page, int timeout);
 
 	/**
-	 * Wait the default timeout for page to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
-	 * method.
+	 * Wait the default timeout for an existing instance of SelfAwarePage to exist.  Page provided must implement the SelfAwarePage's isCurrentPage method.
 	 *
 	 * @param page an instance of the page SelfAwarePage
 	 */
 	void waitFor(SelfAwarePage page);
 
 	/**
-	 * Wait a max of the provided timeout for page to exist.  Page provided must implement the SelfAwarePage's
-	 * isCurrentPage method.
+	 * Wait a max of the provided timeout for an existing instance of SelfAwarePage to exist.  Page provided must implement the SelfAwarePage's isCurrentPage method.
 	 *
 	 * @param page an instance of the page SelfAwarePage
 	 * @param timeout The amount of time (in seconds) to wait for the page to exist.
@@ -377,31 +336,29 @@ public interface WebDriverWrapper
 	void waitFor(SelfAwarePage page, int timeout);
 
 	/**
-	 * Wait the default timeout for page to exist.  Page provided must implement the SelfAwarePage's isCurrentPage
-	 * method.
+	 * Wait the default timeout for an instance of InFlow to exist.  Page provided must implement the InFlow's isCurrentPage method.
 	 *
 	 * @param page an instance of the page SelfAwarePage
 	 */
-	void waitForPage(PageInFlowInterface page);
+	void waitForPageInFlow(InFlow page);
 
 	/**
-	 * Wait a max of the provided timeout for page to exist.  Page provided must implement the SelfAwarePage's
-	 * isCurrentPage method.
+	 * Wait a max of the provided timeout for an instance of InFlow to exist.  Page provided must implement the InFlow's isCurrentPage method.
 	 *
 	 * @param page an instance of the page SelfAwarePage
 	 * @param timeout The amount of time (in seconds) to wait for the page to exist.
 	 */
-	void waitForPage(PageInFlowInterface page, int timeout);
+	void waitForPageInFlow(InFlow page, int timeout);
 
 	/**
-	 * Wait for an element to exist a max of the default timeout.
+	 * Wait for a PageElement to exist a max of the default timeout.
 	 *
 	 * @param element The element to wait for.
 	 */
 	void waitFor(PageElement element);
 
 	/**
-	 * Wait for an element to exist a max of the provided timeout.
+	 * Wait for a PageElement to exist a max of the provided timeout.
 	 *
 	 * @param element The element to wait for.
 	 * @param timeout The amount of time (in seconds) to wait for the element to exist.
@@ -409,14 +366,14 @@ public interface WebDriverWrapper
 	void waitFor(PageElement element, int timeout);
 
 	/**
-	 * Wait not only for an element to exist, but for an element to be visible.  Use the default timeout.
+	 * Wait not only for a PageElement to exist, but for an element to be visible.  Use the default timeout.
 	 *
 	 * @param element The element to wait for.
 	 */
 	void waitForVisible(PageElement element);
 
 	/**
-	 * Wait not only for an element to exist, but for an element to be visible.  Use the timeout provided.
+	 * Wait not only for a PageElement to exist, but for an element to be visible.  Use the timeout provided.
 	 *
 	 * @param element The element to wait for.
 	 * @param timeout The maximum amount of time to wait.
@@ -424,22 +381,12 @@ public interface WebDriverWrapper
 	void waitForVisible(PageElement element, int timeout);
 
 	/**
-	 * Check for the existence of a web page element.  This is a quick check, no waiting is performed.
-     * We log what what page element we are checking for.
+	 * Check for the existence of a PageElement.  This is a quick check, no waiting is performed.
 	 *
 	 * @param element The PageElement that describes where to find the element.
 	 * @return true if the element exists and is accessible, false otherwise
 	 */
 	boolean exists(PageElement element);
-
-    /**
-	 * Check for the existence of a web page element.  This is a quick check, no waiting is performed.
-	 *
-	 * @param element The PageElement that describes where to find the element.
-     * @param should_log Whether we should log what page element we are checking for.
-	 * @return true if the element exists and is accessible, false otherwise
-	 */
-	boolean exists(PageElement element, boolean should_log);
 
 	/**
 	 * Check for the existence of a SelfAwarePage.  This is a non-waiting check, unless the page provided waits for
@@ -451,7 +398,7 @@ public interface WebDriverWrapper
 	boolean exists(Class<? extends SelfAwarePage> page);
 
 	/**
-	 * "Handle" the page, or call the page's handlePage method, passing in the context object provided.  This usually
+	 * "Handle" the page, or call the SelfAwarePage page's handlePage method, passing in the context object provided.  This usually
 	 * means filling out a form on the page, or clicking a particular link based on information in the context object.
 	 *
 	 * @param page The page to "handle".
@@ -462,7 +409,7 @@ public interface WebDriverWrapper
 	<T> void handlePage(Class<? extends SelfAwarePage<T>> page, T context) throws Exception;
 
 	/**
-	 * "Handle" the page, or call the page's handlePage method, passing in the context object provided.  This usually
+	 * "Handle" the page, or call the InFlow page's handlePage method, passing in the context object provided.  This usually
 	 * means filling out a form on the page, or clicking a particular link based on information in the context object.
 	 *
 	 * @param page The page to "handle".
@@ -470,15 +417,23 @@ public interface WebDriverWrapper
 	 * @param <T> The type is determined by the page's handlePage method parameter
 	 * @throws Exception if the page's handlePage throws an exception.
 	 */
-	<T> void handlePageInFlow(Class<? extends PageInFlowInterface<T>> page, T context) throws Exception;
+	<T> void handlePageInFlow(Class<? extends InFlow<T>> page, T context) throws Exception;
 
 	/**
-	 * Check to see if the page that bet browser is on is described by the following self aware page class.
+	 * Check to see if the SelfAwarePage page is the current page
 	 *
 	 * @param page The page class that is to be checked against the current page the browser is on.
 	 * @return true if the page class' isCurrentPage method returns true.
 	 */
 	boolean isCurrentPage(Class<? extends SelfAwarePage> page);
+
+	/**
+	 * Check to see if the InFlow page is the current page
+	 *
+	 * @param page The page class that is to be checked against the current page the browser is on.
+	 * @return true if the page class' isCurrentPage method returns true.
+	 */
+	boolean isCurrentPageInFlow(Class<? extends InFlow> page);
 
 	/**
 	 * Get the browser window handle of the current window.  This is a non-waiting function.
@@ -544,22 +499,12 @@ public interface WebDriverWrapper
 	void closeWindow(String windowHandle);
 
 	/**
-	 * Checks whether the specified page element is visible.  This is a non-waiting function, the page element must currently exist.
-	 * We log what element we are checking the visibility for.
+	 * Checks whether the specified PageElement is visible.  This is a non-waiting function, the page element must currently exist.
      *
      * @param locator The page element to check visibility on
      * @return true if the element is visible, false otherwise
 	 */
 	boolean isVisible(PageElement locator);
-
-    /**
-	 * Checks whether the specified page element is visible.  This is a non-waiting function, the page element must currently exist.
-     *
-     * @param should_log Whether we should log what page element we are checking the visibility for.
-     * @param locator The page element to check visibility on
-     * @return true if the element is visible, false otherwise
-	 */
-	boolean isVisible(PageElement locator, boolean should_log);
 
 	/**
 	 * Take a screenshot, naming it automatically.  This will be placed in the testcase's log directory.
@@ -644,14 +589,14 @@ public interface WebDriverWrapper
     void hover(PageElement element, int timeout);
 
     /**
-	 * Wait for an element to be not visible.  Use the default timeout.
+	 * Wait for a PageElement to be not visible.  Use the default timeout.
 	 *
 	 * @param element The element to wait for.
 	 */
     void waitForNotVisible(PageElement element);
 
     /**
-     * Wait for an element to be not visible.  Use the default timeout
+     * Wait for a PageElement to be not visible.  Use the default timeout
      *
      * @param element The element to wait for.
      * @param timeout The maximum amount of time to wait.
@@ -659,14 +604,14 @@ public interface WebDriverWrapper
     void waitForNotVisible(PageElement element, int timeout);
         
     /**
-	 * Wait for an element to not exist.  Use the default timeout.
+	 * Wait for a PageElement to not exist.  Use the default timeout.
 	 *
 	 * @param element The element to wait for.
 	 */
     void waitForDoesNotExist(PageElement element);
 
     /**
-     * Wait for an element to not exist.  Use the default timeout
+     * Wait for a PageElement to not exist.  Use the default timeout
      *
      * @param element The element to wait for.
      * @param timeout The maximum amount of time to wait.
@@ -674,7 +619,7 @@ public interface WebDriverWrapper
     void waitForDoesNotExist(PageElement element, int timeout);
 
     /**
-     * Wait for an element's getText() to not be empty or null.  Use the default timeout.
+     * Wait for an PageElement's getText() to not be empty or null.  Use the default timeout.
      * This method will also wait for the element to exist.
      *
      * An example usage for this method would be to wait for an ajax error message.
@@ -684,7 +629,7 @@ public interface WebDriverWrapper
     void waitForTextNotEmpty(PageElement element);
 
     /**
-     * Wait for an element's getText() to not be empty or null.  Use the specified timeout.
+     * Wait for an PageElement's getText() to not be empty or null.  Use the specified timeout.
      * This method will also wait for the element to exist.
      *
      * An example usage for this method would be to wait for an ajax error message.
@@ -717,7 +662,23 @@ public interface WebDriverWrapper
 	 * </code>
 	 *
 	 * @param page an instance of the page.
+	 * @param <T> the PageWithActions class
 	 * @return Class the class of the instantiated page
 	 */
 	<T extends PageWithActions> T on (T page);
+
+	/**
+	 * Return a list of PageElements, waiting a maximum of the default timeout for at least 1 matching element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 */
+	ArrayList<PageElement> getPageElements(PageElements locator);
+
+	/**
+	 * Return a list of PageElements, waiting a maximum of the amount of time passed for at least 1 matching element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param timeout The maximum amount of time to wait for at least one element to exist in seconds.
+	 */
+	ArrayList<PageElement> getPageElements(PageElements locator, int timeout);
 }

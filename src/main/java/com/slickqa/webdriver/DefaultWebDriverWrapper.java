@@ -27,8 +27,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.logging.log4j.LogManager;
+import java.util.ArrayList;
 
 /**
+ * Implementation of the WebDriverWrapper interface
  *
  * @author jcorbett
  */
@@ -43,6 +45,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     private static String original_browser_window_handle = "";
     private OutputFileSupport debugSupport;
 
+    /**
+     * Get the underlying webdriver object.
+     *
+     * @param caps The Capabilites for the webdriver instance
+     * @return The webdriver object used by this instance of WebDriverWrapper.
+     */
     public static WebDriver getDriverFromCapabilities(Capabilities caps) {
         if (caps.getCapability(RemoteDriverWithScreenshots.REMOTE_URL) == null) {
             if (caps.getBrowserName().equals(DesiredCapabilities.htmlUnit().getBrowserName())) {
@@ -92,6 +100,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         }
     }
 
+    /**
+     * Return a DefaultWebDriverWrapper instance from an existing WebDriver instance
+     *
+     * @param driver The existing WebDriver instance
+     * @return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
+     */
     public DefaultWebDriverWrapper(WebDriver driver, OutputFileSupport debugSupport) {
         this.driver = driver;
         screenshot_counter = 0;
@@ -99,6 +113,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         this.debugSupport = debugSupport;
     }
 
+    /**
+     * Return a DefaultWebDriverWrapper instance from an existing WebDriver instance
+     *
+     * @param caps The Capabilites for the webdriver instance
+     * @return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
+     */
     public DefaultWebDriverWrapper(Capabilities caps, OutputFileSupport debugSupport) {
         this(getDriverFromCapabilities(caps), debugSupport);
         driver_capabilities = caps;
@@ -113,6 +133,12 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         this.timeout = p_timeout;
     }
 
+    /**
+     * Return a WebElement based off the PageElement
+     *
+     * @param locator The PageElement to use to locate the WebElement
+     * @return p_timeout the max time to wait for the WebElement to exist
+     */
     public WebElement getElement(PageElement locator, int p_timeout) {
         WebElement element = null;
         try {
@@ -126,6 +152,27 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             throw ex;
         }
         return element;
+    }
+
+    /**
+     * Return a list of WebElements based off the PageElements
+     *
+     * @param locator The PageElement to use to locate the WebElement
+     * @return p_timeout the max time to wait for the WebElement to exist
+     */
+    public ArrayList<PageElement> getElements(PageElements locator, int p_timeout) {
+        ArrayList<PageElement> elements;
+        try {
+            elements = locator.getElements(driver, p_timeout);
+        } catch (NoSuchElementException ex) {
+            logger.error("Elements with found {} were not found after {} seconds.", locator.getFindByDescription(), p_timeout);
+            logger.error("Current page URL: {}", driver.getCurrentUrl());
+            logger.error("Current page title: {}", driver.getTitle());
+            saveHTMLSource("no-such-element");
+            takeScreenShot("no-such-element");
+            throw ex;
+        }
+        return elements;
     }
 
     @Override
@@ -259,29 +306,17 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public void type(PageElement locator, String text, int p_timeout, boolean should_log) {
+    public void type(PageElement locator, String text, int p_timeout) {
         clear(locator, p_timeout);
-        if (should_log == true) {
-            logger.info("Typing text '{}' in element with name '{}' and found '{}'.", new Object[]{
+        logger.info("Typing text '{}' in element with name '{}' and found '{}'.", new Object[]{
                         text, locator.getName(), locator.getFindByDescription()
                     });
-        }
         getElement(locator, p_timeout).sendKeys(text);
     }
 
     @Override
-    public void type(PageElement locator, String text, int p_timeout) {
-        type(locator, text, p_timeout, true);
-    }
-
-    @Override
-    public void type(PageElement locator, String text, boolean should_log) {
-        type(locator, text, timeout, should_log);
-    }
-
-    @Override
     public void type(PageElement locator, String text) {
-        type(locator, text, timeout, true);
+        type(locator, text, timeout);
     }
 
     @Override
@@ -333,40 +368,19 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public String getPageTitle() {
-        return getPageTitle(true);
-    }
-
-    @Override
-    public String getPageTitle(boolean should_log) {
-        if (should_log == true) {
-            logger.debug("Getting current page title.");
-        }
+        logger.debug("Getting current page title.");
         return driver.getTitle();
     }
 
     @Override
     public String getPageSource() {
-        return getPageSource(true);
-    }
-
-    @Override
-    public String getPageSource(boolean should_log) {
-        if (should_log == true) {
-            logger.debug("Getting current page html source.");
-        }
+        logger.debug("Getting current page html source.");
         return driver.getPageSource();
     }
 
     @Override
     public String getPageUrl() {
-        return getPageUrl(true);
-    }
-
-    @Override
-    public String getPageUrl(boolean should_log) {
-        if (should_log == true) {
-            logger.debug("Getting current page url.");
-        }
+        logger.debug("Getting current page url.");
         return driver.getCurrentUrl();
     }
 
@@ -439,14 +453,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public void waitForPage(PageInFlowInterface page) { waitForPage(page, timeout); }
+    public void waitForPageInFlow(InFlow page) { waitForPageInFlow(page, timeout); }
 
     @Override
-    public void waitForPage(PageInFlowInterface page, int p_timeout) {
+    public void waitForPageInFlow(InFlow page, int p_timeout) {
         Date start_time = new Date();
         Calendar end_time = Calendar.getInstance();
         end_time.add(Calendar.SECOND, p_timeout);
-        page.setBrowserWrapper(this);
         while (Calendar.getInstance().before(end_time) && !page.isCurrentPage()) {
             try {
                 Thread.sleep(200);
@@ -480,9 +493,9 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public <T> void handlePageInFlow(Class<? extends PageInFlowInterface<T>> page, T context) throws Exception {
+    public <T> void handlePageInFlow(Class<? extends InFlow<T>> page, T context) throws Exception {
         try {
-            PageInFlowInterface<T> page_instance = page.newInstance();
+            InFlow<T> page_instance = page.newInstance();
             page_instance.handlePage(context);
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
@@ -498,6 +511,20 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         try {
             SelfAwarePage page_instance = page.newInstance();
             return page_instance.isCurrentPage(this);
+        } catch (InstantiationException ex) {
+            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
+            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
+        } catch (IllegalAccessException ex) {
+            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
+            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
+        }
+    }
+
+    @Override
+    public boolean isCurrentPageInFlow(Class<? extends InFlow> page) {
+        try {
+            InFlow page_instance = page.newInstance();
+            return page_instance.isCurrentPage();
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
@@ -569,14 +596,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean exists(PageElement element) {
-        return exists(element, true);
-    }
-
-    @Override
-    public boolean exists(PageElement element, boolean should_log) {
-        if (should_log == true) {
-            logger.debug("Checking for existence of element '{}'.", element.getName());
-        }
+        logger.debug("Checking for existence of element '{}'.", element.getName());
         return element.exists(driver, 0);
     }
 
@@ -645,9 +665,9 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             }
             for (String possibleHandle : getWindowHandles()) {
                 switchToWindowByHandle(possibleHandle);
-                logger.info("Current browser URL: " + getPageUrl(false).toLowerCase());
+                logger.info("Current browser URL: " + getPageUrl().toLowerCase());
 
-                if (getPageUrl(false).toLowerCase().contains(partialWindowURL.toLowerCase()) == true) {
+                if (getPageUrl().toLowerCase().contains(partialWindowURL.toLowerCase()) == true) {
                     switchToHandle = possibleHandle;
                 } else {
                     try {
@@ -690,9 +710,9 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             }
             for (String possibleHandle : getWindowHandles()) {
                 switchToWindowByHandle(possibleHandle);
-                logger.info("Current browser URL: " + getPageUrl(false).toLowerCase());
+                logger.info("Current browser URL: " + getPageUrl().toLowerCase());
 
-                if (getPageUrl(false).toLowerCase().equals(windowURL.toLowerCase()) == true) {
+                if (getPageUrl().toLowerCase().equals(windowURL.toLowerCase()) == true) {
                     switchToHandle = possibleHandle;
                 } else {
                     try {
@@ -724,16 +744,9 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean isVisible(PageElement locator) {
-        return isVisible(locator, true);
-    }
-
-    @Override
-    public boolean isVisible(PageElement locator, boolean should_log) {
         boolean elementVisible = true;
 
-        if (should_log == true) {
-            logger.debug("Checking visibility on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
-        }
+        logger.debug("Checking visibility on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         if (exists(locator) == true) {
             WebElement wdelement = getElement(locator, timeout);
             elementVisible = wdelement.isDisplayed();
@@ -988,5 +1001,26 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         logger.info("Calling initializePage for page '{}'.", page.getClass().getName());
         page.initializePage(this);
         return (T) page;
+    }
+
+    @Override
+    public ArrayList<PageElement> getPageElements(PageElements locator) {
+        return getPageElements(locator, timeout);
+    }
+
+    @Override
+    public ArrayList<PageElement> getPageElements(PageElements locator, int p_timeout) {
+        ArrayList<PageElement> elements = new ArrayList<PageElement>();
+        logger.info("Finding elements found '{}'.", locator.getFindByDescription());
+
+        for(int tries = 0; tries < 3; tries++) {
+            try {
+                elements = getElements(locator, p_timeout);
+                break;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Got a stale element exception trying to click, retrying.", e);
+            }
+        }
+        return elements;
     }
 }

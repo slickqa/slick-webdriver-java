@@ -1,13 +1,15 @@
 package com.slickqa.webdriver;
 
 /**
- * The PageInfFlowInterface interface enforces 3 methods: if the browser's current page is itself, how
- * to handle any forms on the page, how to continue past the page.  To help provide information to accomplish this
- * when you implement this interface you will need to define the type of context object that is used to handle the page.
+ * The InFlow interface enforces 3 methods:
+ * 1- if the browser's current page is itself
+ * 2- how to handle any forms on the page
+ * 3- how to continue past the page.
+ * To help provide information to accomplish this when you implement this interface you will need to define the type of context object that is used to handle and complete the page.
  *
  * @author slambson
  */
-public interface PageInFlowInterface<T> {
+public interface InFlow<T> {
 
     /**
      * Determine if the browser's current page is the one represented by this class.  It is VERY important that this
@@ -33,6 +35,4 @@ public interface PageInFlowInterface<T> {
      * @throws Exception In case the implementing method needs to throw an exception during the handling.
      */
     void completePage(T context) throws Exception;
-
-    void setBrowserWrapper(WebDriverWrapper browserWrapper);
 }

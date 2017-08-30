@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 /**
+ * PageElement is essentially an equivalent to the selenium WebElement
  *
  * @author jcorbett
  */
@@ -31,6 +32,14 @@ public class PageElement
     private Date lastCacheSave;
     private int elementIndex = -1;
 
+    /**
+     * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement).   The name param is used primarily for logging.
+     *
+     * @param name This is a common name for the PageElement, used mostly in logging
+     * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement instance
+     */
     public PageElement(String name, WebContainer container, By finder) {
         this.name = name;
         this.container = container;
@@ -39,6 +48,13 @@ public class PageElement
 	    this.lastCacheSave = null;
     }
 
+    /**
+     * Create a PageElement with a FindBy.  The name param is used primarily for logging.
+     *
+     * @param name This is a common name for the PageElement, used mostly in logging
+     * @param finder The FindBy used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement instance
+     */
     public PageElement(String name, By finder) {
         this.name = name;
         this.finder = finder;
@@ -47,6 +63,15 @@ public class PageElement
 	    this.lastCacheSave = null;
     }
 
+    /**
+     * Create a PageElement with a FindBy and an elementIndex.  The expectation is that the FindBy will locate a list of PageElements and we want a specific index in that list.
+     * The name param is used primarily for logging.
+     *
+     * @param name This is a common name for the PageElement, used mostly in logging
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
+     * @return PageElement instance
+     */
     public PageElement(String name, By finder, int elementIndex) {
         this.name = name;
         this.finder = finder;
@@ -56,6 +81,12 @@ public class PageElement
         this.elementIndex = elementIndex;
     }
 
+    /**
+     * Create a PageElement with a FindBy and an elementIndex.
+     *
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement
+     */
     public PageElement(By finder) {
         name = finder.toString();
         this.finder = finder;
@@ -64,6 +95,13 @@ public class PageElement
 	    this.lastCacheSave = null;
     }
 
+    /**
+     * Create a PageElement with a FindBy and an elementIndex.  The expectation is that the FindBy will locate a list of PageElements and we want a specific index in that list.
+     *
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
+     * @return PageElement instance
+     */
     public PageElement(By finder, int elementIndex) {
         name = finder.toString();
         this.finder = finder;
@@ -90,10 +128,21 @@ public class PageElement
 
     }
 
+    /**
+     * Return the By for locating the PageElement
+     *
+     * @return By the By for the PageElement
+     */
     public By getFinder() {
         return finder;
     }
 
+
+    /**
+     * Return the Name (used primarily in logging) of the PageElement
+     *
+     * @return String the name of the PageElement
+     */
     public String getName() {
         return name;
     }
@@ -107,6 +156,13 @@ public class PageElement
 		return false;
     }
 
+    /**
+     * Return a selenium WebElement based on the PageElement FindBy (By)
+     *
+     * @param browser The webdriver browser instance
+     * @param timeout The max amount of time to wait for the element
+     * @return WebElement the selenium WebElement based on the PageElement FindBy (By)
+     */
     public WebElement getElement(WebDriver browser, int timeout) throws NoSuchElementException 
 	{
 		// use the cache
@@ -174,6 +230,11 @@ public class PageElement
         return element;
     }
 
+    /**
+     * Return the FindBy description of the PageElement
+     *
+     * @return String a description of the FindBy for the PageElement
+     */
     public String getFindByDescription() {
 		if (cache != null && lastCacheSave == null)
 		{
@@ -187,6 +248,11 @@ public class PageElement
         }
     }
 
+    /**
+     * Return whether the PageElement exists or not
+     *
+     * @return boolean whether the PageElement exists or not
+     */
     public boolean exists(WebDriver browser, int timeout) {
         try {
             getElement(browser, timeout);

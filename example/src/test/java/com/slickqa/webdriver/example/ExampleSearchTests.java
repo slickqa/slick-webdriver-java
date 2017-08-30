@@ -35,7 +35,7 @@ public class ExampleSearchTests {
 
     @Test
     public void searchForSlickqaContainsSlickqaDotCom() throws Exception {
-        browser.goTo(GoogleHomePage.URL);
+        browser.goTo(GoogleHomePageSelfAwareAndWithActions.URL);
         browser.waitFor(GoogleHomePage.class);
         browser.on(GoogleHomePage.class).searchFor("slickqa");
         browser.waitFor(GoogleResultsPage.class, 2);
