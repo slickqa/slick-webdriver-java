@@ -1,6 +1,8 @@
 # slick-webdriver-java
 Slick webdriver java wrapper library
 
+JavaDoc: http://www.slickqa.com/slick-webdriver-java/
+
 The code in the examples directory show how to utilize this project best.  There are 3 interfaces provided that your Page classes can implement.
 
 INTERFACES
