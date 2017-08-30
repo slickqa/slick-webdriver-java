@@ -2,7 +2,7 @@ package com.slickqa.webdriver;
 
 import org.openqa.selenium.WebDriver;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -672,7 +672,7 @@ public interface WebDriverWrapper
 	 *
 	 * @param locator The page elements instance that describes how to find the elements
 	 */
-	ArrayList<PageElement> getPageElements(PageElement locator);
+	List<PageElement> getPageElements(PageElement locator);
 
 	/**
 	 * Return a list of PageElements, waiting a maximum of the amount of time passed for at least 1 matching element to exist.
@@ -680,5 +680,5 @@ public interface WebDriverWrapper
 	 * @param locator The page elements instance that describes how to find the elements
 	 * @param timeout The maximum amount of time to wait for at least one element to exist in seconds.
 	 */
-	ArrayList<PageElement> getPageElements(PageElement locator, int timeout);
+	List<PageElement> getPageElements(PageElement locator, int timeout);
 }

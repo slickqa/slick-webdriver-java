@@ -249,6 +249,7 @@ public class PageElement
             try {
                 List<WebElement> webElements = browser.findElements(finder);
                 for (WebElement e : webElements) {
+                    if (name != null & !name.equals(""))
                     pageElements.add(new PageElement(e));
                 }
             } catch (NoSuchElementException ex) {
