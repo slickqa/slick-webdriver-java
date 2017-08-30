@@ -14,7 +14,7 @@ INTERFACES
 > - initializePage() - this method needs to be implemented to initilize the page with the browser wrapper instance
 > - this interface allows your test method to do something like this: browser.on(GoogleHomePage.class).searchFor("slickqa");
 >
-> - InFlow
+> -InFlow
 > - isCurrentPage() - this method needs to be implemented to define how webdriver can identify that this page is the current page being displayed (i.e. certain element(s) exist)
 > - handlePage() - this method needs to be implemented to define a default action for interacting with this page
 > - completePage() - this method needs to be implemented to define how to continue past the page
