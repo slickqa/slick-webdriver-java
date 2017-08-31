@@ -247,10 +247,18 @@ public class PageElement
         endTime.add(Calendar.SECOND, timeout);
         do {
             try {
-                List<WebElement> webElements = browser.findElements(finder);
-                for (WebElement e : webElements) {
-                    if (name != null & !name.equals(""))
-                    pageElements.add(new PageElement(e));
+                if (container == null) {
+                    List<WebElement> webElements = browser.findElements(finder);
+                    for (WebElement e : webElements) {
+                        if (name != null & !name.equals(""))
+                            pageElements.add(new PageElement(e));
+                    }
+                } else {
+                    List<WebElement> webElements = container.findElements(browser, this);
+                    for (WebElement e : webElements) {
+                        if (name != null & !name.equals(""))
+                            pageElements.add(new PageElement(e));
+                    }
                 }
             } catch (NoSuchElementException ex) {
                 pageElements = new ArrayList<PageElement>();
