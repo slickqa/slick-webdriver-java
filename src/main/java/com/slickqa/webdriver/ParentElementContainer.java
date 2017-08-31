@@ -4,6 +4,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 /**
  *
  * @author jcorbett
@@ -22,6 +24,12 @@ public class ParentElementContainer implements WebContainer
 	{
 		// fail fast, the child element will handle the timing
 		return parent.getElement(browser, 0).findElement(item.getFinder());
+	}
+
+	@Override
+	public List<WebElement> findElements(WebDriver browser, PageElement item) throws NoSuchElementException
+	{
+		return parent.getElement(browser, 0).findElements(item.getFinder());
 	}
 
 	@Override

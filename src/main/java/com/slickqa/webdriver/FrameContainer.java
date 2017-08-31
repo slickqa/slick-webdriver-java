@@ -5,6 +5,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 /**
  *
  * @author jcorbett
@@ -81,6 +83,62 @@ public class FrameContainer implements WebContainer
 		}
 
 		return retval;
+	}
+
+	@Override
+	public List<WebElement> findElements(WebDriver browser, PageElement item) throws NoSuchElementException
+	{
+		//return parent.getElement(browser, 0).findElements(item.getFinder());
+
+		noFrameId = false;
+		WebElement frameWebElement = null;
+		List<WebElement> elements = null;
+
+		// checking for the case of a PageElement being passed in
+		if(frameId == null)
+		{
+			frameWebElement = framePageElement.getElement(browser, 30);
+			noFrameId = true;
+			frameId = null;
+		}
+		try
+		{
+			if(frameWebElement == null)
+			{
+				String[] frames = frameId.split("\\.");
+				for(String frame : frames)
+				{
+					browser.switchTo().frame(frame);
+				}
+			} else
+			{
+				if(InFrameWebElement.class.isAssignableFrom(frameWebElement.getClass()))
+				{
+					((InFrameWebElement)frameWebElement).beforeOperation();
+					browser.switchTo().frame(((InFrameWebElement)frameWebElement).real);
+				} else
+				{
+					browser.switchTo().frame(frameWebElement);
+				}
+			}
+
+			elements = browser.findElements(item.getFinder());
+		} finally
+		{
+			browser.switchTo().defaultContent();
+		}
+
+//		WebElement retval = null;
+//		if(frameWebElement == null)
+//		{
+//			retval = new InFrameWebElement(item.getFinder(), browser, frameId);
+//		} else
+//		{
+//			retval = new InFrameWebElement(item.getFinder(), browser, frameWebElement);
+//		}
+//
+//		return retval;
+		return elements;
 	}
 
 	@Override
