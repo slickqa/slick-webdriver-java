@@ -9,11 +9,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -27,8 +27,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.logging.log4j.LogManager;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementation of the WebDriverWrapper interface
@@ -567,6 +565,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     @Override
     public void waitFor(PageElement element, int p_timeout) {
         logger.info("Waiting for element '{}' a max of {} seconds.", element.getName(), p_timeout);
+        getElement(element, p_timeout);
     }
 
     @Override

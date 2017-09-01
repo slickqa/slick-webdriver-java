@@ -29,7 +29,9 @@ public class ParentElementContainer implements WebContainer
 	@Override
 	public List<WebElement> findElements(WebDriver browser, PageElement item) throws NoSuchElementException
 	{
-		return parent.getElement(browser, 0).findElements(item.getFinder());
+		WebElement parentElement = parent.getElement(browser, 0);
+		List<WebElement> childElements = parentElement.findElements(item.getFinder());
+		return childElements;
 	}
 
 	@Override
