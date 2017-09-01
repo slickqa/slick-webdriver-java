@@ -1,9 +1,9 @@
 package com.slickqa.webdriver;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -30,7 +30,6 @@ public class PageElement
     private By finder;
     private WebContainer container;
     private WebElement cache;
-    private ArrayList<PageElement> elementsCache;
     private Date lastCacheSave;
     private int elementIndex = -1;
 
@@ -47,7 +46,6 @@ public class PageElement
         this.container = container;
         this.finder = finder;
 	    this.cache = null;
-	    this.elementsCache = null;
 	    this.lastCacheSave = null;
     }
 
@@ -208,6 +206,7 @@ public class PageElement
 				if (ex.getMessage().contains("this.getWindow() is null"))
 					browser.switchTo().defaultContent(); // hack for issue http://code.google.com/p/selenium/issues/detail?id=1438
 			}
+
             // This is the same check as the while loop, but we don't want to sleep if we're already over
             // time (in the case that timeout == 0).
             if (element == null && Calendar.getInstance().before(endTime)) {
@@ -234,14 +233,10 @@ public class PageElement
     /**
      * Return a list of PageElements based on the PageElements FindBy (By)
      *
-     * @return ArrayList<PageElement> the list of PageElements located
+     * @return List<PageElement> the list of PageElements located
      */
-    public ArrayList<PageElement> getElements(WebDriver browser, int timeout) throws NoSuchElementException {
-        ArrayList<PageElement> pageElements = new ArrayList<PageElement>();
-
-        // use the cache
-        if (cache != null && cacheIsValid())
-            return elementsCache;
+    public List<PageElement> getElements(WebDriver browser, int timeout) throws NoSuchElementException {
+        List<PageElement> pageElements = new ArrayList<PageElement>();
 
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.SECOND, timeout);
@@ -250,14 +245,12 @@ public class PageElement
                 if (container == null) {
                     List<WebElement> webElements = browser.findElements(finder);
                     for (WebElement e : webElements) {
-                        if (name != null & !name.equals(""))
-                            pageElements.add(new PageElement(e));
+                        pageElements.add(new PageElement(e));
                     }
                 } else {
                     List<WebElement> webElements = container.findElements(browser, this);
                     for (WebElement e : webElements) {
-                        if (name != null & !name.equals(""))
-                            pageElements.add(new PageElement(e));
+                        pageElements.add(new PageElement(e));
                     }
                 }
             } catch (NoSuchElementException ex) {
@@ -272,17 +265,13 @@ public class PageElement
             // This is the same check as the while loop, but we don't want to sleep if we're already over
             // time (in the case that timeout == 0).
             if (pageElements.size() == 0 && Calendar.getInstance().before(endTime)) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException ex) {
-                }
+                try {Thread.sleep(500);} catch (InterruptedException ie) {}
             }
         } while (Calendar.getInstance().before(endTime) && pageElements.size() == 0);
 
         if (pageElements.size() == 0) {
             throw new NoSuchElementException("Was unable to find list of elements, to be found by " + getFindByDescription());
         }
-        elementsCache = pageElements;
         lastCacheSave = new Date();
         return pageElements;
     }

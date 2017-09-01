@@ -1,39 +1,23 @@
-package testng.example;
-
-import com.slickqa.webdriver.FindBy;
-import com.slickqa.webdriver.In;
-import com.slickqa.webdriver.PageElement;
-import com.slickqa.webdriver.WebDriverWrapper;
-import com.sofi.ui.dataobjects.FlowDataSet;
-import com.sofi.ui.lib.PageInFlow;
+package com.slickqa.webdriver;
 
 import java.util.List;
 
 /**
  * Created by slambson on 8/30/17.
  */
-public class DemoiFramePage extends PageInFlow {
+public class DemoiFramePage {
 
-    protected PageElement demoIframe = new PageElement("Demo iFrame", FindBy.name("myDemoFrame"));
-    protected PageElement forecastLink = new PageElement("Forecast Link", In.Frame(demoIframe), FindBy.linkText("FORECAST"));
-    protected PageElement iFrameLinks = new PageElement("iFrame Links", In.Frame(demoIframe), FindBy.tagName("a"));
-    protected PageElement parentElement = new PageElement("Parent Element", FindBy.id("capSubnav"));
-    protected PageElement childElements = new PageElement("Child Elements", In.ParentElement(parentElement), FindBy.tagName("a"));
+    private PageElement demoIframe = new PageElement("Demo iFrame", FindBy.name("myDemoFrame"));
+    private PageElement forecastLink = new PageElement("Forecast Link", In.Frame(demoIframe), FindBy.linkText("FORECAST"));
+    private PageElement iFrameLinks = new PageElement("iFrame Links", In.Frame(demoIframe), FindBy.tagName("a"));
+    private PageElement parentElement = new PageElement("Parent Element", FindBy.id("capSubnav"));
+    private PageElement childElements = new PageElement("Child Elements", In.ParentElement(parentElement), FindBy.tagName("a"));
+
+    private WebDriverWrapper browserWrapper;
 
 
     public DemoiFramePage(WebDriverWrapper browserWrapper) {
         this.browserWrapper = browserWrapper;
-    }
-
-    public boolean isCurrentPage(WebDriverWrapper browserWrapper) {
-
-        return browserWrapper.exists(demoIframe);
-    }
-
-    public void handlePage(WebDriverWrapper browserWrapper, FlowDataSet context) throws Exception {
-    }
-
-    public void completePage() {
     }
 
     public void clickForecastLink() {

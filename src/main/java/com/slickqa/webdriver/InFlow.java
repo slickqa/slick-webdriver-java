@@ -35,4 +35,11 @@ public interface InFlow<T> {
      * @throws Exception In case the implementing method needs to throw an exception during the handling.
      */
     void completePage(T context) throws Exception;
+
+    /**
+     * Set the browser wrapper if the no param constructor is being used, such as isCurrentPageInFlow
+     *
+     * @param browserWrapper
+     */
+    void setBrowserWrapper(WebDriverWrapper browserWrapper);
 }
