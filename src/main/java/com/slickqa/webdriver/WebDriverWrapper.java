@@ -681,4 +681,12 @@ public interface WebDriverWrapper
 	 * @param timeout The maximum amount of time to wait for at least one element to exist in seconds.
 	 */
 	ArrayList<PageElement> getPageElements(PageElements locator, int timeout);
+
+	/**
+	 * Scroll the identified PageElement into view
+	 * @param locator
+	 * @param timeout
+	 */
+	void scrollIntoView(PageElement locator, int timeout);
+	void scrollIntoView(PageElement locator);
 }
