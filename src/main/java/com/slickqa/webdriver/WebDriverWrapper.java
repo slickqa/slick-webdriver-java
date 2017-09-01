@@ -1,5 +1,6 @@
 package com.slickqa.webdriver;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -673,4 +674,19 @@ public interface WebDriverWrapper
 	 * @param timeout The maximum amount of time to wait for at least one element to exist in seconds.
 	 */
 	List<PageElement> getPageElements(PageElement locator, int timeout);
+
+	/**
+	 * Scroll page to provided element
+	 * @param locator
+	 */
+	void scrollIntoView(PageElement locator);
+
+	/**
+	 * Scroll page to provided element
+	 * @param locator
+	 * @param timeout
+	 */
+	void scrollIntoView(PageElement locator, int timeout);
+
+
 }

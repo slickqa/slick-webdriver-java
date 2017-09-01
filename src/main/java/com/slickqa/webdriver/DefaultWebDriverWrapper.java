@@ -1009,4 +1009,15 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         }
         return elements;
     }
+
+    @Override
+    public void scrollIntoView(PageElement locator){
+        scrollIntoView(locator, 0);
+    }
+
+    @Override
+    public void scrollIntoView(PageElement locator, int timeout){
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript("arguments[0].scrollIntoView();", locator.getElement(driver, timeout));
+    }
 }
