@@ -523,6 +523,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     public boolean isCurrentPageInFlow(Class<? extends InFlow> page) {
         try {
             InFlow page_instance = page.newInstance();
+            page_instance.setBrowserWrapper(this);
             return page_instance.isCurrentPage();
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
