@@ -428,14 +428,6 @@ public interface WebDriverWrapper
 	boolean isCurrentPage(Class<? extends SelfAwarePage> page);
 
 	/**
-	 * Check to see if the InFlow page is the current page
-	 *
-	 * @param page The page class that is to be checked against the current page the browser is on.
-	 * @return true if the page class' isCurrentPage method returns true.
-	 */
-	boolean isCurrentPageInFlow(Class<? extends InFlow> page);
-
-	/**
 	 * Get the browser window handle of the current window.  This is a non-waiting function.
 	 *
 	 * @return The window handle of the current window.

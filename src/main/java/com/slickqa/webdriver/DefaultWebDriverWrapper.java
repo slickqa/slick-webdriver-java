@@ -520,21 +520,6 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public boolean isCurrentPageInFlow(Class<? extends InFlow> page) {
-        try {
-            InFlow page_instance = page.newInstance();
-            page_instance.setBrowserWrapper(this);
-            return page_instance.isCurrentPage();
-        } catch (InstantiationException ex) {
-            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
-            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
-        } catch (IllegalAccessException ex) {
-            logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
-            throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
-        }
-    }
-
-    @Override
     public void selectByOptionText(PageElement selectList, String option) {
         selectByOptionText(selectList, option, timeout);
     }
