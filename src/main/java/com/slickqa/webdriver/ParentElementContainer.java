@@ -1,5 +1,6 @@
 package com.slickqa.webdriver;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,10 @@ public class ParentElementContainer implements WebContainer
 	public ParentElementContainer(PageElement parent)
 	{
 		this.parent = parent;
+	}
+
+	public ParentElementContainer(By finder) {
+		this.parent = new PageElement("Parent FindBy: " + finder.toString(), finder);
 	}
 
 	@Override
