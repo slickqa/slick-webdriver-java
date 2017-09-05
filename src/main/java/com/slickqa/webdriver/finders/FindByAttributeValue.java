@@ -14,25 +14,25 @@ import java.util.Arrays;
 public class FindByAttributeValue extends AbstractFindByParentBy
 {
     String attribute;
-	String attributeValu;
+	String attributeValue;
 
-	public FindByAttributeValue(String attribute, String attributeValu)
+	public FindByAttributeValue(String attribute, String attributeValue)
 	{
 		this.attribute = attribute;
-		this.attributeValu = attributeValu;
+		this.attributeValue = attributeValue;
 	}
 
 	@Override
 	public String toString()
 	{
-		return String.format("By attribute '%s' with value '%s'.", attribute, attributeValu);
+		return String.format("By attribute '%s' with value '%s'.", attribute, attributeValue);
 	}
 
 	@Override
 	public boolean matches(WebElement e)
 	{
 		String attrValue = e.getAttribute(attribute);
-		return attrValue != null && attrValue.equals(attributeValu);
+		return attrValue != null && attrValue.equals(attributeValue);
 	}
 
 	@Override
