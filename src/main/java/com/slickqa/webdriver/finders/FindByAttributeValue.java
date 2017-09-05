@@ -8,35 +8,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ *
+ * @author jcorbett
  */
 public class FindByAttributeValue extends AbstractFindByParentBy
 {
+    String attribute;
+	String attributeValu;
 
-	String attribute;
-	String value;
-
-	public FindByAttributeValue(String attribute, String value)
+	public FindByAttributeValue(String attribute, String attributeValu)
 	{
 		this.attribute = attribute;
-		this.value = value;
+		this.attributeValu = attributeValu;
 	}
 
 	@Override
 	public String toString()
 	{
-		return String.format("By attribute '%s' with value '%s.", attribute, value);
+		return String.format("By attribute '%s' with value '%s'.", attribute, attributeValu);
 	}
 
 	@Override
 	public boolean matches(WebElement e)
 	{
 		String attrValue = e.getAttribute(attribute);
-		return attrValue != null && attrValue.equals(value);
+		return attrValue != null && attrValue.equals(attributeValu);
 	}
 
 	@Override
 	public ArrayList<By> getParentBy()
 	{
-		return new ArrayList<By>(Arrays.asList(tagName("input")));
+		return new ArrayList<By>(Arrays.asList(tagName("img"), tagName("input"), tagName("table"), tagName("tr"), tagName("td"), tagName("div")));
 	}
 }

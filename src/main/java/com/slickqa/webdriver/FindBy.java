@@ -85,7 +85,7 @@ public abstract class FindBy extends By
 	}
 
 	/**
-	 * Find an input by it's value.  This must match exactly.
+	 * Find an input by a specified attributes values.  This must match exactly.
 	 *
 	 * @param attribute The attribute of the page element to look for
 	 * @param value The value of the attribute to locate the page element
