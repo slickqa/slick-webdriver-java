@@ -16,6 +16,7 @@ public class SlickWebDriverExamplePage {
     private PageElement inputElements = new PageElement("input elements", FindBy.tagName("input"));
     private PageElement childElementWithFindByParent = new PageElement("Child element with findby parent", In.ParentElement(FindBy.attributeValue("data-qa", "parent-div")), FindBy.id("features-link"));
     private PageElement childElements3 = new PageElement("Child Elements in Parent specified with FindBy", In.ParentElement(FindBy.className("sidenav-inner")), FindBy.tagName("a"));
+    private PageElement childElementByIndex = new PageElement("Child Element by index", In.ParentElement(parentElement1), FindBy.tagName("a"), 6);
 
     private WebDriverWrapper browserWrapper;
 
@@ -57,6 +58,10 @@ public class SlickWebDriverExamplePage {
             System.out.println("Input element: " + x + " has the href attribute value: " + browserWrapper.getAttribute(element, "href"));
         }
         return childElementList.size();
+    }
+
+    public String getElementByIndexFromParentElement() {
+        return browserWrapper.getText(childElementByIndex);
     }
 
     public void clickOnElementInParentElement() {

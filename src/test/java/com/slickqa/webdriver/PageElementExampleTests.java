@@ -127,6 +127,19 @@ public class PageElementExampleTests {
      *
      */
     @Test
+    public void getPageElementByIndexFromListOfPageElementsInAParentElementTest() {
+        browserWrapper.goTo(testPage);
+        SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
+        String linkText = slickWebDriverExamplePage.getElementByIndexFromParentElement();
+        softAssert.assertEquals(linkText, "Slick Webdriver Project", "Incorrect element by index found in parent element");
+        softAssert.assertAll();
+    }
+
+    /**
+     * The list of page elements returned should be 10.  If it doesn't look specifically in the Parent Element it will return more than 10.
+     *
+     */
+    @Test
     public void findListOfPageElementsInAParentElementFindByTest() {
         browserWrapper.goTo(testPage);
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);

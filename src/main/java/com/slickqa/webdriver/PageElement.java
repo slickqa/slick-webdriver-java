@@ -34,6 +34,21 @@ public class PageElement
     private int elementIndex = -1;
 
     /**
+     * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement).
+     *
+     * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement instance
+     */
+    public PageElement(WebContainer container, By finder) {
+        this.name = name;
+        this.container = container;
+        this.finder = finder;
+        this.cache = null;
+        this.lastCacheSave = null;
+    }
+
+    /**
      * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement).   The name param is used primarily for logging.
      *
      * @param name This is a common name for the PageElement, used mostly in logging
@@ -47,6 +62,41 @@ public class PageElement
         this.finder = finder;
 	    this.cache = null;
 	    this.lastCacheSave = null;
+    }
+
+    /**
+     * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement) and an elementIndex.   The name param is used primarily for logging.
+     *
+     * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
+     * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement instance
+     */
+    public PageElement(WebContainer container, By finder, int elementIndex) {
+        this.name = name;
+        this.container = container;
+        this.finder = finder;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.elementIndex = elementIndex;
+    }
+
+    /**
+     * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement) and an elementIndex.   The name param is used primarily for logging.
+     *
+     * @param name This is a common name for the PageElement, used mostly in logging
+     * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
+     * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
+     * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
+     * @return PageElement instance
+     */
+    public PageElement(String name, WebContainer container, By finder, int elementIndex) {
+        this.name = name;
+        this.container = container;
+        this.finder = finder;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.elementIndex = elementIndex;
     }
 
     /**
@@ -190,7 +240,18 @@ public class PageElement
                         }
                     }
                 } else {
-                    element = container.findElement(browser, this);
+                    if (elementIndex == -1) {
+                        element = container.findElement(browser, this);
+                    }
+                    else {
+                        List<WebElement> elements = container.findElements(browser, this);
+                        if (elements.size() < (elementIndex + 1)) {
+                            element = null;
+                        }
+                        else {
+                            element = elements.get(elementIndex);
+                        }
+                    }
                 }
                 if (element != null) {
                     element.isEnabled(); // cause a NoSuchElementException if it can't find it
