@@ -3,14 +3,11 @@ package com.slickqa.webdriver;
 import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 
-import java.math.BigDecimal;
-import java.util.Currency;
 
 /**
  * Created by slambson on 8/29/17.
@@ -48,7 +45,7 @@ public class PageElementExampleTests {
         browserWrapper.goTo(testPage);
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElements();
-        softAssert.assertEquals(numberOfElementsFound, 4, "Incorrect number of input elements found on page");
+        softAssert.assertEquals(numberOfElementsFound, 5, "Incorrect number of input elements found on page");
         softAssert.assertAll();
     }
 
