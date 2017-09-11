@@ -688,5 +688,43 @@ public interface WebDriverWrapper
 	 */
 	void scrollIntoView(PageElement locator, int timeout);
 
+	/**
+	 * Slide a range input element by the offset amount.  The offset it relative to the current range location.
+	 * Wait a maximum of the default timeout for the element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param xOffset The x offset from the current range input location to slide to
+	 */
+	void slideRangeInput(PageElement locator, int xOffset);
+
+	/**
+	 * Slide a range input element by the offset amount.  The offset it relative to the current range location.
+	 * Wait a maximum of the amount of time passed in for the element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param xOffset The x offset from the current range input location to slide to
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void slideRangeInput(PageElement locator, int xOffset, int timeout);
+
+
+	/**
+	 * Click on an element at the specified x and y offset. Wait a maximum of the default timeout for the element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param xOffset The X offset within the Page Element to click at
+	 * @param yOffset The Y offset within the Page Element to click at
+	 */
+	void clickAtOffset(PageElement locator, int xOffset, int yOffset);
+
+	/**
+	 * Click on an element at the specified x and y offset. Wait a maximum of the amount of time passed in for the element to exist.
+	 *
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param xOffset The X offset within the Page Element to click at
+	 * @param yOffset The Y offset within the Page Element to click at
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void clickAtOffset(PageElement locator, int xOffset, int yOffset, int timeout);
 
 }

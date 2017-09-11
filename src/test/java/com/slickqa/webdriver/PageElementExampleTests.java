@@ -1,17 +1,23 @@
 package com.slickqa.webdriver;
 
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
+
+import java.math.BigDecimal;
+import java.util.Currency;
 
 /**
  * Created by slambson on 8/29/17.
  */
 public class PageElementExampleTests {
 
-    private SoftAssert softAssert = new SoftAssert();
+    protected SoftAssert softAssert;
     protected DefaultWebDriverWrapper browserWrapper;
     private String testPage = "file:///Users/slambson/slick-webdriver-java/src/test/java/com/slickqa/webdriver/examplePage.html";
 
@@ -23,10 +29,15 @@ public class PageElementExampleTests {
             capability = DesiredCapabilities.phantomjs();
         }
         else {
-            ChromeDriverManager.getInstance().setup();
-            capability = DesiredCapabilities.chrome();
+            FirefoxDriverManager.getInstance().setup();
+            capability = DesiredCapabilities.firefox();
         }
         browserWrapper = new DefaultWebDriverWrapper(DefaultWebDriverWrapper.getDriverFromCapabilities(capability), new TestOutputFileSupport());
+    }
+
+    @BeforeMethod
+    public void setupMethod() {
+        softAssert = new SoftAssert();
     }
 
     /**
@@ -145,6 +156,66 @@ public class PageElementExampleTests {
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElementsInParentElementFindBy();
         softAssert.assertEquals(numberOfElementsFound, 10, "Incorrect number of input elements found on page");
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test sliding a range input element
+     */
+    @Test
+    public void slideRangeInputElement() throws Exception {
+        browserWrapper.goTo(testPage);
+        SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
+        int value1 = slickWebDriverExamplePage.getRangeInputValue();
+        System.out.println("value1: " + value1);
+        slickWebDriverExamplePage.slideRangeInputElement(5);
+        int value2 = slickWebDriverExamplePage.getRangeInputValue();
+        System.out.println("value2: " + value2);
+        softAssert.assertTrue(value2 > value1, "Value did not increase sliding to the right");
+
+        slickWebDriverExamplePage.slideRangeInputElement(-10);
+        int value3 = slickWebDriverExamplePage.getRangeInputValue();
+        System.out.println("value3: " + value3);
+        softAssert.assertTrue(value3 < value2, "Value did not decrease sliding to the right");
+
+        slickWebDriverExamplePage.clickRangeInputElement(20, 0);
+        int value4 = slickWebDriverExamplePage.getRangeInputValue();
+        System.out.println("value4: " + value4);
+        softAssert.assertTrue(value4 > value3, "Value did not increase clicking to the right");
+
+        slickWebDriverExamplePage.clickRangeInputElement(-40, 0);
+        int value5 = slickWebDriverExamplePage.getRangeInputValue();
+        System.out.println("value5: " + value5);
+        softAssert.assertTrue(value5 < value4, "Value did not decrease clicking to the right");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test wait for element
+     */
+    @Test
+    public void testWaitForElement() {
+        browserWrapper.goTo(testPage);
+        SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
+        slickWebDriverExamplePage.waitDefaultTimeForElementThatExists();
+        slickWebDriverExamplePage.waitPassedInTimeForElementThatExists(5);
+        boolean errorOutForNonExistingElementDefaultTimeout = false;
+        try {
+            slickWebDriverExamplePage.waitDefaultTimeForElementThatDoesNotExist();
+        } catch (NoSuchElementException e) {
+            errorOutForNonExistingElementDefaultTimeout = true;
+        }
+        softAssert.assertTrue(errorOutForNonExistingElementDefaultTimeout, "Did not get a timeout waiting the default timeout for an element that does not exist");
+
+        boolean errorOutForNonExistingElementPassedInTimeout = false;
+        try {
+            slickWebDriverExamplePage.waitPassedInTimeForElementThatDoesNotExists(5);
+        } catch (NoSuchElementException e) {
+            errorOutForNonExistingElementPassedInTimeout = true;
+        }
+        softAssert.assertTrue(errorOutForNonExistingElementPassedInTimeout, "Did not get a timeout waiting the passed in timeout for an element that does not exist");
+
         softAssert.assertAll();
     }
 
