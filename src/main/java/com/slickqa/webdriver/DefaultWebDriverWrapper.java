@@ -1032,9 +1032,10 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         WebElement slider = getElement(locator, p_timeout);
 
         Actions builder = new Actions(driver);
-        builder.moveToElement(slider)
+        builder.clickAndHold(slider)
+                .moveByOffset(x_offset, 0)
                 .click()
-                .dragAndDropBy(slider, x_offset, 0)
+                .release()
                 .build()
                 .perform();
     }
