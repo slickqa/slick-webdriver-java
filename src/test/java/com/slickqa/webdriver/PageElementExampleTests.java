@@ -26,8 +26,10 @@ public class PageElementExampleTests {
             capability = DesiredCapabilities.phantomjs();
         }
         else {
-            FirefoxDriverManager.getInstance().setup();
-            capability = DesiredCapabilities.firefox();
+            //FirefoxDriverManager.getInstance().setup();
+            //capability = DesiredCapabilities.firefox();
+            ChromeDriverManager.getInstance().setup();
+            capability = DesiredCapabilities.chrome();
         }
         browserWrapper = new DefaultWebDriverWrapper(DefaultWebDriverWrapper.getDriverFromCapabilities(capability), new TestOutputFileSupport());
     }
