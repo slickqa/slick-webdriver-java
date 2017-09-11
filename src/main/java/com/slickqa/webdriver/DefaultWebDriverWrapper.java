@@ -1020,4 +1020,36 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         JavascriptExecutor jse = (JavascriptExecutor)driver;
         jse.executeScript("arguments[0].scrollIntoView();", locator.getElement(driver, timeout));
     }
+
+    @Override
+    public void slideRangeInput(PageElement locator, int offset) {
+        slideRangeInput(locator, offset, timeout);
+    }
+
+    @Override
+    public void slideRangeInput(PageElement locator, int x_offset, int p_timeout) {
+        logger.info("Sliding Range input '{}' located by '{}' to X offset '{}'.", locator.getName(), locator.getFindByDescription(), p_timeout);
+        WebElement slider = getElement(locator, p_timeout);
+
+        Actions builder = new Actions(driver);
+        builder.moveToElement(slider)
+                .click()
+                .dragAndDropBy(slider, x_offset, 0)
+                .build()
+                .perform();
+    }
+
+    @Override
+    public void clickAtOffset(PageElement locator, int xOffset, int yOffset) {
+        clickAtOffset(locator, xOffset, yOffset, timeout);
+    }
+
+    @Override
+    public void clickAtOffset(PageElement locator, int xOffset, int yOffset, int p_timeout) {
+        logger.info("Clicking on element '{}' located by '{}' to X offset '{}'.", locator.getName(), locator.getFindByDescription(), p_timeout);
+        WebElement slider = getElement(locator, p_timeout);
+
+        Actions move = new Actions(driver);
+        move.moveToElement(slider).moveByOffset(xOffset, yOffset).click().perform();
+    }
 }

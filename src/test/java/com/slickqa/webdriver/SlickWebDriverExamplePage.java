@@ -1,5 +1,10 @@
 package com.slickqa.webdriver;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+
 import java.util.List;
 
 /**
@@ -17,6 +22,8 @@ public class SlickWebDriverExamplePage {
     private PageElement childElementWithFindByParent = new PageElement("Child element with findby parent", In.ParentElement(FindBy.attributeValue("data-qa", "parent-div")), FindBy.id("features-link"));
     private PageElement childElements3 = new PageElement("Child Elements in Parent specified with FindBy", In.ParentElement(FindBy.className("sidenav-inner")), FindBy.tagName("a"));
     private PageElement childElementByIndex = new PageElement("Child Element by index", In.ParentElement(parentElement1), FindBy.tagName("a"), 6);
+    private PageElement sliderRates = new PageElement("Rates slider", FindBy.id("product-slider"));
+    private PageElement invalidElement = new PageElement("Invalid element", FindBy.id("product-slidera"));
 
     private WebDriverWrapper browserWrapper;
 
@@ -83,5 +90,33 @@ public class SlickWebDriverExamplePage {
             }
         }
         return inputElementList.size();
+    }
+
+    public int getRangeInputValue() {
+        return Integer.valueOf(browserWrapper.getAttribute(sliderRates, "value"));
+    }
+
+    public void slideRangeInputElement(int xOffset) throws Exception {
+        browserWrapper.slideRangeInput(sliderRates, xOffset);
+    }
+
+    public void clickRangeInputElement(int xOffset, int yOffset) {
+        browserWrapper.clickAtOffset(sliderRates, xOffset, yOffset);
+    }
+
+    public void waitDefaultTimeForElementThatExists() {
+        browserWrapper.waitFor(sliderRates);
+    }
+
+    public void waitPassedInTimeForElementThatExists(int timeout) {
+        browserWrapper.waitFor(sliderRates, timeout);
+    }
+
+    public void waitDefaultTimeForElementThatDoesNotExist() {
+        browserWrapper.waitFor(invalidElement);
+    }
+
+    public void waitPassedInTimeForElementThatDoesNotExists(int timeout) {
+        browserWrapper.waitFor(invalidElement, timeout);
     }
 }
