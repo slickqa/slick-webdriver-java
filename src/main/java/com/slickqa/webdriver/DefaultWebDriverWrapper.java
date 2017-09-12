@@ -582,8 +582,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean exists(PageElement element) {
+        return exists(element, 0);
+    }
+
+    @Override
+    public boolean exists(PageElement element, int timeout) {
         logger.debug("Checking for existence of element '{}'.", element.getName());
-        return element.exists(driver, 0);
+        return element.exists(driver, timeout);
     }
 
     @Override
@@ -730,6 +735,11 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public boolean isVisible(PageElement locator) {
+        return isVisible(locator, timeout);
+    }
+
+    @Override
+    public boolean isVisible(PageElement locator, int timeout) {
         boolean elementVisible = true;
 
         logger.debug("Checking visibility on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
