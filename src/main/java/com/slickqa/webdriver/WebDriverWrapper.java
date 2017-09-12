@@ -390,6 +390,15 @@ public interface WebDriverWrapper
 	boolean exists(PageElement element);
 
 	/**
+	 * Check for the existence of a PageElement.  Waiting the passed in timeout for it to exist.
+	 *
+	 * @param element The PageElement that describes where to find the element.
+	 * @param timeout
+	 * @return true if the element exists and is accessible, false otherwise
+	 */
+	boolean exists(PageElement element, int timeout);
+
+	/**
 	 * Check for the existence of a SelfAwarePage.  This is a non-waiting check, unless the page provided waits for
 	 * elements on the page.  This is the same as getting an instance of the page, then calling isCurrentPage.
 	 *
@@ -498,6 +507,15 @@ public interface WebDriverWrapper
      * @return true if the element is visible, false otherwise
 	 */
 	boolean isVisible(PageElement locator);
+
+	/**
+	 * Checks whether the specified PageElement is visible.  This is a non-waiting function, the page element must currently exist.
+	 *
+	 * @param locator The page element to check visibility on
+	 * @param timeout time to wait for the element to be visible
+	 * @return true if the element is visible, false otherwise
+	 */
+	boolean isVisible(PageElement locator, int timeout);
 
 	/**
 	 * Take a screenshot, naming it automatically.  This will be placed in the testcase's log directory.
