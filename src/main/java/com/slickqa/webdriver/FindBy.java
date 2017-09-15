@@ -1,13 +1,7 @@
 package com.slickqa.webdriver;
 
-import com.slickqa.webdriver.finders.FindByHref;
-import com.slickqa.webdriver.finders.FindByHrefContains;
-import com.slickqa.webdriver.finders.FindBySrcContains;
-import com.slickqa.webdriver.finders.FindByValue;
+import com.slickqa.webdriver.finders.*;
 import org.openqa.selenium.By;
-import com.slickqa.webdriver.finders.FindByAlt;
-import com.slickqa.webdriver.finders.FindBySrc;
-import com.slickqa.webdriver.finders.FindByAttributeValue;
 
 /**
  * FindBy just extends the selenium By class adding some additional finders for locating PageElements
@@ -85,7 +79,7 @@ public abstract class FindBy extends By
 	}
 
 	/**
-	 * Find an input by a specified attributes values.  This must match exactly.
+	 * Find an element by a specified attributes values.  This must match exactly.
 	 *
 	 * @param attribute The attribute of the page element to look for
 	 * @param value The value of the attribute to locate the page element
@@ -94,6 +88,17 @@ public abstract class FindBy extends By
 	public static By attributeValue(String attribute, String value)
 	{
 		return new FindByAttributeValue(attribute, value);
+	}
+
+	/**
+	 * Find an element by the specified text.  This must match exactly.
+	 *
+	 * @param text The text inside the page element you want to locate
+	 * @return a By instance that finds web elements in web driver.
+	 */
+	public static By text(String text)
+	{
+		return new FindByText(text);
 	}
 }
 

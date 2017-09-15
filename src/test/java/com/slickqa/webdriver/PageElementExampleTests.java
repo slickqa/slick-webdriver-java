@@ -1,6 +1,5 @@
 package com.slickqa.webdriver;
 
-import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.*;
@@ -40,14 +39,14 @@ public class PageElementExampleTests {
     }
 
     /**
-     * The list of input page elements returned should be 4
+     * The list of input page elements returned should be 8
      */
     @Test
     public void findListOfPageElementsTest() {
         browserWrapper.goTo(testPage);
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElements();
-        softAssert.assertEquals(numberOfElementsFound, 5, "Incorrect number of input elements found on page");
+        softAssert.assertEquals(numberOfElementsFound, 8, "Incorrect number of input elements found on page");
         softAssert.assertAll();
     }
 
@@ -217,6 +216,195 @@ public class PageElementExampleTests {
 
         softAssert.assertAll();
     }
+
+    /**
+     * Test get element relative to child element
+     */
+    @Test
+    public void getElementRelativeToChildElement() {
+        browserWrapper.goTo(testPage);
+        SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
+        PageElement relativeChildElement = new PageElement("Relative Child Element", FindBy.id("descendent-label-element"));
+
+        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "table");
+        String verify2 = browserWrapper.getAttribute(ascendantTable, "data-qa");
+        softAssert.assertEquals(verify2, "great-3-grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTbody = new PageElement(Relative.Decendent(relativeChildElement), "tbody");
+        String verify3 = browserWrapper.getAttribute(ascendantTbody, "data-qa");
+        softAssert.assertEquals(verify3, "great-2-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "tr");
+        String verify4 = browserWrapper.getAttribute(ascendantTr, "data-qa");
+        softAssert.assertEquals(verify4, "great-grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "td");
+        String verify5 = browserWrapper.getAttribute(ascendantTd, "data-qa");
+        softAssert.assertEquals(verify5, "grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantA = new PageElement("parent element a tag", Relative.Decendent(relativeChildElement), "a");
+        String verify6 = browserWrapper.getAttribute(ascendantA, "data-qa");
+        softAssert.assertEquals(verify6, "parent", "Did not get element relative to child element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element relative to child FindBy
+     */
+    @Test
+    public void getElementRelativeToChildFindBy() {
+        browserWrapper.goTo(testPage);
+
+        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "table");
+        String verify2 = browserWrapper.getAttribute(ascendantTable, "data-qa");
+        softAssert.assertEquals(verify2, "great-3-grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTbody = new PageElement(Relative.Decendent(FindBy.id("descendent-label-element")), "tbody");
+        String verify3 = browserWrapper.getAttribute(ascendantTbody, "data-qa");
+        softAssert.assertEquals(verify3, "great-2-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "tr");
+        String verify4 = browserWrapper.getAttribute(ascendantTr, "data-qa");
+        softAssert.assertEquals(verify4, "great-grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "td");
+        String verify5 = browserWrapper.getAttribute(ascendantTd, "data-qa");
+        softAssert.assertEquals(verify5, "grand-parent", "Did not get element relative to child element");
+
+        PageElement ascendantA = new PageElement("parent element a tag", Relative.Decendent(FindBy.id("descendent-label-element")), "a");
+        String verify6 = browserWrapper.getAttribute(ascendantA, "data-qa");
+        softAssert.assertEquals(verify6, "parent", "Did not get element relative to child element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element relative to preceding sibling element
+     */
+    @Test
+    public void getElementRelativeToPrecedBySiblingElement() {
+        browserWrapper.goTo(testPage);
+        PageElement precedingSiblingElement = new PageElement("Preceding Sibling Element", FindBy.text("This Is A Label"));
+
+        PageElement precededByA = new PageElement("preceded by sibling a tag", Relative.PrecededBySibling(precedingSiblingElement), "a");
+        String verify1 = browserWrapper.getAttribute(precededByA, "data-qa");
+        softAssert.assertEquals(verify1, "following-sibling-element-a", "Did not get element relative to preceding sibling element");
+
+        PageElement precededByInput = new PageElement(Relative.PrecededBySibling(precedingSiblingElement), "input");
+        String verify2 = browserWrapper.getAttribute(precededByInput, "data-qa");
+        softAssert.assertEquals(verify2, "following-sibling-element-input", "Did not get element relative to preceding sibling element");
+
+        PageElement precededByLabel = new PageElement("preceded by sibling a tag", Relative.PrecededBySibling(precedingSiblingElement), "label");
+        String verify3 = browserWrapper.getAttribute(precededByLabel, "data-qa");
+        softAssert.assertEquals(verify3, "following-sibling-element-label", "Did not get element relative to preceding sibling element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element relative to preceding sibling FindBy
+     */
+    @Test
+    public void getElementRelativeToPrecededBySiblingFindBy() {
+        browserWrapper.goTo(testPage);
+
+        PageElement precededByA = new PageElement(Relative.PrecededBySibling(FindBy.text("This Is A Label")), "a");
+        String verify1 = browserWrapper.getAttribute(precededByA, "data-qa");
+        softAssert.assertEquals(verify1, "following-sibling-element-a", "Did not get element relative to preceding sibling element");
+
+        PageElement precededByInput = new PageElement("preceded by sibling a tag", Relative.PrecededBySibling(FindBy.text("This Is A Label")), "input");
+        String verify2 = browserWrapper.getAttribute(precededByInput, "data-qa");
+        softAssert.assertEquals(verify2, "following-sibling-element-input", "Did not get element relative to preceding sibling element");
+
+        PageElement precededByLabel = new PageElement("preceded by sibling a tag", Relative.PrecededBySibling(FindBy.text("This Is A Label")), "label");
+        String verify3 = browserWrapper.getAttribute(precededByLabel, "data-qa");
+        softAssert.assertEquals(verify3, "following-sibling-element-label", "Did not get element relative to preceding sibling element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element relative to following sibling element
+     */
+    @Test
+    public void getElementRelativeToFollowedBySiblingElement() {
+        browserWrapper.goTo(testPage);
+        PageElement followingSiblingElement = new PageElement("Following Sibling Element", FindBy.text("This Is A Label"));
+
+        PageElement followingElementInput = new PageElement("following sibling input tag", Relative.FollowedBySibling(followingSiblingElement), "input");
+        String verify1 = browserWrapper.getAttribute(followingElementInput, "data-qa");
+        softAssert.assertEquals(verify1, "preceding-sibling-element-input", "Did not get element relative to preceding sibling element");
+
+        PageElement followingElementLabel = new PageElement("following sibling label label", Relative.FollowedBySibling(followingSiblingElement), "label");
+        String verify2 = browserWrapper.getAttribute(followingElementLabel, "data-qa");
+        softAssert.assertEquals(verify2, "preceding-sibling-element-label", "Did not get element relative to preceding sibling element");
+
+        PageElement followingElementA = new PageElement(Relative.FollowedBySibling(followingSiblingElement), "a");
+        String verify3 = browserWrapper.getAttribute(followingElementA, "data-qa");
+        softAssert.assertEquals(verify3, "preceding-sibling-element-a", "Did not get element relative to preceding sibling element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element relative to following sibling element
+     */
+    @Test
+    public void getElementRelativeToFollowedBySiblingFindBy() {
+        browserWrapper.goTo(testPage);
+
+        PageElement followingElementInput = new PageElement("following sibling input tag", Relative.FollowedBySibling(FindBy.text("This Is A Label")), "input");
+        String verify1 = browserWrapper.getAttribute(followingElementInput, "data-qa");
+        softAssert.assertEquals(verify1, "preceding-sibling-element-input", "Did not get element relative to preceding sibling element");
+
+        PageElement followingElementLabel = new PageElement(Relative.FollowedBySibling(FindBy.text("This Is A Label")), "label");
+        String verify2 = browserWrapper.getAttribute(followingElementLabel, "data-qa");
+        softAssert.assertEquals(verify2, "preceding-sibling-element-label", "Did not get element relative to preceding sibling element");
+
+        PageElement followingElementA = new PageElement("following sibling label a", Relative.FollowedBySibling(FindBy.text("This Is A Label")), "a");
+        String verify3 = browserWrapper.getAttribute(followingElementA, "data-qa");
+        softAssert.assertEquals(verify3, "preceding-sibling-element-a", "Did not get element relative to preceding sibling element");
+
+        softAssert.assertAll();
+    }
+
+    /**
+     * Test get element by text
+     */
+    @Test
+    public void getElementByText() {
+        browserWrapper.goTo(testPage);
+
+        PageElement labelByText = new PageElement("label element by text", FindBy.text("Get Label Element By Text"));
+        String verify1 = browserWrapper.getAttribute(labelByText, "data-qa");
+        softAssert.assertEquals(verify1, "label-element-by-text", "Did not get element relative to preceding sibling element");
+
+        PageElement divByText = new PageElement("div element by text", FindBy.text("Get Div Element By Text"));
+        String verify2 = browserWrapper.getAttribute(divByText, "data-qa");
+        softAssert.assertEquals(verify2, "div-element-by-text", "Did not get element relative to preceding sibling element");
+
+        PageElement h3ByText = new PageElement("h3 element by text", FindBy.text("Get H3 Element By Text"));
+        String verify3 = browserWrapper.getAttribute(h3ByText, "data-qa");
+        softAssert.assertEquals(verify3, "h3-element-by-text", "Did not get element relative to preceding sibling element");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void getElementClasses() {
+        browserWrapper.goTo(testPage);
+
+        PageElement label = new PageElement(FindBy.id("label-with-class"));
+        String text = browserWrapper.getText(label);
+        String elementClasses = browserWrapper.getAttribute(label, "class");
+
+        softAssert.assertEquals(text, "5-Year");
+        softAssert.assertEquals(elementClasses, "selected");
+
+        softAssert.assertAll();
+    }
+
 
     @AfterSuite
     public void cleanup() {
