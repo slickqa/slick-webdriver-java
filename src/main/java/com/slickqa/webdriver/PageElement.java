@@ -12,6 +12,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * PageElement is essentially an equivalent to the selenium WebElement
@@ -29,9 +30,65 @@ public class PageElement
     private String name;
     private By finder;
     private WebContainer container;
+    private RelativeElement relativeElement;
     private WebElement cache;
     private Date lastCacheSave;
     private int elementIndex = -1;
+    private Relative relative;
+    private String relativeTagName;
+
+    public enum Relative {
+        WEBCONTAINER("webcontainer"),
+        ELEMENT("element"),
+        NONE("none");
+
+        private String relative;
+
+        Relative(String relative) {
+            this.relative = relative;
+        }
+
+        public String relative() {
+            return relative;
+        }
+    }
+
+
+
+    /**
+     * Create a PageElement with a FindBy that is relative to a RelativeElement (another PageElement).
+     *
+     * @param relativeElement A RelativeElement is basically a PageElement that we can use to relatively locate another PageElement.  It is a way to identify a relative relationship among PageElements
+     * @param tagName The tagName of the actual element you are trying to locate
+     * @return PageElement instance
+     */
+    public PageElement(RelativeElement relativeElement, String tagName) {
+        this.name = name;
+        this.relativeElement = relativeElement;
+        this.finder = finder;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.relative = Relative.ELEMENT;
+        this.relativeTagName = tagName;
+    }
+
+    /**
+     * Create a PageElement with a FindBy that is relative to a RelativeElement (another PageElement).
+     *
+     * @param name This is a common name for the PageElement, used mostly in logging
+     * @param relativeElement A RelativeElement is basically a PageElement that we can use to relatively locate another PageElement.  It is a way to identify a relative relationship among PageElements
+     * @param tagName The tagName of the actual element you are trying to locate
+     * @return PageElement instance
+     */
+    public PageElement(String name, RelativeElement relativeElement, String tagName) {
+        this.name = name;
+        this.relativeElement = relativeElement;
+        this.finder = finder;
+        this.cache = null;
+        this.lastCacheSave = null;
+        this.relative = Relative.ELEMENT;
+        this.relativeTagName = tagName;
+    }
 
     /**
      * Create a PageElement with a FindBy that is contained in a WebContainer (another PageElement).
@@ -46,6 +103,7 @@ public class PageElement
         this.finder = finder;
         this.cache = null;
         this.lastCacheSave = null;
+        this.relative = Relative.WEBCONTAINER;
     }
 
     /**
@@ -62,6 +120,7 @@ public class PageElement
         this.finder = finder;
 	    this.cache = null;
 	    this.lastCacheSave = null;
+        this.relative = Relative.WEBCONTAINER;
     }
 
     /**
@@ -79,6 +138,7 @@ public class PageElement
         this.cache = null;
         this.lastCacheSave = null;
         this.elementIndex = elementIndex;
+        this.relative = Relative.WEBCONTAINER;
     }
 
     /**
@@ -97,6 +157,7 @@ public class PageElement
         this.cache = null;
         this.lastCacheSave = null;
         this.elementIndex = elementIndex;
+        this.relative = Relative.WEBCONTAINER;
     }
 
     /**
@@ -112,6 +173,7 @@ public class PageElement
         this.container = null;
 	    this.cache = null;
 	    this.lastCacheSave = null;
+        this.relative = Relative.NONE;
     }
 
     /**
@@ -130,6 +192,7 @@ public class PageElement
         this.cache = null;
         this.lastCacheSave = null;
         this.elementIndex = elementIndex;
+        this.relative = Relative.NONE;
     }
 
     /**
@@ -144,6 +207,7 @@ public class PageElement
         this.container = null;
 	    this.cache = null;
 	    this.lastCacheSave = null;
+        this.relative = Relative.NONE;
     }
 
     /**
@@ -160,6 +224,7 @@ public class PageElement
         this.cache = null;
         this.lastCacheSave = null;
         this.elementIndex = elementIndex;
+        this.relative = Relative.NONE;
     }
 
 	/**
@@ -170,13 +235,13 @@ public class PageElement
 	 */
 	public PageElement(WebElement element)
 	{
-			name = "Pre Existing Webdriver WebElement";
-			this.finder = null;
-			this.container = null;
-			this.cache = element;
-			this.lastCacheSave = null;
-            this.elementIndex = -1;
-
+        name = "Pre Existing Webdriver WebElement";
+        this.finder = null;
+        this.container = null;
+        this.cache = element;
+        this.lastCacheSave = null;
+        this.elementIndex = -1;
+        this.relative = Relative.NONE;
     }
 
     /**
@@ -226,32 +291,33 @@ public class PageElement
         // the case of the timeout being zero
         do {
             try {
-                if (container == null) {
-                    if (elementIndex == -1) {
-                        element = browser.findElement(finder);
-                    }
-                    else {
-                        List<WebElement> elements = browser.findElements(finder);
-                        if (elements.size() < (elementIndex + 1)) {
-                            element = null;
+                switch (relative) {
+                    case WEBCONTAINER:
+                        if (elementIndex == -1) {
+                            element = container.findElement(browser, this);
+                        } else {
+                            List<WebElement> elements = container.findElements(browser, this);
+                            if (elements.size() < (elementIndex + 1)) {
+                                element = null;
+                            } else {
+                                element = elements.get(elementIndex);
+                            }
                         }
-                        else {
-                            element = elements.get(elementIndex);
+                        break;
+                    case ELEMENT:
+                        element = relativeElement.findElement(browser, this, relativeTagName);
+                        break;
+                    default:
+                        if (elementIndex == -1) {
+                            element = browser.findElement(finder);
+                        } else {
+                            List<WebElement> elements = browser.findElements(finder);
+                            if (elements.size() < (elementIndex + 1)) {
+                                element = null;
+                            } else {
+                                element = elements.get(elementIndex);
+                            }
                         }
-                    }
-                } else {
-                    if (elementIndex == -1) {
-                        element = container.findElement(browser, this);
-                    }
-                    else {
-                        List<WebElement> elements = container.findElements(browser, this);
-                        if (elements.size() < (elementIndex + 1)) {
-                            element = null;
-                        }
-                        else {
-                            element = elements.get(elementIndex);
-                        }
-                    }
                 }
                 if (element != null) {
                     element.isEnabled(); // cause a NoSuchElementException if it can't find it
@@ -296,23 +362,28 @@ public class PageElement
      *
      * @return List<PageElement> the list of PageElements located
      */
-    public List<PageElement> getElements(WebDriver browser, int timeout) throws NoSuchElementException {
+    public List<PageElement> getElements(WebDriver browser, int timeout) throws NoSuchElementException, NotImplementedException {
         List<PageElement> pageElements = new ArrayList<PageElement>();
 
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.SECOND, timeout);
         do {
             try {
-                if (container == null) {
-                    List<WebElement> webElements = browser.findElements(finder);
-                    for (WebElement e : webElements) {
-                        pageElements.add(new PageElement(e));
-                    }
-                } else {
-                    List<WebElement> webElements = container.findElements(browser, this);
-                    for (WebElement e : webElements) {
-                        pageElements.add(new PageElement(e));
-                    }
+                List<WebElement> webElements;
+                switch(relative) {
+                    case WEBCONTAINER:
+                        webElements = container.findElements(browser, this);
+                        for (WebElement e : webElements) {
+                            pageElements.add(new PageElement(e));
+                        }
+                        break;
+                    case ELEMENT:
+                        throw new NotImplementedException();
+                    default:
+                        webElements = browser.findElements(finder);
+                        for (WebElement e : webElements) {
+                            pageElements.add(new PageElement(e));
+                        }
                 }
             } catch (NoSuchElementException ex) {
                 pageElements = new ArrayList<PageElement>();
@@ -330,9 +401,6 @@ public class PageElement
             }
         } while (Calendar.getInstance().before(endTime) && pageElements.size() == 0);
 
-        if (pageElements.size() == 0) {
-            throw new NoSuchElementException("Was unable to find list of elements, to be found by " + getFindByDescription());
-        }
         lastCacheSave = new Date();
         return pageElements;
     }
@@ -343,16 +411,23 @@ public class PageElement
      * @return String a description of the FindBy for the PageElement
      */
     public String getFindByDescription() {
+        String description = "";
 		if (cache != null && lastCacheSave == null)
 		{
 			// We created the page element from an existing WebElement
-			return "Page Element created from an existing webdriver WebElement.";
+            return "Page Element created from an existing webdriver WebElement.";
 		}
-        if (container != null) {
-            return container.getFindByDescription() + " " + finder.toString();
-        } else {
-            return finder.toString();
+		switch (relative) {
+            case WEBCONTAINER:
+                description = container.getFindByDescription() + " " + finder.toString();
+                break;
+            case ELEMENT:
+                description = relativeElement.getFindByDescription();
+                break;
+            default:
+                description = finder.toString();
         }
+        return description;
     }
 
     /**
