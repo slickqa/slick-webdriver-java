@@ -28,7 +28,7 @@ public class FollowedBySibling implements RelativeElement
 	{
 		// fail fast, the child element will handle the timing
 		WebElement relativeElement = followingSibling.getElement(browser, 0);
-		return relativeElement.findElement(By.xpath("preceding-sibling::" + tagName));
+		return relativeElement.findElement(By.xpath("preceding-sibling::" + tagName + "[1]"));
 	}
 
 	@Override

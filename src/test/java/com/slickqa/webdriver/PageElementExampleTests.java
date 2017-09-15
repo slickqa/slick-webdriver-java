@@ -46,7 +46,7 @@ public class PageElementExampleTests {
         browserWrapper.goTo(testPage);
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElements();
-        softAssert.assertEquals(numberOfElementsFound, 8, "Incorrect number of input elements found on page");
+        softAssert.assertEquals(numberOfElementsFound, 16, "Incorrect number of input elements found on page");
         softAssert.assertAll();
     }
 
@@ -370,8 +370,92 @@ public class PageElementExampleTests {
     }
 
     /**
-     * Test get element by text
+     * Test get element relative to following sibling element
      */
+    @Test
+    public void getElementRelativeToFollowedBySiblingFindByInParent() {
+        browserWrapper.goTo(testPage);
+
+        PageElement fixedRateContainer = new PageElement(FindBy.id("product-fixed-container"));
+
+        PageElement labelFixedFiveYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.text("5-Year"));
+        PageElement checkboxFixedFiveYear = new PageElement("Fixed 5 Year Checkbox", Relative.FollowedBySibling(labelFixedFiveYear), "input");
+        String verify5yearFixedLabel = browserWrapper.getAttribute(labelFixedFiveYear, "data-qa");
+        softAssert.assertEquals(verify5yearFixedLabel, "label-5-year-fixed", "Did not get correct element");
+        String verify5yearFixedCheckbox = browserWrapper.getAttribute(checkboxFixedFiveYear, "data-qa");
+        softAssert.assertEquals(verify5yearFixedCheckbox, "checkbox-5-year-fixed", "Did not get correct element");
+
+        PageElement labelFixedSevenYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.text("7-Year"));
+        PageElement checkboxFixedSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelFixedSevenYear), "input");
+        String verify7yearFixedLabel = browserWrapper.getAttribute(labelFixedSevenYear, "data-qa");
+        softAssert.assertEquals(verify7yearFixedLabel, "label-7-year-fixed", "Did not get correct element");
+        String verify7yearFixedCheckbox = browserWrapper.getAttribute(checkboxFixedSevenYear, "data-qa");
+        softAssert.assertEquals(verify7yearFixedCheckbox, "checkbox-7-year-fixed", "Did not get correct element");
+
+        PageElement variableRateContainer = new PageElement(FindBy.id("product-variable-container"));
+
+        PageElement labelVariableFiveYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.text("5-Year"));
+        PageElement checkboxVariableFiveYear = new PageElement("Variable 5 Year Checkbox", Relative.FollowedBySibling(labelVariableFiveYear), "input");
+        String verify5yearVariableLabel = browserWrapper.getAttribute(labelVariableFiveYear, "data-qa");
+        softAssert.assertEquals(verify5yearVariableLabel, "label-5-year-variable", "Did not get correct element");
+        String verify5yearVariableCheckbox = browserWrapper.getAttribute(checkboxVariableFiveYear, "data-qa");
+        softAssert.assertEquals(verify5yearVariableCheckbox, "checkbox-5-year-variable", "Did not get correct element");
+
+        PageElement labelVariableSevenYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.text("7-Year"));
+        PageElement checkboxVariableSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelVariableSevenYear), "input");
+        String verify7yearVariableLabel = browserWrapper.getAttribute(labelVariableSevenYear, "data-qa");
+        softAssert.assertEquals(verify7yearVariableLabel, "label-7-year-variable", "Did not get correct element");
+        String verify7yearVariableCheckbox = browserWrapper.getAttribute(checkboxVariableSevenYear, "data-qa");
+        softAssert.assertEquals(verify7yearVariableCheckbox, "checkbox-7-year-variable", "Did not get correct element");
+
+        softAssert.assertAll();
+    }
+
+//    /**
+//     * Test get element relative to following sibling element
+//     */
+//    @Test
+//    public void getElementRelativeToFollowedBySiblingFindByInParentByXpath() {
+//        browserWrapper.goTo(testPage);
+//
+//        PageElement fixedRateContainer = new PageElement(FindBy.id("product-fixed-container"));
+//
+//        PageElement labelFixedFiveYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath("//label[text()='5-Year']"));
+//        PageElement checkboxFixedFiveYear = new PageElement("Fixed 5 Year Checkbox", Relative.FollowedBySibling(labelFixedFiveYear), "input");
+//        String verify5yearFixedLabel = browserWrapper.getAttribute(labelFixedFiveYear, "data-qa");
+//        softAssert.assertEquals(verify5yearFixedLabel, "label-5-year-fixed", "Did not get correct element");
+//        String verify5yearFixedCheckbox = browserWrapper.getAttribute(checkboxFixedFiveYear, "data-qa");
+//        softAssert.assertEquals(verify5yearFixedCheckbox, "checkbox-5-year-fixed", "Did not get correct element");
+//
+//        PageElement labelFixedSevenYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath("//label[text()='7-Year']"));
+//        PageElement checkboxFixedSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelFixedSevenYear), "input");
+//        String verify7yearFixedLabel = browserWrapper.getAttribute(labelFixedSevenYear, "data-qa");
+//        softAssert.assertEquals(verify7yearFixedLabel, "label-7-year-fixed", "Did not get correct element");
+//        String verify7yearFixedCheckbox = browserWrapper.getAttribute(checkboxFixedSevenYear, "data-qa");
+//        softAssert.assertEquals(verify7yearFixedCheckbox, "checkbox-7-year-fixed", "Did not get correct element");
+//
+//        PageElement variableRateContainer = new PageElement(FindBy.id("product-variable-container"));
+//
+//        PageElement labelVariableFiveYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath("//label[text()='5-Year']"));
+//        PageElement checkboxVariableFiveYear = new PageElement("Variable 5 Year Checkbox", Relative.FollowedBySibling(labelVariableFiveYear), "input");
+//        String verify5yearVariableLabel = browserWrapper.getAttribute(labelVariableFiveYear, "data-qa");
+//        softAssert.assertEquals(verify5yearVariableLabel, "label-5-year-variable", "Did not get correct element");
+//        String verify5yearVariableCheckbox = browserWrapper.getAttribute(checkboxVariableFiveYear, "data-qa");
+//        softAssert.assertEquals(verify5yearVariableCheckbox, "checkbox-5-year-variable", "Did not get correct element");
+//
+//        PageElement labelVariableSevenYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath("//label[text()='7-Year']"));
+//        PageElement checkboxVariableSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelVariableSevenYear), "input");
+//        String verify7yearVariableLabel = browserWrapper.getAttribute(labelVariableSevenYear, "data-qa");
+//        softAssert.assertEquals(verify7yearVariableLabel, "label-7-year-variable", "Did not get correct element");
+//        String verify7yearVariableCheckbox = browserWrapper.getAttribute(checkboxVariableSevenYear, "data-qa");
+//        softAssert.assertEquals(verify7yearVariableCheckbox, "checkbox-7-year-variable", "Did not get correct element");
+//
+//        softAssert.assertAll();
+//    }
+
+        /**
+         * Test get element by text
+         */
     @Test
     public void getElementByText() {
         browserWrapper.goTo(testPage);
