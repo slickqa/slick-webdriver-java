@@ -974,6 +974,72 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
+    public void waitForTextEmpty(PageElement element) {
+        waitForTextNotEmpty(element, this.timeout);
+    }
+
+    @Override
+    public void waitForTextEmpty(PageElement element, int p_timeout) {
+        logger.info("Waiting a maximum of {} seconds for element '{}' found by {} to exist and for it's text to be not empty.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        Date beginning = new Date();
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND, p_timeout);
+        do {
+            String elementText = getText(element, p_timeout);
+            if (elementText == null || elementText.isEmpty()) {
+                logger.debug("Found element '{}' with no text after {} seconds.", new Object[]{element.getName(), (((new Date()).getTime() - beginning.getTime()) / 1000)});
+                return;
+            }
+        } while (Calendar.getInstance().before(endTime));
+        logger.error("Waited {} seconds for the text of element '{}' found by {} to not be empty.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000), element.getName(), element.getFindByDescription()});
+        throw new TimeoutError("Timeout of " + p_timeout + " seconds exceeded while waiting for element '" + element.getName() + "' to provide non empty text.");
+    }
+
+    @Override
+    public void waitForValueNotEmpty(PageElement element) {
+        waitForValueNotEmpty(element, this.timeout);
+    }
+
+    @Override
+    public void waitForValueNotEmpty(PageElement element, int p_timeout) {
+        logger.info("Waiting a maximum of {} seconds for element '{}' found by {} to exist and for it's value attribute to be not empty.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        Date beginning = new Date();
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND, p_timeout);
+        do {
+            String elementValue = getAttribute(element, p_timeout,"value");
+            if (elementValue != null && !elementValue.isEmpty()) {
+                logger.debug("Found element '{}' with value attribute '{}' after {} seconds.", new Object[]{element.getName(), elementValue, (((new Date()).getTime() - beginning.getTime()) / 1000)});
+                return;
+            }
+        } while (Calendar.getInstance().before(endTime));
+        logger.error("Waited {} seconds for the value attribute of element '{}' found by {} to not be empty.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000), element.getName(), element.getFindByDescription()});
+        throw new TimeoutError("Timeout of " + p_timeout + " seconds exceeded while waiting for element '" + element.getName() + "' to provide non empty value attribute.");
+    }
+
+    @Override
+    public void waitForValueEmpty(PageElement element) {
+        waitForValueEmpty(element, this.timeout);
+    }
+
+    @Override
+    public void waitForValueEmpty(PageElement element, int p_timeout) {
+        logger.info("Waiting a maximum of {} seconds for element '{}' found by {} to exist and for it's value attribute to be not empty.", new Object[]{p_timeout, element.getName(), element.getFindByDescription()});
+        Date beginning = new Date();
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND, p_timeout);
+        do {
+            String elementValue = getAttribute(element, p_timeout,"value");
+            if (elementValue == null || elementValue.isEmpty()) {
+                logger.debug("Found element '{}' with no empty attribute value after {} seconds.", new Object[]{element.getName(), (((new Date()).getTime() - beginning.getTime()) / 1000)});
+                return;
+            }
+        } while (Calendar.getInstance().before(endTime));
+        logger.error("Waited {} seconds for the value attribute of element '{}' found by {} to not be empty.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000), element.getName(), element.getFindByDescription()});
+        throw new TimeoutError("Timeout of " + p_timeout + " seconds exceeded while waiting for element '" + element.getName() + "' to provide empty value attribute.");
+    }
+
+    @Override
     public <T extends PageWithActions> T on(Class<T> page) {
         logger.info("Creating instance of page '{}'.", page.getName());
 
@@ -1062,5 +1128,115 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
         Actions move = new Actions(driver);
         move.moveToElement(slider).moveByOffset(xOffset, yOffset).click().perform();
+    }
+
+    @Override
+    public void acceptAlert() {
+        try{
+            driver.switchTo().alert().accept();
+        }
+        catch (Exception e){
+            logger.trace("No alert box present");
+        }
+    }
+
+    @Override
+    public boolean alertPresent() {
+        try
+        {
+            driver.switchTo().alert();
+            return true;
+        }
+        catch (NoAlertPresentException Ex)
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean alertPresent(int p_timeout) {
+        boolean alertPresent = false;
+        try {
+            waitForAlertPresent(p_timeout);
+            alertPresent = true;
+        } catch (TimeoutError e) {
+            alertPresent = false;
+        }
+
+        return alertPresent;
+    }
+
+    @Override
+    public void waitForAlertPresent() {
+        waitForAlertPresent(timeout);
+    }
+
+    @Override
+    public void waitForAlertPresent(int p_timeout) {
+        logger.info("Waiting a maximum of {} seconds for an alert to be present", new Object[]{p_timeout});
+        Date beginning = new Date();
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND, p_timeout);
+        do {
+            boolean alertIsPresent = alertPresent();
+            if (alertIsPresent == true) {
+                logger.debug("Found an alert present after {} seconds.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000)});
+                return;
+            }
+        } while (Calendar.getInstance().before(endTime));
+        logger.error("Waited {} seconds for an alert to be present.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000)});
+        throw new TimeoutError("Timeout of " + p_timeout + " seconds exceeded while waiting for an alert to be present");
+    }
+
+    @Override
+    public void waitForNoAlertPresent() {
+        waitForNoAlertPresent(timeout);
+    }
+
+    @Override
+    public void waitForNoAlertPresent(int p_timeout) {
+        logger.info("Waiting a maximum of {} seconds for no alert to be present", new Object[]{p_timeout});
+        Date beginning = new Date();
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND, p_timeout);
+        do {
+            boolean alertIsPresent = alertPresent();
+            if (alertIsPresent == false) {
+                logger.debug("Found no alert present after {} seconds.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000)});
+                return;
+            }
+        } while (Calendar.getInstance().before(endTime));
+        logger.error("Waited {} seconds for no alert to be present.", new Object[]{(((new Date()).getTime() - beginning.getTime()) / 1000)});
+        throw new TimeoutError("Timeout of " + p_timeout + " seconds exceeded while waiting for no alert to be present");
+    }
+
+    @Override
+    public void deleteAllCookies(){
+        driver.manage().deleteAllCookies();
+    }
+
+    @Override
+    public void deleteCookieNamed(String cookieName){
+        driver.manage().deleteCookieNamed(cookieName);
+    }
+
+    @Override
+    public String getValueOfCookieNamed(String cookieName){
+        return driver.manage().getCookieNamed(cookieName).getValue();
+    }
+
+    @Override
+    public Cookie getCookieNamed(String cookieName) {
+        return driver.manage().getCookieNamed(cookieName);
+    }
+
+    @Override
+    public Set<Cookie> getAllCookies(){
+        return driver.manage().getCookies();
+    }
+
+    @Override
+    public void addCookie(Cookie cookie){
+        driver.manage().addCookie(cookie);
     }
 }

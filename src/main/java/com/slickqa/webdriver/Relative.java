@@ -8,12 +8,12 @@ import org.openqa.selenium.By;
  */
 public class Relative
 {
-	public static RelativeElement Decendent(PageElement decendent)
+	public static RelativeElement Descendant(PageElement descendant)
 	{
-		return new Descendant(decendent);
+		return new Descendant(descendant);
 	}
 
-	public static RelativeElement Decendent(By finder) {
+	public static RelativeElement Descendant(By finder) {
 		return new Descendant(finder);
 	}
 
