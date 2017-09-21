@@ -1,11 +1,15 @@
 package com.slickqa.webdriver;
 
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
+
+import java.util.Set;
 
 
 /**
@@ -224,25 +228,25 @@ public class PageElementExampleTests {
     public void getElementRelativeToChildElement() {
         browserWrapper.goTo(testPage);
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
-        PageElement relativeChildElement = new PageElement("Relative Child Element", FindBy.id("descendent-label-element"));
+        PageElement relativeChildElement = new PageElement("Relative Child Element", FindBy.id("descendant-label-element"));
 
-        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "table");
+        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Descendant(relativeChildElement), "table");
         String verify2 = browserWrapper.getAttribute(ascendantTable, "data-qa");
         softAssert.assertEquals(verify2, "great-3-grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTbody = new PageElement(Relative.Decendent(relativeChildElement), "tbody");
+        PageElement ascendantTbody = new PageElement(Relative.Descendant(relativeChildElement), "tbody");
         String verify3 = browserWrapper.getAttribute(ascendantTbody, "data-qa");
         softAssert.assertEquals(verify3, "great-2-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "tr");
+        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Descendant(relativeChildElement), "tr");
         String verify4 = browserWrapper.getAttribute(ascendantTr, "data-qa");
         softAssert.assertEquals(verify4, "great-grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Decendent(relativeChildElement), "td");
+        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Descendant(relativeChildElement), "td");
         String verify5 = browserWrapper.getAttribute(ascendantTd, "data-qa");
         softAssert.assertEquals(verify5, "grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantA = new PageElement("parent element a tag", Relative.Decendent(relativeChildElement), "a");
+        PageElement ascendantA = new PageElement("parent element a tag", Relative.Descendant(relativeChildElement), "a");
         String verify6 = browserWrapper.getAttribute(ascendantA, "data-qa");
         softAssert.assertEquals(verify6, "parent", "Did not get element relative to child element");
 
@@ -256,23 +260,23 @@ public class PageElementExampleTests {
     public void getElementRelativeToChildFindBy() {
         browserWrapper.goTo(testPage);
 
-        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "table");
+        PageElement ascendantTable = new PageElement("parent element div tag", Relative.Descendant(FindBy.id("descendant-label-element")), "table");
         String verify2 = browserWrapper.getAttribute(ascendantTable, "data-qa");
         softAssert.assertEquals(verify2, "great-3-grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTbody = new PageElement(Relative.Decendent(FindBy.id("descendent-label-element")), "tbody");
+        PageElement ascendantTbody = new PageElement(Relative.Descendant(FindBy.id("descendant-label-element")), "tbody");
         String verify3 = browserWrapper.getAttribute(ascendantTbody, "data-qa");
         softAssert.assertEquals(verify3, "great-2-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "tr");
+        PageElement ascendantTr = new PageElement("parent element div tag", Relative.Descendant(FindBy.id("descendant-label-element")), "tr");
         String verify4 = browserWrapper.getAttribute(ascendantTr, "data-qa");
         softAssert.assertEquals(verify4, "great-grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Decendent(FindBy.id("descendent-label-element")), "td");
+        PageElement ascendantTd = new PageElement("parent element div tag", Relative.Descendant(FindBy.id("descendant-label-element")), "td");
         String verify5 = browserWrapper.getAttribute(ascendantTd, "data-qa");
         softAssert.assertEquals(verify5, "grand-parent", "Did not get element relative to child element");
 
-        PageElement ascendantA = new PageElement("parent element a tag", Relative.Decendent(FindBy.id("descendent-label-element")), "a");
+        PageElement ascendantA = new PageElement("parent element a tag", Relative.Descendant(FindBy.id("descendant-label-element")), "a");
         String verify6 = browserWrapper.getAttribute(ascendantA, "data-qa");
         softAssert.assertEquals(verify6, "parent", "Did not get element relative to child element");
 
@@ -420,14 +424,14 @@ public class PageElementExampleTests {
 //
 //        PageElement fixedRateContainer = new PageElement(FindBy.id("product-fixed-container"));
 //
-//        PageElement labelFixedFiveYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath("//label[text()='5-Year']"));
+//        PageElement labelFixedFiveYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath(".label[text()='5-Year']"));
 //        PageElement checkboxFixedFiveYear = new PageElement("Fixed 5 Year Checkbox", Relative.FollowedBySibling(labelFixedFiveYear), "input");
 //        String verify5yearFixedLabel = browserWrapper.getAttribute(labelFixedFiveYear, "data-qa");
 //        softAssert.assertEquals(verify5yearFixedLabel, "label-5-year-fixed", "Did not get correct element");
 //        String verify5yearFixedCheckbox = browserWrapper.getAttribute(checkboxFixedFiveYear, "data-qa");
 //        softAssert.assertEquals(verify5yearFixedCheckbox, "checkbox-5-year-fixed", "Did not get correct element");
 //
-//        PageElement labelFixedSevenYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath("//label[text()='7-Year']"));
+//        PageElement labelFixedSevenYear = new PageElement(In.ParentElement(fixedRateContainer), FindBy.xpath(".label[text()='7-Year']"));
 //        PageElement checkboxFixedSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelFixedSevenYear), "input");
 //        String verify7yearFixedLabel = browserWrapper.getAttribute(labelFixedSevenYear, "data-qa");
 //        softAssert.assertEquals(verify7yearFixedLabel, "label-7-year-fixed", "Did not get correct element");
@@ -436,14 +440,14 @@ public class PageElementExampleTests {
 //
 //        PageElement variableRateContainer = new PageElement(FindBy.id("product-variable-container"));
 //
-//        PageElement labelVariableFiveYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath("//label[text()='5-Year']"));
+//        PageElement labelVariableFiveYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath(".label[text()='5-Year']"));
 //        PageElement checkboxVariableFiveYear = new PageElement("Variable 5 Year Checkbox", Relative.FollowedBySibling(labelVariableFiveYear), "input");
 //        String verify5yearVariableLabel = browserWrapper.getAttribute(labelVariableFiveYear, "data-qa");
 //        softAssert.assertEquals(verify5yearVariableLabel, "label-5-year-variable", "Did not get correct element");
 //        String verify5yearVariableCheckbox = browserWrapper.getAttribute(checkboxVariableFiveYear, "data-qa");
 //        softAssert.assertEquals(verify5yearVariableCheckbox, "checkbox-5-year-variable", "Did not get correct element");
 //
-//        PageElement labelVariableSevenYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath("//label[text()='7-Year']"));
+//        PageElement labelVariableSevenYear = new PageElement(In.ParentElement(variableRateContainer), FindBy.xpath(".label[text()='7-Year']"));
 //        PageElement checkboxVariableSevenYear = new PageElement("Fixed 7 Year Checkbox", Relative.FollowedBySibling(labelVariableSevenYear), "input");
 //        String verify7yearVariableLabel = browserWrapper.getAttribute(labelVariableSevenYear, "data-qa");
 //        softAssert.assertEquals(verify7yearVariableLabel, "label-7-year-variable", "Did not get correct element");
@@ -489,6 +493,221 @@ public class PageElementExampleTests {
         softAssert.assertAll();
     }
 
+    @Test
+    public void waitForValue() {
+        boolean timedOutAsExpectedWaitingForValueEmpty;
+        boolean timedOutAsExpectedWaitingForValueNotEmpty;
+        boolean timedOutWaitingForValueEmpty;
+        boolean timedOutWaitingForValueNotEmpty;
+
+        browserWrapper.goTo(testPage);
+        PageElement inputBox = new PageElement("input box", FindBy.id("yo"));
+        try {
+            browserWrapper.waitForValueNotEmpty(inputBox, 2);
+            timedOutAsExpectedWaitingForValueNotEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutAsExpectedWaitingForValueNotEmpty = true;
+        }
+        softAssert.assertTrue(timedOutAsExpectedWaitingForValueNotEmpty, "Did not get a timeout waiting for the value attribute to not be empty");
+
+        try {
+            browserWrapper.waitForValueEmpty(inputBox, 2);
+            timedOutWaitingForValueEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutWaitingForValueEmpty = true;
+        }
+        softAssert.assertFalse(timedOutWaitingForValueEmpty, "Timed out waiting for value attribute to be empty");
+
+        browserWrapper.type(inputBox, "hey there, how is it going?");
+
+        try {
+            browserWrapper.waitForValueEmpty(inputBox, 2);
+            timedOutAsExpectedWaitingForValueEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutAsExpectedWaitingForValueEmpty = true;
+        }
+        softAssert.assertTrue(timedOutAsExpectedWaitingForValueEmpty, "Did not get a timeout waiting for the value attribute to be empty");
+
+        try {
+            browserWrapper.waitForValueNotEmpty(inputBox, 2);
+            timedOutWaitingForValueNotEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutWaitingForValueNotEmpty = true;
+        }
+        softAssert.assertFalse(timedOutWaitingForValueNotEmpty, "Timed out waiting for value attribute to not be empty");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void waitForText() {
+        boolean timedOutAsExpectedWaitingForTextEmpty;
+        boolean timedOutWaitingForTextNotEmpty;
+        boolean timedOutAsExpectedWaitingForTextNotEmpty;
+        boolean timedOutWaitingForTextEmpty;
+
+        browserWrapper.goTo(testPage);
+
+        PageElement whatIsSlick = new PageElement("What is Slick", FindBy.id("what-is-slick"));
+
+        try {
+            browserWrapper.waitForTextEmpty(whatIsSlick, 2);
+            timedOutAsExpectedWaitingForTextEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutAsExpectedWaitingForTextEmpty = true;
+        }
+        softAssert.assertTrue(timedOutAsExpectedWaitingForTextEmpty, "Did not timeout waiting for the text to be empty");
+
+        try {
+            browserWrapper.waitForTextNotEmpty(whatIsSlick, 2);
+            timedOutWaitingForTextNotEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutWaitingForTextNotEmpty = true;
+        }
+        softAssert.assertFalse(timedOutWaitingForTextNotEmpty, "Timed out waiting for text to not be empty");
+
+        PageElement inputBox = new PageElement("input box", FindBy.id("yo"));
+
+        try {
+            browserWrapper.waitForTextNotEmpty(inputBox, 2);
+            timedOutAsExpectedWaitingForTextNotEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutAsExpectedWaitingForTextNotEmpty = true;
+        }
+        softAssert.assertTrue(timedOutAsExpectedWaitingForTextNotEmpty, "Did not timeout wiating for the text to not be empty");
+
+        try {
+            browserWrapper.waitForTextEmpty(inputBox, 2);
+            timedOutWaitingForTextEmpty = false;
+        } catch (TimeoutError e) {
+            timedOutWaitingForTextEmpty = true;
+        }
+        softAssert.assertFalse(timedOutWaitingForTextEmpty, "Timed out waiting for the text to be empty");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testAcceptAlert() {
+        browserWrapper.goTo(testPage);
+
+        PageElement alertButton = new PageElement("alert box", FindBy.id("alert-button"));
+
+        boolean gotExceptionAcceptingAlertWhenDoesNotExist;
+        try {
+            browserWrapper.acceptAlert();
+            gotExceptionAcceptingAlertWhenDoesNotExist = false;
+        } catch (Exception e) {
+            gotExceptionAcceptingAlertWhenDoesNotExist = true;
+        }
+        softAssert.assertFalse(gotExceptionAcceptingAlertWhenDoesNotExist, "Got an exception accepting an alert that does not exist");
+
+        browserWrapper.click(alertButton);
+        boolean alertExists = browserWrapper.alertPresent();
+        softAssert.assertTrue(alertExists, "Alert did not exist");
+
+        browserWrapper.acceptAlert();
+        alertExists = browserWrapper.alertPresent();
+        softAssert.assertFalse(alertExists, "Alert still existed");
+
+        browserWrapper.click(alertButton);
+        boolean alertExistsWithTimeout = browserWrapper.alertPresent(2);
+        softAssert.assertTrue(alertExistsWithTimeout, "Alert did not exist");
+
+        browserWrapper.acceptAlert();
+        alertExistsWithTimeout = browserWrapper.alertPresent(2);
+        softAssert.assertFalse(alertExistsWithTimeout, "Alert still existed");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testWaitForAlert() {
+        browserWrapper.goTo(testPage);
+
+        boolean timeoutAsExpectedWaitingForAlertPresent;
+        boolean timeoutWaitingForAlertPresent;
+        boolean timeoutAsExpectedWaitingForNoAlertPresent;
+        boolean timeoutWaitingForNoAlertPresent;
+
+        PageElement alertButton = new PageElement("alert box", FindBy.id("alert-button"));
+
+        try {
+            browserWrapper.waitForAlertPresent(2);
+            timeoutAsExpectedWaitingForAlertPresent = false;
+        } catch(TimeoutError e) {
+            timeoutAsExpectedWaitingForAlertPresent = true;
+        }
+        softAssert.assertTrue(timeoutAsExpectedWaitingForAlertPresent, "Did not timeout as expected waiting for an alert to be present");
+
+        browserWrapper.click(alertButton);
+
+        try {
+            browserWrapper.waitForAlertPresent(2);
+            timeoutWaitingForAlertPresent = false;
+        } catch (Exception e){
+            timeoutWaitingForAlertPresent = true;
+        }
+        softAssert.assertFalse(timeoutWaitingForAlertPresent, "Timed out waiting for an alert to be present");
+
+        try {
+            browserWrapper.waitForNoAlertPresent(2);
+            timeoutAsExpectedWaitingForNoAlertPresent = false;
+        } catch (TimeoutError e) {
+            timeoutAsExpectedWaitingForNoAlertPresent = true;
+        }
+        softAssert.assertTrue(timeoutAsExpectedWaitingForNoAlertPresent, "Did not timeout as expected waiting for no alert to be present");
+
+        browserWrapper.acceptAlert();
+
+        try {
+            browserWrapper.waitForNoAlertPresent(2);
+            timeoutAsExpectedWaitingForNoAlertPresent = false;
+        } catch (Exception e) {
+            timeoutAsExpectedWaitingForNoAlertPresent = true;
+        }
+        softAssert.assertFalse(timeoutAsExpectedWaitingForNoAlertPresent, "Timed out waiting for no alert to be present");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testCookies() {
+        browserWrapper.goTo("http://www.google.com");
+        Set<Cookie> cookies = browserWrapper.getAllCookies();
+        Assert.assertTrue(cookies.size() > 0, "Did not start out with any cookies, cannot continue test");
+        browserWrapper.deleteAllCookies();
+        cookies = browserWrapper.getAllCookies();
+        softAssert.assertTrue(cookies.size() == 0, "Did not successfully delete all cookies");
+
+        String cookieName = "C";
+        String cookieValue = "Is for cookie";
+        Cookie c = new Cookie(cookieName, cookieValue);
+        browserWrapper.addCookie(c);
+        cookies = browserWrapper.getAllCookies();
+        Assert.assertTrue(cookies.size() == 1, "Did not successfully add a cookie, cannot continue test");
+
+        String valueOfCookie = browserWrapper.getValueOfCookieNamed(cookieName);
+        softAssert.assertEquals(valueOfCookie, cookieValue, "Cookie value returned was not correct");
+
+        Cookie returnedCooked = browserWrapper.getCookieNamed(cookieName);
+        softAssert.assertEquals(returnedCooked.getName(), cookieName, "Returned cookie did not have correct name");
+        softAssert.assertEquals(returnedCooked.getValue(), cookieValue,"Returned cookie did not have correct value");
+
+        String cookie2Name = "C2";
+        String cookie2Value = "C2 is not for cookie";
+        Cookie c2 = new Cookie(cookie2Name, cookie2Value);
+        browserWrapper.addCookie(c2);
+        cookies = browserWrapper.getAllCookies();
+        Assert.assertTrue(cookies.size() == 2, "Did not successfully add a 2nd cookie, cannot continue test");
+
+        browserWrapper.deleteCookieNamed(cookieName);
+        cookies = browserWrapper.getAllCookies();
+        softAssert.assertTrue(cookies.size() == 1, "Did not successfully delete a cookie by name");
+        softAssert.assertEquals(cookies.iterator().next().getName(), cookie2Name, "We deleted the wrong cookie");
+
+        softAssert.assertAll();
+    }
 
     @AfterSuite
     public void cleanup() {

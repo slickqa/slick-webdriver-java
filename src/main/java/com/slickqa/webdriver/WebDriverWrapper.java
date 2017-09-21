@@ -1,5 +1,6 @@
 package com.slickqa.webdriver;
 
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
@@ -650,6 +651,27 @@ public interface WebDriverWrapper
      */
     void waitForTextNotEmpty(PageElement element, int timeout);
 
+	/**
+	 * Wait for an PageElement's getText() to be empty or null.  Use the default timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for an ajax error message.
+	 *
+	 * @param element The element to wait for the text to be empty.
+	 */
+	void waitForTextEmpty(PageElement element);
+
+	/**
+	 * Wait for an PageElement's getText() to be empty or null.  Use the specified timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for an ajax error message.
+	 *
+	 * @param element The element to wait for the text to be empty.
+	 * @param timeout The maximum wait time in seconds.
+	 */
+	void waitForTextEmpty(PageElement element, int timeout);
+
     /**
      * Use actions on a PageWithActions.  Basically any class (page) that implements the interface
      * PageWithActions, and has a default no-arg constructor can be instantiated.  Example would look like
@@ -745,4 +767,132 @@ public interface WebDriverWrapper
 	 */
 	void clickAtOffset(PageElement locator, int xOffset, int yOffset, int timeout);
 
+	/**
+	 * Wait for an PageElement's value attribute to not be empty or null.  Use the default timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for the input element to be populated.
+	 *
+	 * @param element The element to wait for the value attribute to be not empty.
+	 */
+	void waitForValueNotEmpty(PageElement element);
+
+	/**
+	 * Wait for an PageElement's value attribute to not be empty or null.  Use the specified timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for the input element to be populated.
+	 *
+	 * @param element The element to wait for the value attribute to be not empty.
+	 * @param timeout The maximum wait time in seconds.
+	 */
+	void waitForValueNotEmpty(PageElement element, int timeout);
+
+	/**
+	 * Wait for an PageElement's value attribute to be empty or null.  Use the default timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for the input element to be populated.
+	 *
+	 * @param element The element to wait for the value attribute to be empty.
+	 */
+	void waitForValueEmpty(PageElement element);
+
+	/**
+	 * Wait for an PageElement's value attribute to be empty or null.  Use the specified timeout.
+	 * This method will also wait for the element to exist.
+	 *
+	 * An example usage for this method would be to wait for the input element to be populated.
+	 *
+	 * @param element The element to wait for the value attribute to be empty.
+	 * @param timeout The maximum wait time in seconds.
+	 */
+	void waitForValueEmpty(PageElement element, int timeout);
+
+	/**
+	 * Delete all cookies
+	 */
+	void deleteAllCookies();
+
+	/**
+	 * Delete cookie with the name provided
+	 *
+	 * @param cookieName
+	 */
+	void deleteCookieNamed(String cookieName);
+
+	/**
+	 * Return the value of the cookie with the name provided
+	 *
+	 * @param cookieName
+	 * @return the value of the cookie with the name provided
+	 */
+	String getValueOfCookieNamed(String cookieName);
+
+	/**
+	 * Return the cookie with the name provided
+	 *
+	 * @param cookieName
+	 * @return the cookie with the specified name
+	 */
+	Cookie getCookieNamed(String cookieName);
+
+	/**
+	 * Add a cookie
+	 * @param cookie The cookie to add
+	 */
+	void addCookie(Cookie cookie);
+
+	/**
+	 * Get all cookies
+	 *
+	 * @return
+	 */
+	Set<Cookie> getAllCookies();
+
+	/**
+	 * Accept an alert if it is present
+	 */
+	void acceptAlert();
+
+	/**
+	 * Check if an alert is present.  This is a quick check, no waiting is performed.
+	 *
+	 * @return true if an alert is present, false otherwise
+	 */
+	boolean alertPresent();
+
+	/**
+	 * Check if an alert is present.  Waiting the passed in timeout for an alert to be present.
+	 *
+	 * @param timeout
+	 * @return true if the element exists and is accessible, false otherwise
+	 */
+	boolean alertPresent(int timeout);
+
+	/**
+	 * Wait for an alert to be present.  Use the default timeout.
+	 *
+	 */
+	void waitForAlertPresent();
+
+	/**
+	 * Wait for an alert to be present.  Use the specified timeout.
+	 *
+	 * @param timeout The maximum wait time in seconds.
+	 */
+	void waitForAlertPresent(int timeout);
+
+	/**
+	 * Wait for an alert to not be present.  Use the default timeout.
+	 *
+	 */
+	void waitForNoAlertPresent();
+
+	/**
+	 * Wait for an alert to not be present.  Use the specified timeout.
+	 *
+	 * @param timeout The maximum wait time in seconds.
+	 */
+	void waitForNoAlertPresent(int timeout);
 }
