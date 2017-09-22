@@ -223,6 +223,16 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             } catch (StaleElementReferenceException e) {
                 logger.warn("Got a stale element exception trying to click, retrying.", e);
             }
+            catch (Exception e) {
+                if (e.getMessage().contains("not clickable at point")) {
+                    logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
+                    try {
+                        Thread.sleep(500);
+                    } catch (Exception te) {
+
+                    }
+                }
+            }
         }
     }
 
