@@ -469,13 +469,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         Date start_time = new Date();
         Calendar end_time = Calendar.getInstance();
         end_time.add(Calendar.SECOND, p_timeout);
-        while (Calendar.getInstance().before(end_time) && !page.isCurrentPage()) {
+        while (Calendar.getInstance().before(end_time) && !page.isCurrentStep()) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException ex) {
             }
         }
-        if (!page.isCurrentPage()) {
+        if (!page.isCurrentStep()) {
             logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getClass().getName(), p_timeout);
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
@@ -505,7 +505,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     public <T> void handlePageInFlow(Class<? extends InFlow<T>> page, T context) throws Exception {
         try {
             InFlow<T> page_instance = page.newInstance();
-            page_instance.handlePage(context);
+            page_instance.handleStep(context);
         } catch (InstantiationException ex) {
             logger.error("Unable to create instance of page class " + page.getName() + ".", ex);
             throw new IllegalStateException("Unable to create instance of page class " + page.getName() + ".", ex);
