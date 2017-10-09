@@ -14,7 +14,7 @@ public interface InFlow<T> {
     /**
      * Determine if the current step is the one represented by this class.  It is VERY important that this
      * be a quick check, not one that waits for 30 seconds before returning false.  You should pass in a 0 timeout to
-     * whatever elements you look for in the browser.
+     * whatever elements you are looking for.
      *
      * @return true if the current step is the one this class represents, false otherwise.
      */
