@@ -577,17 +577,25 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         end_time.add(Calendar.SECOND, p_timeout);
         WebElement wdelement = getElement(element, p_timeout);
         logger.info("Found element '{}' after {} seconds, waiting for it to become visible.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
-        while (!wdelement.isDisplayed() && (Calendar.getInstance().before(end_time))) {
+
+        while (Calendar.getInstance().before(end_time)) {
             try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                logger.warn("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
+                if (wdelement.isDisplayed()) {
+                    break;
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    logger.error("Caught interrupted exception, while waiting for element visible, but it shouldn't cause too much trouble: {}", e.getMessage());
+                }
+            } catch (StaleElementReferenceException e) {
             }
         }
+
         if (!wdelement.isDisplayed()) {
             throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " + element.getFindByDescription() + " to become visible, and it never happened.");
         }
-        logger.debug("Element '{}' was found visisble after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.debug("Element '{}' was found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
@@ -921,7 +929,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    logger.error("Caught interrupted exception, while waiting for element, but it shouldn't cause too much trouble: {}", e.getMessage());
+                    logger.error("Caught interrupted exception, while waiting for element to not be visible, but it shouldn't cause too much trouble: {}", e.getMessage());
                 }
             } catch (StaleElementReferenceException e) {
             }
@@ -930,7 +938,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " +  element.getName() + "to become invisible, and it never happened.");
         }
 
-        logger.info("Element '{}' was not found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.info("Element '{}' was not found invisible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
@@ -1090,7 +1098,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 elements = getElements(locator, p_timeout);
                 break;
             } catch (StaleElementReferenceException e) {
-                logger.warn("Got a stale element exception trying to click, retrying.", e);
+                logger.warn("Got a stale element exception trying to get page elements, retrying.", e);
             }
         }
         return elements;
