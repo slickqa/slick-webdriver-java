@@ -192,16 +192,31 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void setCheckboxState(PageElement locator, boolean checked, int p_timeout) {
-        WebElement element = getElement(locator, p_timeout);
-        if (checked) {
-            logger.info("setting checkbox element state to true with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
-            if (!element.isSelected()) {
-                element.click();
-            }
-        } else {
-            logger.info("setting checkbox element state to false with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
-            if (element.isSelected()) {
-                element.click();
+        for(int tries = 0; tries < 3; tries++) {
+            try {
+                WebElement element = getElement(locator, p_timeout);
+                if (checked) {
+                    logger.info("setting checkbox element state to true with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+                    if (!element.isSelected()) {
+                        element.click();
+                    }
+                    break;
+                } else {
+                    logger.info("setting checkbox element state to false with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
+                    if (element.isSelected()) {
+                        element.click();
+                    }
+                    break;
+                }
+            } catch (Exception e) {
+                if (e.getMessage().contains("not clickable at point")) {
+                    logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
+                    try {
+                        Thread.sleep(500);
+                    } catch (Exception te) {
+
+                    }
+                }
             }
         }
     }
