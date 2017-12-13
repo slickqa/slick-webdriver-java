@@ -259,11 +259,25 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     @Override
     public void clickHiddenElement(PageElement locator, int p_timeout) {
         logger.info("Clicking on hidden element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
-        WebDriver webDriver = getDriver();
-        By findByMethod = locator.getFinder();
-        WebElement element = webDriver.findElement(findByMethod);
-        JavascriptExecutor executor = (JavascriptExecutor)webDriver;
-        executor.executeScript("arguments[0].click()", element);
+
+        Calendar end_time = Calendar.getInstance();
+        end_time.add(Calendar.SECOND, p_timeout);
+
+        while (Calendar.getInstance().before(end_time)) {
+            try {
+                WebDriver webDriver = getDriver();
+                By findByMethod = locator.getFinder();
+                WebElement element = webDriver.findElement(findByMethod);
+                JavascriptExecutor executor = (JavascriptExecutor)webDriver;
+                executor.executeScript("arguments[0].click()", element);
+                break;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Got a stale element exception trying to get page elements, retrying.", e);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) { }
+            }
+        }
     }
 
     @Override
@@ -772,22 +786,36 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
-    public boolean isVisible(PageElement locator, int timeout) {
+    public boolean isVisible(PageElement locator, int p_timeout) {
         boolean elementVisible = true;
 
         logger.debug("Checking visibility on element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
-        if (exists(locator) == true) {
-            WebElement wdelement = getElement(locator, timeout);
-            elementVisible = wdelement.isDisplayed();
+        Calendar end_time = Calendar.getInstance();
+        end_time.add(Calendar.SECOND, p_timeout);
 
-            if (elementVisible) {
-                logger.info("Found visible element with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
-            } else {
-                logger.info("Element was NOT VISIBLE with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
+        while (Calendar.getInstance().before(end_time)) {
+            try {
+                if (exists(locator) == true) {
+                    WebElement wdelement = getElement(locator, p_timeout);
+                    elementVisible = wdelement.isDisplayed();
+
+                    if (elementVisible) {
+                        logger.info("Found visible element with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
+                        break;
+                    } else {
+                        logger.info("Element was NOT VISIBLE with name '{}' and found '{}'", locator.getName(), locator.getFindByDescription());
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) { }
+                    }
+                } else {
+                    elementVisible = false;
+                }
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Got a stale element exception trying to get page elements, retrying.", e);
             }
-        } else {
-            elementVisible = false;
         }
+
         return elementVisible;
     }
 
