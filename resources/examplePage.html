@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html ng-app="SlickWebsite">
+<head>
+    <title>SlickQA: WebDriver Wrapper Test Page</title>
+</head>
+<body ng-controller="MainController">
+<header>
+    <div class="inner-header">
+        <div>
+            <a href="#" class="sidenav-button-link" ng-click="toggleNav($event)"><img src="/images/icon-menu.svg"/></a>
+        </div>
+        <h1>Slick Test Manager</h1>
+    </div>
+</header>
+
+<div _ngcontent-c3="" id="pl-requested-slider">
+    <input _ngcontent-c3="" id="product-slider" name="productSlider" step="1" type="range" min="1" max="100" class="ng-valid ng-dirty ng-touched">
+</div>
+
+<div class="flex-layout-row-nowrap flex-container main">
+    <input id="this is an input">
+    <section class="sidenav" ng-class="navModeClass()" ng-show="navShow()">
+        <div class="sidenav-inner">
+            <div class="sidenav-pin-box">
+                <a href="#" ng-click="toggleMode($event)"><img class="sidenav-mode-image" ng-src="/images/sidenav-{{ navMode() }}.png"/> </a>
+            </div>
+            <a class="clickable-text" href="/">Home</a><br />
+
+
+            <a class="clickable-text" href="/about.html">About Slick</a><br />
+
+
+
+            <a class="clickable-text" href="/features.html">Features</a><br />
+
+
+
+
+
+            <a class="clickable-text" href="/clients/python/index.html">Slick Python Client</a><br />
+
+
+
+            <a class="clickable-text" href="/clients/index.html">Slick Clients</a><br />
+
+
+
+            <a class="clickable-text" href="/webdriver/index.html">Slick Webdriver Project</a><br />
+
+
+
+            <a class="clickable-text" href="/webdriver/python/index.html">Slick Webdriver Python</a><br />
+
+
+
+            <a class="clickable-text" href="/clients/java/index.html">Slick Java Client</a><br />
+
+
+
+            <a class="clickable-text" href="/features/rest.html">Slick's REST Api</a><br />
+
+
+        </div>
+    </section>
+    <input id="yadayada">
+    <section class="main-container">
+        <div class="main-view">
+            <div class="slickview">
+                <p><img src="slickFancy.gif" alt="slick logo" data-qa="slick-logo"/></p>
+
+                <h2 id="what-is-slick">What is slick?</h2>
+
+                <p>Slick is a web app that helps you organize your testing infrastructure.  That means slick does what most test or quality
+                    management applications do.  It keeps track of test cases, projects, results of tests, etc.  One of the main goals
+                    of slick is to make it really easy for engineers and analysts to do their jobs.  Slick should look nice, give
+                    management what they need, and get out of the way for those using it.</p>
+
+                <h2 id="what-can-it-do" data-qa="slick-what-can-it-do">What can it do?</h2>
+
+                <p>A short feature list is:</p>
+
+                <ul>
+                    <li>Various ways to categorize tests, including by <a href="/features/project.html">project</a>, <a href="/features/project.html">component</a>, <a href="/features/project.html">feature</a>, and arbitrary tags.</li>
+                    <li><a href="/features/testautomation.html">Test automation</a> <a href="/features/clients.html">integration</a> without a predefined test tool!  You can use whatever you want</li>
+                    <li>Documented <a href="/features/rest.html">REST Api</a></li>
+                    <li>Put test into <a href="/features/testplans.html">testplans</a> to define what should be run, and how it should be run</li>
+                    <li>Lots of “Manager Porn” or <a href="/features/testruns.html">graphs</a>, <a href="/features/result.html">trends</a>, <a href="/features/dashboards.html">dashboards</a>, and <a href="/features/result.html">debugging information</a></li>
+                    <li><a href="/features.html">and more</a></li>
+                </ul>
+
+                <h2 id="let-me-see">Let me See!</h2>
+
+                <p>For more screenshots look at the <a href="/features.html">features page</a>.</p>
+
+
+            </div>
+        </div>
+    </section>
+    <a href="invalid" id="features-link">features link invalid</a>
+    <div data-qa="parent-div">
+        <input id="blah">
+        <a href="http://www.slickqa.com/features.html" id="features-link">features link valid</a>
+    </div>
+    <div data-qa="parent-div2" value="testingrelative">
+        <input id="blah2">
+        <a href="http://www.slickqa.com/features.html" id="features-link2">features link valid 2</a>
+    </div>
+    <div>
+        <a data-qa="wrong2-preceding-sibling-a-element"></a>
+        <a data-qa="wrong-preceding-sibling-a-element"></a>
+        <input data-qa="and-another-preceding-sibling-element-input">
+        <a data-qa="preceding-sibling-element-a"></a>
+        <label data-qa="preceding-sibling-element-label"></label>
+        <input data-qa="another-preceding-sibling-element-input">
+        <input data-qa="preceding-sibling-element-input">
+        <label data-qa="label">This Is A Label</label>
+        <input data-qa="following-sibling-element-input">
+        <input data-qa="another-following-sibling-element-input">
+        <a data-qa="following-sibling-element-a"></a>
+        <input data-qa="and-another-following-sibling-element-input">
+        <a data-qa="another-following-sibling-element-a"></a>
+        <label data-qa="following-sibling-element-label"></label>
+        <label data-qa="wrong-following-label-element"></label>
+        <a data-qa="and-another-following-sibling-element-a"></a>
+        <label data-qa="wrong2-following-label-element"></label>
+    </div>
+    <div id="product-fixed-container">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <input type="checkbox" data-qa="checkbox-5-year-fixed">
+                            <label data-qa="label-5-year-fixed">5-Year</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <input type="checkbox" data-qa="checkbox-7-year-fixed">
+                            <label data-qa="label-7-year-fixed">7-Year</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="product-variable-container">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <div>
+                        <input type="checkbox" data-qa="checkbox-5-year-variable">
+                        <label data-qa="label-5-year-variable">5-Year</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <input type="checkbox" data-qa="checkbox-7-year-variable">
+                        <label data-qa="label-7-year-variable">7-Year</label>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table data-qa="great-3-grand-parent">
+            <tbody data-qa="great-2-parent">
+                <tr data-qa="wrong-great-grand-parent">
+                </tr>
+                <tr data-qa="great-grand-parent">
+                    <td data-qa="wrong-grand-parent">
+                    </td>
+                    <td data-qa="grand-parent">
+                        <a data-qa="parent">
+                            <label id="descendant-label-element">hey</label>
+                        </a>
+                    </td>
+                    <td data-qa="another-wrong-grand-parent">
+                    </td>
+                </tr>
+                <tr data-qa="another-wrong-great-grand-parent">
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <label data-qa="label-element-by-text">Get Label Element By Text</label>
+    <div data-qa="wrong-div-element-by-text">Div Element By Text</div>
+    <div data-qa="div-element-by-text">Get Div Element By Text</div>
+    <div data-qa="h3-element-by-text">Get H3 Element By Text</div>
+    <div data-qa="parent-div-find-by-text">
+        <h3 class="selected">Fixed</h3>
+    </div>
+    <label class="selected" id="label-with-class">5-Year</label>
+</div>
+
+<input id="yo">
+
+<div>
+<button id="alert-button" onclick="myFunction()">Try it</button>
+</div>
+
+<select name="select_list">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+</select>
+
+<script>
+    function myFunction() {
+        alert("Hello! I am an alert box!");
+    }
+</script>
+
+</body>
+</html>

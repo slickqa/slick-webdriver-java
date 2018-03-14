@@ -243,6 +243,25 @@ public interface WebDriverWrapper
 	void selectByOptionText(PageElement selectList, String option, int timeout);
 
 	/**
+	 * Select an option of a drop down list by providing the index of the item in the list.  Wait a maximum of the default
+	 * timeout for the select list to exist.
+	 *
+	 * @param selectList The page element instance that describes how to find the select list.
+	 * @param index The text of the option displayed in the list that you want to select.
+	 */
+	void selectByIndex(PageElement selectList, int index);
+
+	/**
+	 * Select an option of a drop down list by providing the index of the item in the list.  Wait a maximum of the amount
+	 * of time passed in for the select list to exist.
+	 *
+	 * @param selectList The page element instance that describes how to find the select list.
+	 * @param index The text of the option displayed in the list that you want to select.
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void selectByIndex(PageElement selectList, int index, int timeout);
+
+	/**
 	 * Select an option of a drop down list by providing the text of the value attribute.  Wait a maximum of the default
 	 * timeout for the select list to exist.
 	 *
