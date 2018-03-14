@@ -576,6 +576,18 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
+    public void selectByIndex(PageElement selectList, int index) {
+        selectByIndex(selectList, index, timeout);
+    }
+
+    @Override
+    public void selectByIndex(PageElement selectList, int index, int p_timeout) {
+        logger.debug("Selecting option at index '{}' of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{index, selectList.getName(), selectList.getFinder(), p_timeout});
+        Select selectInput = new Select(getElement(selectList, p_timeout));
+        selectInput.selectByIndex(index);
+    }
+
+    @Override
     public void selectByOptionValue(PageElement selectList, String optionValue, int p_timeout) {
         logger.info("Selecting option with value '{}' of select list '{}' found by '{}' waiting a max timeout of {} seconds.", new Object[]{optionValue, selectList.getName(), selectList.getFinder(), p_timeout});
         Select selectInput = new Select(getElement(selectList, p_timeout));

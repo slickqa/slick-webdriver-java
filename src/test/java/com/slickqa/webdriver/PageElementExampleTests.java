@@ -8,6 +8,7 @@ import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
+import java.io.File;
 
 import java.util.Set;
 
@@ -19,7 +20,6 @@ public class PageElementExampleTests {
 
     protected SoftAssert softAssert;
     protected DefaultWebDriverWrapper browserWrapper;
-    private String testPage = "file:///Users/slambson/slick-webdriver-java/src/test/java/com/slickqa/webdriver/examplePage.html";
 
     @BeforeClass
     public void setupBrowser() {
@@ -42,12 +42,25 @@ public class PageElementExampleTests {
         softAssert = new SoftAssert();
     }
 
+    private String getExamplePagePath() {
+        String inputFilePath = System.getProperty("user.dir") + "/resources/examplePage.html";
+        String url = new File(inputFilePath).getAbsolutePath();
+        return "file:///"+url;
+    }
+
+    @Test
+    public void loadTestPage() {
+        String inputFilePath = System.getProperty("user.dir") + "/resources/examplePage.html";
+        String url = new File(inputFilePath).getAbsolutePath();
+        browserWrapper.goTo("file:///"+url);
+    }
+
     /**
      * The list of input page elements returned should be 8
      */
     @Test
     public void findListOfPageElementsTest() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElements();
         softAssert.assertEquals(numberOfElementsFound, 16, "Incorrect number of input elements found on page");
@@ -56,7 +69,7 @@ public class PageElementExampleTests {
 
     @Test
     public void getElementByAltValue() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         String imageSrc = slickWebDriverExamplePage.getElementSrcByAlt();
         softAssert.assertTrue(imageSrc.endsWith("slickFancy.gif"));
@@ -65,7 +78,7 @@ public class PageElementExampleTests {
 
     @Test
     public void getElementByAttributeValue() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         String imageSrc = slickWebDriverExamplePage.getElementSrcByAttributeValue();
         softAssert.assertTrue(imageSrc.endsWith("slickFancy.gif"));
@@ -101,7 +114,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void clickElementInParentElement() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         slickWebDriverExamplePage.clickOnElementInParentElement();
         softAssert.assertEquals(browserWrapper.getPageUrl(), "http://www.slickqa.com/features.html", "We did not end up on the correct end page so we must have clicked on the wrong link");
@@ -115,7 +128,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void clickElementInParentElementWithFindBy() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         slickWebDriverExamplePage.clickOnElementInParentElementWithFindBy();
         softAssert.assertEquals(browserWrapper.getPageUrl(), "http://www.slickqa.com/features.html", "We did not end up on the correct end page so we must have clicked on the wrong link");
@@ -128,7 +141,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void findListOfPageElementsInAParentElementTest() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElementsInParentElement();
         softAssert.assertEquals(numberOfElementsFound, 10, "Incorrect number of input elements found on page");
@@ -141,7 +154,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getPageElementByIndexFromListOfPageElementsInAParentElementTest() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         String linkText = slickWebDriverExamplePage.getElementByIndexFromParentElement();
         softAssert.assertEquals(linkText, "Slick Webdriver Project", "Incorrect element by index found in parent element");
@@ -154,7 +167,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void findListOfPageElementsInAParentElementFindByTest() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElementsInParentElementFindBy();
         softAssert.assertEquals(numberOfElementsFound, 10, "Incorrect number of input elements found on page");
@@ -166,7 +179,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void slideRangeInputElement() throws Exception {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int value1 = slickWebDriverExamplePage.getRangeInputValue();
         System.out.println("value1: " + value1);
@@ -198,7 +211,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void testWaitForElement() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         slickWebDriverExamplePage.waitDefaultTimeForElementThatExists();
         slickWebDriverExamplePage.waitPassedInTimeForElementThatExists(5);
@@ -226,7 +239,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToChildElement() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         PageElement relativeChildElement = new PageElement("Relative Child Element", FindBy.id("descendant-label-element"));
 
@@ -258,7 +271,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToChildFindBy() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement ascendantTable = new PageElement("parent element div tag", Relative.Descendant(FindBy.id("descendant-label-element")), "table");
         String verify2 = browserWrapper.getAttribute(ascendantTable, "data-qa");
@@ -288,7 +301,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToPrecedBySiblingElement() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         PageElement precedingSiblingElement = new PageElement("Preceding Sibling Element", FindBy.text("This Is A Label"));
 
         PageElement precededByA = new PageElement("preceded by sibling a tag", Relative.PrecededBySibling(precedingSiblingElement), "a");
@@ -311,7 +324,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToPrecededBySiblingFindBy() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement precededByA = new PageElement(Relative.PrecededBySibling(FindBy.text("This Is A Label")), "a");
         String verify1 = browserWrapper.getAttribute(precededByA, "data-qa");
@@ -333,7 +346,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToFollowedBySiblingElement() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         PageElement followingSiblingElement = new PageElement("Following Sibling Element", FindBy.text("This Is A Label"));
 
         PageElement followingElementInput = new PageElement("following sibling input tag", Relative.FollowedBySibling(followingSiblingElement), "input");
@@ -356,7 +369,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToFollowedBySiblingFindBy() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement followingElementInput = new PageElement("following sibling input tag", Relative.FollowedBySibling(FindBy.text("This Is A Label")), "input");
         String verify1 = browserWrapper.getAttribute(followingElementInput, "data-qa");
@@ -378,7 +391,7 @@ public class PageElementExampleTests {
      */
     @Test
     public void getElementRelativeToFollowedBySiblingFindByInParent() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement fixedRateContainer = new PageElement(FindBy.id("product-fixed-container"));
 
@@ -462,7 +475,7 @@ public class PageElementExampleTests {
          */
     @Test
     public void getElementByText() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement labelByText = new PageElement("label element by text", FindBy.text("Get Label Element By Text"));
         String verify1 = browserWrapper.getAttribute(labelByText, "data-qa");
@@ -481,7 +494,7 @@ public class PageElementExampleTests {
 
     @Test
     public void getElementClasses() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement label = new PageElement(FindBy.id("label-with-class"));
         String text = browserWrapper.getText(label);
@@ -500,7 +513,7 @@ public class PageElementExampleTests {
         boolean timedOutWaitingForValueEmpty;
         boolean timedOutWaitingForValueNotEmpty;
 
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
         PageElement inputBox = new PageElement("input box", FindBy.id("yo"));
         try {
             browserWrapper.waitForValueNotEmpty(inputBox, 2);
@@ -546,7 +559,7 @@ public class PageElementExampleTests {
         boolean timedOutAsExpectedWaitingForTextNotEmpty;
         boolean timedOutWaitingForTextEmpty;
 
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement whatIsSlick = new PageElement("What is Slick", FindBy.id("what-is-slick"));
 
@@ -589,7 +602,7 @@ public class PageElementExampleTests {
 
     @Test
     public void testAcceptAlert() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         PageElement alertButton = new PageElement("alert box", FindBy.id("alert-button"));
 
@@ -623,7 +636,7 @@ public class PageElementExampleTests {
 
     @Test
     public void testWaitForAlert() {
-        browserWrapper.goTo(testPage);
+        browserWrapper.goTo(getExamplePagePath());
 
         boolean timeoutAsExpectedWaitingForAlertPresent;
         boolean timeoutWaitingForAlertPresent;
@@ -705,6 +718,39 @@ public class PageElementExampleTests {
         cookies = browserWrapper.getAllCookies();
         softAssert.assertTrue(cookies.size() == 1, "Did not successfully delete a cookie by name");
         softAssert.assertEquals(cookies.iterator().next().getName(), cookie2Name, "We deleted the wrong cookie");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testSelectByValue() {
+        browserWrapper.goTo(getExamplePagePath());
+        ExamplePage examplePage = new ExamplePage(browserWrapper);
+        examplePage.selectByValue("mercedes");
+        String option = examplePage.getSelectedOption();
+        softAssert.assertEquals(option, "Mercedes");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testSelectByIndex() {
+        browserWrapper.goTo(getExamplePagePath());
+        ExamplePage examplePage = new ExamplePage(browserWrapper);
+        examplePage.selectByIndex(1);
+        String option = examplePage.getSelectedOption();
+        softAssert.assertEquals(option, "Saab");
+
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testSelectByText() {
+        browserWrapper.goTo(getExamplePagePath());
+        ExamplePage examplePage = new ExamplePage(browserWrapper);
+        examplePage.selectByText("Audi");
+        String option = examplePage.getSelectedOption();
+        softAssert.assertEquals(option, "Audi");
 
         softAssert.assertAll();
     }

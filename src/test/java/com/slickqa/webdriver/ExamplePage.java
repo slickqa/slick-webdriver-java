@@ -15,6 +15,7 @@ public class ExamplePage {
     private PageElement buttonGoogleSearch = new PageElement("Google Search button", FindBy.value("Google Search"));
     private PageElement inputElements = new PageElement("input elements", FindBy.tagName("input"));
     private PageElement elementByAttributeValue = new PageElement("Element by Attribute Value", FindBy.attributeValue("aria-label", "I'm Feeling Lucky"));
+    private PageElement selectList = new PageElement("Select List", FindBy.name("select_list"));
 
     private WebDriverWrapper browserWrapper;
 
@@ -33,5 +34,21 @@ public class ExamplePage {
             }
         }
         return inputElementList.size();
+    }
+
+    public void selectByValue(String value) {
+        browserWrapper.selectByOptionValue(selectList, value);
+    }
+
+    public void selectByText(String value) {
+        browserWrapper.selectByOptionText(selectList, value);
+    }
+
+    public void selectByIndex(int value) {
+        browserWrapper.selectByIndex(selectList, value);
+    }
+
+    public String getSelectedOption() {
+        return browserWrapper.getFirstSelectedOptionText(selectList);
     }
 }
