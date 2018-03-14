@@ -43,7 +43,7 @@ public class PageElementExampleTests {
     }
 
     private String getExamplePagePath() {
-        String inputFilePath = System.getProperty("user.dir") + "/src/resources/examplePage.html";
+        String inputFilePath = System.getProperty("user.dir") + "/resources/examplePage.html";
         String url = new File(inputFilePath).getAbsolutePath();
         return "file:///"+url;
     }
