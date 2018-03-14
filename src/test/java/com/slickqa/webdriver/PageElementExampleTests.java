@@ -43,16 +43,17 @@ public class PageElementExampleTests {
     }
 
     private String getExamplePagePath() {
-        String inputFilePath = System.getProperty("user.dir") + "/resources/examplePage.html";
+        String inputFilePath = System.getProperty("user.dir") + "/src/resources/examplePage.html";
         String url = new File(inputFilePath).getAbsolutePath();
         return "file:///"+url;
     }
 
     @Test
     public void loadTestPage() {
-        String inputFilePath = System.getProperty("user.dir") + "/resources/examplePage.html";
-        String url = new File(inputFilePath).getAbsolutePath();
-        browserWrapper.goTo("file:///"+url);
+        browserWrapper.goTo(getExamplePagePath());
+        softAssert.assertEquals(browserWrapper.getPageTitle(), "SlickQA: WebDriver Wrapper Test Page");
+
+        softAssert.assertAll();;
     }
 
     /**
