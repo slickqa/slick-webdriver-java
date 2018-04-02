@@ -1,7 +1,7 @@
 package com.slickqa.webdriver;
 
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -120,6 +120,40 @@ public interface WebDriverWrapper
 	 * @param text The text to type.
 	 */
 	void type(PageElement locator, String text);
+
+	/**
+	 * Type a single org.openqa.selenium.Keys in an element in a page, waiting a maximum of the amount of time passed in for the element to exist.
+	 *
+	 * @param locator The page element instance that describes how to find the element to type in.
+	 * @param key The Key to type.
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void type(PageElement locator, Keys key, int timeout);
+
+	/**
+	 * Type a single org.openqa.selenium.Keys in an element in a page, waiting a maximum of the default timeout for the element to exist.
+	 *
+	 * @param locator The page element instance that describes how to find the element to type in.
+	 * @param key The Key to type.
+	 */
+	void type(PageElement locator, Keys key);
+
+	/**
+	 * Type a list of org.openqa.selenium.Keys in an element in a page, waiting a maximum of the amount of time passed in for the element to exist.
+	 *
+	 * @param locator The page element instance that describes how to find the element to type in.
+	 * @param keys The list of Keys to type.
+	 * @param timeout The maximum amount of time to wait for the element to exist in seconds.
+	 */
+	void type(PageElement locator, List<Keys> keys, int timeout);
+
+	/**
+	 * Type a list of org.openqa.selenium.Keys in an element in a page, waiting a maximum of the default timeout for the element to exist.
+	 *
+	 * @param locator The page element instance that describes how to find the element to type in.
+	 * @param keys The list of Keys to type.
+	 */
+	void type(PageElement locator, List<Keys> keys);
 
 	/**
 	 * Get the text of an element, waiting a maximum of the default timeout for the element to exist.

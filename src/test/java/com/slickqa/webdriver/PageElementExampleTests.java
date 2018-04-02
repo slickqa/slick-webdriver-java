@@ -1,6 +1,7 @@
 package com.slickqa.webdriver;
 
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -10,6 +11,9 @@ import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 import java.io.File;
 
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -754,6 +758,38 @@ public class PageElementExampleTests {
         softAssert.assertEquals(option, "Audi");
 
         softAssert.assertAll();
+    }
+
+    @Test
+    public void typeKey() {
+        browserWrapper.goTo(getExamplePagePath());
+        PageElement inputBox = new PageElement("input box", FindBy.id("yo"));
+
+        browserWrapper.type(inputBox, "Test Backspace Key");
+        String fieldText = browserWrapper.getAttribute(inputBox, "value");
+        Assert.assertEquals(fieldText, "Test Backspace Key", "Text not equal to start, can't continue test");
+
+        browserWrapper.type(inputBox, Keys.BACK_SPACE);
+        fieldText = browserWrapper.getAttribute(inputBox, "value");
+        Assert.assertEquals(fieldText, "Test Backspace Ke", "Text not correct after typing Backspace, it must not have worked correctly!");
+    }
+
+    @Test
+    public void typeListOfKey() {
+        browserWrapper.goTo(getExamplePagePath());
+        PageElement inputBox = new PageElement("input box", FindBy.id("yo"));
+
+        browserWrapper.type(inputBox, "Test Backspace Keys");
+        String fieldText = browserWrapper.getAttribute(inputBox, "value");
+        Assert.assertEquals(fieldText, "Test Backspace Keys", "Text not equal to start, can't continue test");
+
+        List<Keys> keys = new ArrayList<Keys>();
+        keys.add(Keys.BACK_SPACE);
+        keys.add(Keys.BACK_SPACE);
+        keys.add(Keys.BACK_SPACE);
+        browserWrapper.type(inputBox, keys);
+        fieldText = browserWrapper.getAttribute(inputBox, "value");
+        Assert.assertEquals(fieldText, "Test Backspace K", "Text not correct after typing Backspace, it must not have worked correctly!");
     }
 
     @AfterSuite
