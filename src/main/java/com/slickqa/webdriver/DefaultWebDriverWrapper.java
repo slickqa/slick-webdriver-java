@@ -358,6 +358,30 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     }
 
     @Override
+    public void type(PageElement locator, Keys key, int p_timeout)  {
+        logger.info("Typing Key '{}' in element with name '{}' and found '{}'.", new Object[]{
+                key, locator.getName(), locator.getFindByDescription()
+        });
+        getElement(locator, p_timeout).sendKeys(key);
+    }
+
+    @Override
+    public void type(PageElement locator, Keys key) { type(locator, key, timeout); }
+
+    @Override
+    public void type(PageElement locator, List<Keys> keys, int p_timeout) {
+        logger.info("Typing Keys '{}' in element with name '{}' and found '{}'.", new Object[]{
+                keys, locator.getName(), locator.getFindByDescription()
+        });
+        for (Keys key : keys) {
+            getElement(locator, p_timeout).sendKeys(key);
+        }
+    }
+
+    @Override
+    public void type(PageElement locator, List<Keys> keys) { type(locator, keys, timeout); }
+
+    @Override
     public String getText(PageElement locator) {
         logger.info("Getting text from element with name '{}' and found '{}'.", locator.getName(), locator.getFindByDescription());
         return getText(locator, timeout);
