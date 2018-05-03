@@ -39,6 +39,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     private Capabilities driver_capabilities;
     private int timeout;
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("test." + DefaultWebDriverWrapper.class.getName());
+    private boolean takeScreenshots = true;
     private int screenshot_counter;
     private int htmlsource_counter;
     private static String original_browser_window_handle = "";
@@ -131,6 +132,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     public void setDefaultTimeout(int p_timeout) {
         this.timeout = p_timeout;
     }
+
+    /**
+     * Turn screenshots on or off.  Defaults to on.
+     * @param takeScreenshots
+     */
+    @Override
+    public void setTakeScreenshots(boolean takeScreenshots) { this.takeScreenshots = takeScreenshots; }
 
     /**
      * Return a WebElement based off the PageElement
@@ -862,6 +870,10 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void takeScreenShot(String name) {
+        if (!this.takeScreenshots){
+            logger.info("Screenshots disabled. Skipping.");
+            return;
+        }
         if (TakesScreenshot.class.isAssignableFrom(driver.getClass())) {
             if (name == null) {
                 name = "screenshot";

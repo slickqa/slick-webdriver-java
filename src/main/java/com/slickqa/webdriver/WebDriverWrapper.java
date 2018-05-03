@@ -32,6 +32,11 @@ public interface WebDriverWrapper
 	void clear(PageElement locator);
 
 	/**
+	 * Provides a way to turn screenshots on or off
+	 */
+	void setTakeScreenshots(boolean takeScreenshots);
+
+	/**
 	 * Clear the text web page element, waiting a maximum of the amount of time passed in for the element to exist.
 	 *
 	 * @param locator The page element instance that describes how to find the element to clear the text on.
