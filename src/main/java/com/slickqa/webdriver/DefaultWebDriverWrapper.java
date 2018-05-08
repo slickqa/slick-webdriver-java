@@ -357,7 +357,26 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         logger.info("Typing text '{}' in element with name '{}' and found '{}'.", new Object[]{
                         text, locator.getName(), locator.getFindByDescription()
                     });
-        getElement(locator, p_timeout).sendKeys(text);
+
+        for(int tries = 0; tries < 3; tries++) {
+            try {
+                getElement(locator, p_timeout).sendKeys(text);
+                break;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Got a stale element exception trying to type, retrying.", e);
+            }
+            catch (Exception e) {
+                if (e.getMessage().contains("not clickable at point")) {
+                    logger.warn("Got a 'not clickable at point' exception type, retrying.");
+                    try {
+                        Thread.sleep(500);
+                    } catch (Exception te) {
+
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
