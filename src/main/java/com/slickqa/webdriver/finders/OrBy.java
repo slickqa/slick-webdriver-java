@@ -19,6 +19,21 @@ public class OrBy extends By {
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for(By finder : finders) {
+            if(first) {
+                first = false;
+            } else {
+                sb.append(" Or ");
+            }
+            sb.append(finder.toString());
+        }
+        return sb.toString();
+    }
+
+    @Override
     public List<WebElement> findElements(SearchContext context) {
         ArrayList<WebElement> retval = new ArrayList<WebElement>();
         for(By finder : finders) {
