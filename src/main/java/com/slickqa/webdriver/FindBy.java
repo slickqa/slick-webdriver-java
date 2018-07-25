@@ -100,5 +100,15 @@ public abstract class FindBy extends By
 	{
 		return new FindByText(text);
 	}
+
+	/**
+	 * Find an element by looking at any number of finders.  The first one that matches wins.
+	 * @param first One required finder
+	 * @param others Any number of other finders
+	 * @return A finder that can use any of the provided finders.
+	 */
+	public static By Or(By first, By ...others) {
+		return new OrBy(first, others);
+	}
 }
 

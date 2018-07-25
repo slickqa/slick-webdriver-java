@@ -213,6 +213,31 @@
     <option value="audi">Audi</option>
 </select>
 
+<div>
+    <button id="or-find-button" class="one" onclick="changeClassForOrElement()">one</button><button id="or-find-reset" onclick="resetOrElement()">Reset</button>
+</div>
+
+<script>
+    function resetOrElement() {
+        var el = document.getElementById("or-find-button");
+        el.setAttribute("class", "one");
+        el.innerHTML = "one";
+    }
+    function changeClassForOrElement() {
+        var el = document.getElementById("or-find-button");
+        if(el.getAttribute("class") === "one") {
+            el.setAttribute("class", "two");
+            el.innerHTML = "two";
+        } else if(el.getAttribute("class") === "two") {
+            el.setAttribute("class", "three");
+            el.innerHTML = "three";
+        } else {
+            el.setAttribute("class", "one");
+            el.innerHTML = "one";
+        }
+    }
+</script>
+
 <script>
     function myFunction() {
         alert("Hello! I am an alert box!");
