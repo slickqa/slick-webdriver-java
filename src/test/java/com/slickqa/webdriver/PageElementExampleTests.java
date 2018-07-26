@@ -57,7 +57,7 @@ public class PageElementExampleTests {
         browserWrapper.goTo(getExamplePagePath());
         softAssert.assertEquals(browserWrapper.getPageTitle(), "SlickQA: WebDriver Wrapper Test Page");
 
-        softAssert.assertAll();;
+        softAssert.assertAll();
     }
 
     /**
@@ -791,6 +791,36 @@ public class PageElementExampleTests {
         fieldText = browserWrapper.getAttribute(inputBox, "value");
         Assert.assertEquals(fieldText, "Test Backspace K", "Text not correct after typing Backspace, it must not have worked correctly!");
     }
+
+    @Test
+    public void OrWith2Finders() {
+        browserWrapper.goTo(getExamplePagePath());
+        // reset the button
+        browserWrapper.click(new PageElement("Reset Or finder button", FindBy.id("or-find-reset")));
+        PageElement button = new PageElement("Or finder button, but found by ID", FindBy.id("or-find-button"));
+        PageElement orFinderElement = new PageElement("Button with a changing class", FindBy.Or(FindBy.className("one"), FindBy.className("two")));
+        Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class one");
+        browserWrapper.click(button);
+        Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class two");
+        Assert.assertEquals(browserWrapper.getAttribute(orFinderElement, "class"), "two");
+    }
+
+    @Test
+    public void OrWith3Finders() {
+        browserWrapper.goTo(getExamplePagePath());
+        browserWrapper.click(new PageElement("Reset Or finder button", FindBy.id("or-find-reset")));
+
+        PageElement button = new PageElement("Or finder button, but found by ID", FindBy.id("or-find-button"));
+        PageElement orFinderElement = new PageElement("Button with a changing class", FindBy.Or(FindBy.className("one"), FindBy.className("two"), FindBy.className("three")));
+        Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class one");
+        browserWrapper.click(button);
+        Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class two");
+        Assert.assertEquals(browserWrapper.getAttribute(orFinderElement, "class"), "two");
+        browserWrapper.click(button);
+        Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class three");
+        Assert.assertEquals(browserWrapper.getAttribute(orFinderElement, "class"), "three");
+    }
+
 
     @AfterSuite
     public void cleanup() {
