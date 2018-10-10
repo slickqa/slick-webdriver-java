@@ -217,13 +217,16 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                     break;
                 }
             } catch (Exception e) {
-                if (e.getMessage().contains("not clickable at point")) {
+                if (e.getMessage().contains("not clickable at point") && tries < 2) {
                     logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
                     try {
                         Thread.sleep(500);
                     } catch (Exception te) {
 
                     }
+                }
+                else {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -247,13 +250,16 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                 logger.warn("Got a stale element exception trying to click, retrying.", e);
             }
             catch (Exception e) {
-                if (e.getMessage().contains("not clickable at point")) {
+                if (e.getMessage().contains("not clickable at point") && tries < 2) {
                     logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
                     try {
                         Thread.sleep(500);
                     } catch (Exception te) {
 
                     }
+                }
+                else {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -1260,12 +1266,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     @Override
     public void acceptAlert() {
-        try{
-            driver.switchTo().alert().accept();
-        }
-        catch (Exception e){
-            logger.trace("No alert box present");
-        }
+        driver.switchTo().alert().accept();
     }
 
     @Override

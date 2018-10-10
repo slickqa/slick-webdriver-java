@@ -611,15 +611,6 @@ public class PageElementExampleTests {
 
         PageElement alertButton = new PageElement("alert box", FindBy.id("alert-button"));
 
-        boolean gotExceptionAcceptingAlertWhenDoesNotExist;
-        try {
-            browserWrapper.acceptAlert();
-            gotExceptionAcceptingAlertWhenDoesNotExist = false;
-        } catch (Exception e) {
-            gotExceptionAcceptingAlertWhenDoesNotExist = true;
-        }
-        softAssert.assertFalse(gotExceptionAcceptingAlertWhenDoesNotExist, "Got an exception accepting an alert that does not exist");
-
         browserWrapper.click(alertButton);
         boolean alertExists = browserWrapper.alertPresent();
         softAssert.assertTrue(alertExists, "Alert did not exist");
