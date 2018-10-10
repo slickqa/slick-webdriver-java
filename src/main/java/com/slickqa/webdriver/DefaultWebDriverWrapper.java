@@ -216,7 +216,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                     }
                     break;
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 if (e.getMessage().contains("not clickable at point") && tries < 2) {
                     logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
                     try {
@@ -226,7 +226,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                     }
                 }
                 else {
-                    throw new RuntimeException(e);
+                    throw e;
                 }
             }
         }
@@ -249,7 +249,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
             } catch (StaleElementReferenceException e) {
                 logger.warn("Got a stale element exception trying to click, retrying.", e);
             }
-            catch (Exception e) {
+            catch (RuntimeException e) {
                 if (e.getMessage().contains("not clickable at point") && tries < 2) {
                     logger.warn("Got a 'not clickable at point' exception clicking, retrying.");
                     try {
@@ -259,7 +259,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
                     }
                 }
                 else {
-                    throw new RuntimeException(e);
+                    throw e;
                 }
             }
         }
