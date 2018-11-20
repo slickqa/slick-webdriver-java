@@ -1,7 +1,5 @@
 package com.slickqa.webdriver;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -12,17 +10,17 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -36,7 +34,7 @@ import org.apache.logging.log4j.LogManager;
 public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     private WebDriver driver;
-    private Capabilities driver_capabilities;
+    private MutableCapabilities driver_capabilities;
     private int timeout;
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("test." + DefaultWebDriverWrapper.class.getName());
     private boolean takeScreenshots = true;
@@ -48,63 +46,78 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     /**
      * Get the underlying webdriver object.
      *
-     * @param caps The Capabilites for the webdriver instance
+     * @param options The MutableCapabilities options for the webdriver instance,
+     *                these are converted to a browswer specific type in this method.
      * @return The webdriver object used by this instance of WebDriverWrapper.
      */
-    public static WebDriver getDriverFromCapabilities(Capabilities caps) {
-        if (caps.getCapability(RemoteDriverWithScreenshots.REMOTE_URL) == null) {
-            if (caps.getBrowserName().equals(DesiredCapabilities.htmlUnit().getBrowserName())) {
-                HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_52);
-                driver.setJavascriptEnabled(true);
-                return driver;
-            } else if (caps.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())) {
-                if (caps.getPlatform() == Platform.WINDOWS) {
-                    DesiredCapabilities createCaps = DesiredCapabilities.firefox();
-                    createCaps.setAcceptInsecureCerts(true);
-                    FirefoxProfile profile = new FirefoxProfile();
-                    profile.setPreference("app.update.auto", false);
-                    createCaps.setCapability(FirefoxDriver.PROFILE, profile);
-                    return new FirefoxDriver(createCaps);
-                } else {
-                    DesiredCapabilities createCaps = DesiredCapabilities.firefox();
-                    createCaps.setAcceptInsecureCerts(true);
-                    FirefoxProfile profile = new FirefoxProfile();
-                    profile.setPreference("app.update.auto", false);
+    public static WebDriver getDriverFromOptions(MutableCapabilities options) {
+        if (options.getCapability(RemoteDriverWithScreenshots.REMOTE_URL) == null) {
+            if (options.getBrowserName().equals("firefox")) {
+                FirefoxOptions createOpts = new FirefoxOptions(options);
+                createOpts.setAcceptInsecureCerts(true);
+                FirefoxProfile profile = new FirefoxProfile();
+                profile.setPreference("app.update.auto", false);
+                if (options.getPlatform() != Platform.WINDOWS) {
                     profile.setAssumeUntrustedCertificateIssuer(false);
-                    profile.setPreference("app.update.auto", false);
-                    return new FirefoxDriver(createCaps);
                 }
-            } else if (caps.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())) {
+                String args = getArgs(options);
+                if(!args.isEmpty()) {
+                    createOpts.addArguments(args);
+                }
+                createOpts.setProfile(profile);
+                return new FirefoxDriver(createOpts);
+
+            } else if (options.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())) {
                 return new InternetExplorerDriver();
-            } else if (caps.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())) {
-                return new ChromeDriver();
-            } else if (caps.getBrowserName().equals(DesiredCapabilities.phantomjs().getBrowserName())) {
-                DesiredCapabilities phantomcaps = new DesiredCapabilities();
-                phantomcaps.merge(caps);
-                phantomcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new String[] {"--web-security=no", "--ignore-ssl-errors=yes"});
-                PhantomJSDriver driver = new PhantomJSDriver(phantomcaps);
-                driver.manage().window().setSize(new Dimension(1920, 1080));
-                return driver;
-            } else if (caps.getBrowserName().equals(DesiredCapabilities.safari().getBrowserName())) {
+            } else if (options.getBrowserName().equals("chrome")) {
+                String args = getArgs(options);
+                if(args.isEmpty()) {
+                    return new ChromeDriver();
+                }
+                else {
+                    return new ChromeDriver(new ChromeOptions().addArguments(args));
+                }
+                //PhantomJS has been deprecated in favor of headless firefox and chrome, see:
+                //https://github.com/SeleniumHQ/selenium/issues/3534
+            } else if (options.getBrowserName().equals(DesiredCapabilities.safari().getBrowserName())) {
                 return new SafariDriver();
             } else {
                 return new FirefoxDriver();
             }
         } else {
             try {
-                return new RemoteDriverWithScreenshots(caps);
+                return new RemoteDriverWithScreenshots(options);
             } catch (MalformedURLException ex) {
-                logger.error("Invalid URL for remote webdriver '" + caps.getCapability(RemoteDriverWithScreenshots.REMOTE_URL) + "': ", ex);
+                logger.error("Invalid URL for remote webdriver '" + options.getCapability(RemoteDriverWithScreenshots.REMOTE_URL) + "': ", ex);
                 return null;
             }
         }
     }
 
     /**
+     * Find any passed in arguments (needed for headless browser, might be needed for other purposes down the road.
+     * @param options The MutableCapabilities options for the webdriver instance
+     * @return String of arguments to pass in (if any are found)
+     */
+    private static String getArgs(MutableCapabilities options) {
+        String args;
+        if("firefox".equals(options.getBrowserName())) {
+            args = options.asMap().get("moz:firefoxOptions").toString();
+        }
+        else {
+            args = options.asMap().get("goog:chromeOptions").toString();
+        }
+
+        args = StringUtils.substringBetween(args, "[", "]");
+        return args;
+    }
+
+    /**
      * Return a DefaultWebDriverWrapper instance from an existing WebDriver instance
      *
      * @param driver The existing WebDriver instance
-     * @return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
+     * @param debugSupport OutputFileSupport
+     * return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
      */
     public DefaultWebDriverWrapper(WebDriver driver, OutputFileSupport debugSupport) {
         this.driver = driver;
@@ -116,12 +129,13 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
     /**
      * Return a DefaultWebDriverWrapper instance from an existing WebDriver instance
      *
-     * @param caps The Capabilites for the webdriver instance
-     * @return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
+     * @param opts The Capabilites for the webdriver instance
+     * @param debugSupport OutputFileSupport
+     * return debugSupport and OutputFileSupport object to support saving screenshots and other files from the webdriver wrapper
      */
-    public DefaultWebDriverWrapper(Capabilities caps, OutputFileSupport debugSupport) {
-        this(getDriverFromCapabilities(caps), debugSupport);
-        driver_capabilities = caps;
+    public DefaultWebDriverWrapper(MutableCapabilities opts, OutputFileSupport debugSupport) {
+        this(getDriverFromOptions(opts), debugSupport);
+        driver_capabilities = opts;
         if (!driver_capabilities.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())) {
             original_browser_window_handle = driver.getWindowHandle();
         }
@@ -135,7 +149,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
 
     /**
      * Turn screenshots on or off.  Defaults to on.
-     * @param takeScreenshots
+     * @param takeScreenshots Determines whether we take screenshots or not.
      */
     @Override
     public void setTakeScreenshots(boolean takeScreenshots) { this.takeScreenshots = takeScreenshots; }
@@ -144,7 +158,8 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
      * Return a WebElement based off the PageElement
      *
      * @param locator The PageElement to use to locate the WebElement
-     * @return p_timeout the max time to wait for the WebElement to exist
+     * @param p_timeout - The max time to wait for the WebElement to exist
+     * @return WebElement the selenium WebElement based on the PageElement FindBy (By)
      */
     public WebElement getElement(PageElement locator, int p_timeout) {
         WebElement element = null;
@@ -165,7 +180,8 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
      * Return a list of WebElements based off the PageElements
      *
      * @param locator The PageElement to use to locate the WebElement
-     * @return p_timeout the max time to wait for the WebElement to exist
+     * @param p_timeout - The max time to wait for the WebElement to exist
+     * @return List of PageElement the selenium WebElements based on the PageElement FindBy (By)
      */
     public List<PageElement> getElements(PageElement locator, int p_timeout) {
         List<PageElement> elements;
@@ -954,7 +970,7 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         } catch (WebDriverException wde) {
             logger.error("Caught an Exception when trying to quit the driver in reopen()", wde);
         }
-        driver = getDriverFromCapabilities(driver_capabilities);
+        driver = getDriverFromOptions(driver_capabilities);
 
         if (driver_capabilities.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName()) == false) {
             original_browser_window_handle = driver.getWindowHandle();
