@@ -33,6 +33,7 @@ public interface WebDriverWrapper
 
 	/**
 	 * Provides a way to turn screenshots on or off
+	 * @param takeScreenshots Determines whether we take screenshots or not.
 	 */
 	void setTakeScreenshots(boolean takeScreenshots);
 
@@ -452,7 +453,7 @@ public interface WebDriverWrapper
 	 * Check for the existence of a PageElement.  Waiting the passed in timeout for it to exist.
 	 *
 	 * @param element The PageElement that describes where to find the element.
-	 * @param timeout
+	 * @param timeout The maximum amount of time to wait.
 	 * @return true if the element exists and is accessible, false otherwise
 	 */
 	boolean exists(PageElement element, int timeout);
@@ -762,6 +763,7 @@ public interface WebDriverWrapper
 	 * Return a list of PageElements, waiting a maximum of the default timeout for at least 1 matching element to exist.
 	 *
 	 * @param locator The page elements instance that describes how to find the elements
+     * @return List of PageElement the selenium WebElements based on the PageElement FindBy (By)
 	 */
 	List<PageElement> getPageElements(PageElement locator);
 
@@ -770,19 +772,20 @@ public interface WebDriverWrapper
 	 *
 	 * @param locator The page elements instance that describes how to find the elements
 	 * @param timeout The maximum amount of time to wait for at least one element to exist in seconds.
+     * @return List of PageElement the selenium WebElements based on the PageElement FindBy (By)
 	 */
 	List<PageElement> getPageElements(PageElement locator, int timeout);
 
 	/**
 	 * Scroll page to provided element
-	 * @param locator
+	 * @param locator The page elements instance that describes how to find the elements
 	 */
 	void scrollIntoView(PageElement locator);
 
 	/**
 	 * Scroll page to provided element
-	 * @param locator
-	 * @param timeout
+	 * @param locator The page elements instance that describes how to find the elements
+	 * @param timeout The maximum amount of time to wait for at least one element to scroll into view in seconds.
 	 */
 	void scrollIntoView(PageElement locator, int timeout);
 
@@ -875,14 +878,14 @@ public interface WebDriverWrapper
 	/**
 	 * Delete cookie with the name provided
 	 *
-	 * @param cookieName
+	 * @param cookieName Name of the cookie to delete
 	 */
 	void deleteCookieNamed(String cookieName);
 
 	/**
 	 * Return the value of the cookie with the name provided
 	 *
-	 * @param cookieName
+	 * @param cookieName Name of the cookie to retrieve
 	 * @return the value of the cookie with the name provided
 	 */
 	String getValueOfCookieNamed(String cookieName);
@@ -890,7 +893,7 @@ public interface WebDriverWrapper
 	/**
 	 * Return the cookie with the name provided
 	 *
-	 * @param cookieName
+	 * @param cookieName Name of the cookie to retrieve
 	 * @return the cookie with the specified name
 	 */
 	Cookie getCookieNamed(String cookieName);
@@ -904,7 +907,7 @@ public interface WebDriverWrapper
 	/**
 	 * Get all cookies
 	 *
-	 * @return
+	 * @return Set of all found Cookie values
 	 */
 	Set<Cookie> getAllCookies();
 
@@ -923,7 +926,7 @@ public interface WebDriverWrapper
 	/**
 	 * Check if an alert is present.  Waiting the passed in timeout for an alert to be present.
 	 *
-	 * @param timeout
+	 * @param timeout The max amount of time to wait for the alert
 	 * @return true if the element exists and is accessible, false otherwise
 	 */
 	boolean alertPresent(int timeout);

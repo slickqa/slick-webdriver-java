@@ -7,8 +7,8 @@ package com.slickqa.webdriver;
 import java.util.List;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.interactions.Coordinates;
+import org.openqa.selenium.interactions.Locatable;
 
 /**
  *

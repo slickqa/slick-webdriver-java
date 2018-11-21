@@ -12,7 +12,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * PageElement is essentially an equivalent to the selenium WebElement
@@ -60,7 +60,7 @@ public class PageElement
      *
      * @param relativeElement A RelativeElement is basically a PageElement that we can use to relatively locate another PageElement.  It is a way to identify a relative relationship among PageElements
      * @param tagName The tagName of the actual element you are trying to locate
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(RelativeElement relativeElement, String tagName) {
         this.name = name;
@@ -78,7 +78,7 @@ public class PageElement
      * @param name This is a common name for the PageElement, used mostly in logging
      * @param relativeElement A RelativeElement is basically a PageElement that we can use to relatively locate another PageElement.  It is a way to identify a relative relationship among PageElements
      * @param tagName The tagName of the actual element you are trying to locate
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(String name, RelativeElement relativeElement, String tagName) {
         this.name = name;
@@ -95,7 +95,7 @@ public class PageElement
      *
      * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(WebContainer container, By finder) {
         this.name = name;
@@ -112,7 +112,7 @@ public class PageElement
      * @param name This is a common name for the PageElement, used mostly in logging
      * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(String name, WebContainer container, By finder) {
         this.name = name;
@@ -129,7 +129,7 @@ public class PageElement
      * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
      * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(WebContainer container, By finder, int elementIndex) {
         this.name = name;
@@ -148,7 +148,7 @@ public class PageElement
      * @param container A WebContainer is basically a PageElement that contains another PageElement.  It is a way to identify a parent/child relationship among PageElements
      * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(String name, WebContainer container, By finder, int elementIndex) {
         this.name = name;
@@ -165,7 +165,7 @@ public class PageElement
      *
      * @param name This is a common name for the PageElement, used mostly in logging
      * @param finder The FindBy used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(String name, By finder) {
         this.name = name;
@@ -183,7 +183,7 @@ public class PageElement
      * @param name This is a common name for the PageElement, used mostly in logging
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
      * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(String name, By finder, int elementIndex) {
         this.name = name;
@@ -199,7 +199,7 @@ public class PageElement
      * Create a PageElement with a FindBy and an elementIndex.
      *
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
-     * @return PageElement
+     * return PageElement
      */
     public PageElement(By finder) {
         name = finder.toString();
@@ -215,7 +215,7 @@ public class PageElement
      *
      * @param finder The By used to locate the PageElement, i.e. FindBy.id or FindBy.cssSelector
      * @param elementIndex The index of the PageElement from the list of PageElements located by the specified finder
-     * @return PageElement instance
+     * return PageElement instance
      */
     public PageElement(By finder, int elementIndex) {
         name = finder.toString();
@@ -359,8 +359,9 @@ public class PageElement
 
     /**
      * Return a list of PageElements based on the PageElements FindBy (By)
-     *
-     * @return List<PageElement> the list of PageElements located
+     * @param browser The webdriver browser instance
+     * @param timeout The max amount of time to wait for the elements to appear
+     * @return List of PageElement located
      */
     public List<PageElement> getElements(WebDriver browser, int timeout) throws NoSuchElementException, NotImplementedException {
         List<PageElement> pageElements = new ArrayList<PageElement>();
@@ -378,7 +379,7 @@ public class PageElement
                         }
                         break;
                     case ELEMENT:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException("CASE ELEMENT not implemented.");
                     default:
                         webElements = browser.findElements(finder);
                         for (WebElement e : webElements) {
@@ -432,7 +433,8 @@ public class PageElement
 
     /**
      * Return whether the PageElement exists or not
-     *
+     * @param browser The webdriver browser instance
+     * @param timeout The max amount of time to wait for the element
      * @return boolean whether the PageElement exists or not
      */
     public boolean exists(WebDriver browser, int timeout) {
