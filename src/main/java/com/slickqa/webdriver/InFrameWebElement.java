@@ -19,12 +19,14 @@ public class InFrameWebElement extends ProxyWebElement
 	private String frameId;
     private WebElement frameWebElement = null;
 	private By finder;
+	private int elementIndex;
 
 	public InFrameWebElement(By finder, WebDriver driver, String frame)
 	{
 		super(null, driver);
 		this.frameId = frame;
 		this.finder = finder;
+		this.elementIndex = -1;
 	}
 
     public InFrameWebElement(By finder, WebDriver driver, WebElement frame)
@@ -32,6 +34,25 @@ public class InFrameWebElement extends ProxyWebElement
 		super(null, driver);
 		this.frameWebElement = frame;
 		this.finder = finder;
+		this.elementIndex = -1;
+	}
+
+	public InFrameWebElement(By finder, WebDriver driver, String frame, int elementIndex)
+	{
+		super(null, driver);
+		this.frameId = frame;
+		this.finder = finder;
+		this.elementIndex = -1;
+		this.elementIndex = elementIndex;
+	}
+
+	public InFrameWebElement(By finder, WebDriver driver, WebElement frame, int elementIndex)
+	{
+		super(null, driver);
+		this.frameWebElement = frame;
+		this.finder = finder;
+		this.elementIndex = -1;
+		this.elementIndex = elementIndex;
 	}
 
 	public InFrameWebElement(WebElement element, WebDriver driver, String frame)
@@ -39,6 +60,7 @@ public class InFrameWebElement extends ProxyWebElement
 		super(element, driver);
 		this.frameId = frame;
 		this.finder = null;
+		this.elementIndex = -1;
 	}
 
     public InFrameWebElement(WebElement element, WebDriver driver, WebElement frame)
@@ -46,6 +68,23 @@ public class InFrameWebElement extends ProxyWebElement
 		super(element, driver);
 		this.frameWebElement = frame;
 		this.finder = null;
+		this.elementIndex = -1;
+	}
+
+	public InFrameWebElement(WebElement element, WebDriver driver, String frame, int elementIndex)
+	{
+		super(element, driver);
+		this.frameId = frame;
+		this.finder = null;
+		this.elementIndex = elementIndex;
+	}
+
+	public InFrameWebElement(WebElement element, WebDriver driver, WebElement frame, int elementIndex)
+	{
+		super(element, driver);
+		this.frameWebElement = frame;
+		this.finder = null;
+		this.elementIndex = elementIndex;
 	}
 
 	@Override
@@ -72,7 +111,16 @@ public class InFrameWebElement extends ProxyWebElement
 					}
                 }
 				if(finder != null)
-					real = driver.findElement(finder);
+					if (elementIndex == -1) {
+						real = driver.findElement(finder);
+					} else {
+						List<WebElement> elements = driver.findElements(finder);
+						if (elements.size() < (elementIndex + 1)) {
+							real = null;
+						} else {
+							real = elements.get(elementIndex);
+						}
+					}
 	}
 
 	@Override

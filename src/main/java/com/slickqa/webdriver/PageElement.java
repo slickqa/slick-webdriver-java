@@ -374,8 +374,15 @@ public class PageElement
                 switch(relative) {
                     case WEBCONTAINER:
                         webElements = container.findElements(browser, this);
+                        int indexCounter = 0;
                         for (WebElement e : webElements) {
-                            pageElements.add(new PageElement(e));
+                            if (container instanceof FrameContainer) {
+                                pageElements.add(new PageElement(name, container, finder, indexCounter));
+                            }
+                            else {
+                                pageElements.add(new PageElement(e));
+                            }
+                            indexCounter += 1;
                         }
                         break;
                     case ELEMENT:

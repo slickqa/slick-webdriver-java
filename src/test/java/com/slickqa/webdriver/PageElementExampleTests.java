@@ -104,13 +104,32 @@ public class PageElementExampleTests {
         demoiFramePage.clickForecastLink();
     }
 
-        // ****** NOT LIMITING TO THE IFRAME
-//    @Test
-//    public void findListOfPageElementsInIFrameElement() {
-//        browserWrapper.goTo("http://www.dwuser.com/education/content/the-magical-iframe-tag-an-introduction/");
-//        DemoiFramePage demoiFramePage = new DemoiFramePage(browserWrapper);
-//        demoiFramePage.listInputElementsInIFrameElement();
-//    }
+    @Test
+    public void clickElementInIFrameElementWithoutSpecifyingIframe() {
+          // since we are relying on a external page we just want to ensure that the link is still only found in the iframe
+        DemoiFramePage demoiFramePage = new DemoiFramePage(browserWrapper);
+        boolean clickFailed = demoiFramePage.clickForecastLinkWithoutSpecifyingFrame();
+        softAssert.assertTrue(clickFailed, "Trying to click on link in a frame without specifying the frame did not fail like we expected");
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void clickElementInIFrameElementAtIndex() {
+        browserWrapper.goTo("http://www.dwuser.com/education/content/the-magical-iframe-tag-an-introduction/");
+        DemoiFramePage demoiFramePage = new DemoiFramePage(browserWrapper);
+        demoiFramePage.clickForecastLinkAtIndex();
+    }
+
+    @Test
+    public void findListOfPageElementsInIFrameElement() {
+        browserWrapper.goTo("http://www.dwuser.com/education/content/the-magical-iframe-tag-an-introduction/");
+        DemoiFramePage demoiFramePage = new DemoiFramePage(browserWrapper);
+        List<PageElement> elements = demoiFramePage.getForecastElementsInFrame();
+        softAssert.assertEquals(elements.size(), 9,"Did not find the correct number of forecast links in the frame");
+        demoiFramePage.listForecastLinkElementsInIFrameElement();
+        softAssert.assertEquals(browserWrapper.getAttribute(elements.get(7), "href"), "http://www.weather.gov/search","Did not find the correct forecast link value at index 7");
+        softAssert.assertAll();
+    }
 
             // in parent
     /**
@@ -268,6 +287,8 @@ public class PageElementExampleTests {
         PageElement ascendantA = new PageElement("parent element a tag", Relative.Descendant(relativeChildElement), "a");
         String verify6 = browserWrapper.getAttribute(ascendantA, "data-qa");
         softAssert.assertEquals(verify6, "parent", "Did not get element relative to child element");
+
+
 
         softAssert.assertAll();
     }
