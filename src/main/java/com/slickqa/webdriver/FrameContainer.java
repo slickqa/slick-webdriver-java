@@ -5,6 +5,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -128,17 +129,20 @@ public class FrameContainer implements WebContainer
 			browser.switchTo().defaultContent();
 		}
 
-//		WebElement retval = null;
-//		if(frameWebElement == null)
-//		{
-//			retval = new InFrameWebElement(item.getFinder(), browser, frameId);
-//		} else
-//		{
-//			retval = new InFrameWebElement(item.getFinder(), browser, frameWebElement);
-//		}
-//
-//		return retval;
-		return elements;
+		List<WebElement> retval = new ArrayList<WebElement>();
+
+		int indexCounter = 0;
+		for (WebElement e : elements) {
+			if (frameWebElement == null) {
+				retval.add(new InFrameWebElement(item.getFinder(), browser, frameId, indexCounter));
+			} else {
+				retval.add(new InFrameWebElement(item.getFinder(), browser, frameWebElement, indexCounter));
+			}
+
+			indexCounter += 1;
+		}
+
+		return retval;
 	}
 
 	@Override

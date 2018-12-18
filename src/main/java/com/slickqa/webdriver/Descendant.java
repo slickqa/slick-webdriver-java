@@ -29,7 +29,8 @@ public class Descendant implements RelativeElement
 	{
 		// fail fast, the descendant element will handle the timing
 		WebElement relativeElement = descendant.getElement(browser, 0);
-		return relativeElement.findElement(By.xpath("ancestor::" + tagName));
+		  // the position forces it to the nearest ancestor
+		return relativeElement.findElement(By.xpath("ancestor::" + tagName + "[position()=1]"));
 	}
 
 	@Override
