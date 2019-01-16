@@ -73,7 +73,7 @@ public class PageElementExampleTests {
         browserWrapper.goTo(getExamplePagePath());
         SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
         int numberOfElementsFound = slickWebDriverExamplePage.listInputElements();
-        softAssert.assertEquals(numberOfElementsFound, 16, "Incorrect number of input elements found on page");
+        softAssert.assertEquals(numberOfElementsFound, 17, "Incorrect number of input elements found on page");
         softAssert.assertAll();
     }
 

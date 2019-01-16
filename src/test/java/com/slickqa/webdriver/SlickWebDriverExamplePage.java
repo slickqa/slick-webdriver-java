@@ -94,10 +94,18 @@ public class SlickWebDriverExamplePage {
         List<PageElement> inputElementList = browserWrapper.getPageElements(inputElements);
         for (int x=0; x<inputElementList.size(); x++) {
             PageElement element = inputElementList.get(x);
-            System.out.println("Input element: " + x + " has the id attribute value: " + browserWrapper.getAttribute(element, "id"));
-            if (browserWrapper.isVisible(element) & browserWrapper.isEnabled(element)) {
-                System.out.println("Clicking on input element: " + x);
-                browserWrapper.click(element);
+            if (browserWrapper.isVisible(element)) {
+                System.out.println("Input element: " + x + " has the id attribute value: " + browserWrapper.getAttribute(element, "id"));
+                if (browserWrapper.isVisible(element) & browserWrapper.isEnabled(element)) {
+                    System.out.println("Clicking on input element: " + x);
+                    try {
+                        browserWrapper.click(element);
+                    } catch(Exception e) {
+
+                    }
+                }
+            } else {
+                System.out.println("Element: " + x + "is invisible");
             }
         }
         return inputElementList.size();
