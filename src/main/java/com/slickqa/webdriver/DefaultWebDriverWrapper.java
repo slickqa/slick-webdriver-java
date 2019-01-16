@@ -1050,27 +1050,32 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         Calendar end_time = Calendar.getInstance();
         Date start_time = end_time.getTime();
         end_time.add(Calendar.SECOND, p_timeout);
-        WebElement wdelement = getElement(element, p_timeout);
-        logger.debug("Found element '{}' after {} seconds, waiting for it to become invisible.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
-
+        WebElement wdelement = null;
+        try {
+            wdelement = getElement(element, 0);
+            logger.debug("Found element '{}' after {} seconds, waiting for it to become invisible.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        } catch (NoSuchElementException ex) {
+            logger.debug("Element '{}' not found", element.getName());
+        }
         while (Calendar.getInstance().before(end_time)) {
             try {
-                if (!wdelement.isDisplayed()) {
-                    break;
-                }
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    logger.error("Caught interrupted exception, while waiting for element to not be visible, but it shouldn't cause too much trouble: {}", e.getMessage());
-                }
+                    if (wdelement == null || !wdelement.isDisplayed()) {
+                        break;
+                    }
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        logger.error("Caught interrupted exception, while waiting for element to not be visible, but it shouldn't cause too much trouble: {}", e.getMessage());
+                    }
             } catch (StaleElementReferenceException e) {
+                wdelement = getElement(element, 0);
             }
         }
-        if (wdelement.isDisplayed()) {
+        if (wdelement != null && wdelement.isDisplayed()) {
             throw new ElementNotVisibleException("Waited " + p_timeout + " seconds for element " + element.getName() + " found by " +  element.getName() + "to become invisible, and it never happened.");
         }
 
-        logger.info("Element '{}' was not found invisible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
+        logger.info("Element '{}' was not found visible after {} seconds.", element.getName(), ((new Date()).getTime() - start_time.getTime()) / 1000);
     }
 
     @Override
