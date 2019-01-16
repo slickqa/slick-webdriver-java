@@ -18,12 +18,15 @@ public class SlickWebDriverExamplePage {
     private PageElement childElements1 = new PageElement("Child Elements", In.ParentElement(parentElement1), FindBy.tagName("a"));
     private PageElement parentElement2 = new PageElement("Parent Element", FindBy.attributeValue("data-qa", "parent-div"));
     private PageElement childElements2 = new PageElement("Child Elements", In.ParentElement(parentElement2), FindBy.id("features-link"));
+    private PageElement elements2ByXpath = new PageElement("Child Elements", FindBy.xpath("//*[@id=\"features-link\"]"));
+    private PageElement childElements2ByXpath = new PageElement("Child Elements", In.ParentElement(parentElement2), FindBy.xpath("*[@id=\"features-link\"]"));
     private PageElement inputElements = new PageElement("input elements", FindBy.tagName("input"));
     private PageElement childElementWithFindByParent = new PageElement("Child element with findby parent", In.ParentElement(FindBy.attributeValue("data-qa", "parent-div")), FindBy.id("features-link"));
     private PageElement childElements3 = new PageElement("Child Elements in Parent specified with FindBy", In.ParentElement(FindBy.className("sidenav-inner")), FindBy.tagName("a"));
     private PageElement childElementByIndex = new PageElement("Child Element by index", In.ParentElement(parentElement1), FindBy.tagName("a"), 6);
     private PageElement sliderRates = new PageElement("Rates slider", FindBy.id("product-slider"));
     private PageElement invalidElement = new PageElement("Invalid element", FindBy.id("product-slidera"));
+    private PageElement hiddenElement = new PageElement("Hidden element", FindBy.id("hiddenElement"));
 
     private WebDriverWrapper browserWrapper;
 
@@ -75,6 +78,14 @@ public class SlickWebDriverExamplePage {
         browserWrapper.click(childElements2);
     }
 
+    public void clickOnElementInParentElementChildByXpath() {
+        browserWrapper.click(childElements2ByXpath);
+    }
+
+    public void clickOnElementByXpath() {
+        browserWrapper.click(elements2ByXpath);
+    }
+
     public void clickOnElementInParentElementWithFindBy() {
         browserWrapper.click(childElementWithFindByParent);
     }
@@ -118,5 +129,17 @@ public class SlickWebDriverExamplePage {
 
     public void waitPassedInTimeForElementThatDoesNotExists(int timeout) {
         browserWrapper.waitFor(invalidElement, timeout);
+    }
+
+    public void waitPassedInTimeForElementToNotBeVisibleElementExists(int timeout) {
+        browserWrapper.waitForNotVisible(sliderRates, timeout);
+    }
+
+    public void waitPassedInTimeForElementToNotBeVisibleElementDoesNotExists(int timeout) {
+        browserWrapper.waitForNotVisible(invalidElement, timeout);
+    }
+
+    public void waitPassedInTimeForElementToNotBeVisibleElementIsHidden(int timeout) {
+        browserWrapper.waitForNotVisible(hiddenElement, timeout);
     }
 }

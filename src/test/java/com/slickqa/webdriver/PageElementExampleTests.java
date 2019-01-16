@@ -2,7 +2,9 @@ package com.slickqa.webdriver;
 
 import io.github.bonigarcia.wdm.DriverManagerType;
 import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -145,6 +149,19 @@ public class PageElementExampleTests {
         softAssert.assertEquals(browserWrapper.getPageUrl(), "http://www.slickqa.com/features.html", "We did not end up on the correct end page so we must have clicked on the wrong link");
         softAssert.assertAll();
     }
+
+    @Test
+    public void clickElementInParentElementChildByXpath() {
+        browserWrapper.goTo(getExamplePagePath());
+        SlickWebDriverExamplePage slickWebDriverExamplePage = new SlickWebDriverExamplePage(browserWrapper);
+        slickWebDriverExamplePage.clickOnElementByXpath();
+        Assert.assertTrue(browserWrapper.getPageUrl().endsWith("/resources/invalid"), "We did not end up on the correct end page so we must not have clicked on the link correctly");
+        browserWrapper.goBack();
+        slickWebDriverExamplePage.clickOnElementInParentElementChildByXpath();
+        softAssert.assertEquals(browserWrapper.getPageUrl(), "http://www.slickqa.com/features.html", "We did not end up on the correct end page so we must have clicked on the wrong link");
+        softAssert.assertAll();
+    }
+
 
     /**
      * Test that clicking on an element within a Parent where the Parent is defined with a FindBy works
@@ -846,6 +863,44 @@ public class PageElementExampleTests {
         browserWrapper.click(button);
         Assert.assertTrue(browserWrapper.exists(orFinderElement), "Element should be found by class three");
         Assert.assertEquals(browserWrapper.getAttribute(orFinderElement, "class"), "three");
+    }
+
+    @Test
+    public void WaitForNotVisible() {
+        SoftAssert softAssert = new SoftAssert();
+
+        browserWrapper.goTo(getExamplePagePath());
+        SlickWebDriverExamplePage examplePage = new SlickWebDriverExamplePage(browserWrapper);
+        examplePage.waitDefaultTimeForElementThatExists();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        boolean gotCorrectException = false;
+        try {
+            examplePage.waitPassedInTimeForElementToNotBeVisibleElementExists(2);
+        } catch (ElementNotVisibleException e) {
+            gotCorrectException = true;
+        }
+        stopWatch.stop();
+        int duration = (int) stopWatch.getTime(TimeUnit.SECONDS);
+        softAssert.assertTrue(Math.round(duration) <= 2, "The duration was not what we expected when element did not go away.  Duration was: " + duration);
+        softAssert.assertTrue(gotCorrectException, "We did not get the correct exception");
+
+        stopWatch.reset();
+        stopWatch.start();
+        examplePage.waitPassedInTimeForElementToNotBeVisibleElementDoesNotExists(2);
+        stopWatch.stop();
+        int duration2 = (int) stopWatch.getTime(TimeUnit.SECONDS);
+        softAssert.assertTrue(Math.round(duration2) <= 2, "The duration was not what we expected when element did not exist.  Duration was: " + duration);
+
+
+        stopWatch.reset();
+        stopWatch.start();
+        examplePage.waitPassedInTimeForElementToNotBeVisibleElementIsHidden(2);
+        stopWatch.stop();
+        int duration3 = (int) stopWatch.getTime(TimeUnit.SECONDS);
+        softAssert.assertTrue(Math.round(duration3) <= 2, "The duration was not what we expected when element did not exist.  Duration was: " + duration);
+
+        softAssert.assertAll();
     }
 
 
