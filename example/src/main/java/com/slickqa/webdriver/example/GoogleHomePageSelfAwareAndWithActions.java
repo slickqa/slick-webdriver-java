@@ -1,7 +1,5 @@
 package com.slickqa.webdriver.example;
 
-import com.slickqa.webdriver.*;
-
 /**
  * Google's Home Page
  * Created by jcorbett on 6/24/17.

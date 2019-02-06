@@ -1,10 +1,5 @@
 package com.slickqa.webdriver;
 
-import com.slickqa.webdriver.FindBy;
-import com.slickqa.webdriver.In;
-import com.slickqa.webdriver.PageElement;
-import com.slickqa.webdriver.WebDriverWrapper;
-
 import java.util.List;
 
 /**

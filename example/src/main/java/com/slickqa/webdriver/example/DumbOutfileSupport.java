@@ -2,8 +2,6 @@ package com.slickqa.webdriver.example;
 
 import com.slickqa.webdriver.OutputFileSupport;
 
-import java.io.*;
-
 /**
  * This output file support just throws everything in the current working directory
  */
