@@ -1,18 +1,10 @@
 package com.slickqa.webdriver;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.nio.charset.Charset;
-import java.util.*;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -24,7 +16,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.apache.logging.log4j.LogManager;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * Implementation of the WebDriverWrapper interface

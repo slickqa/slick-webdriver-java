@@ -1,7 +1,5 @@
 package com.slickqa.webdriver.example;
 
-import com.slickqa.webdriver.*;
-
 /**
  * Search results
  */

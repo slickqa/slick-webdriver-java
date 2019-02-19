@@ -1,18 +1,12 @@
 package com.slickqa.webdriver;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.openqa.selenium.*;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * PageElement is essentially an equivalent to the selenium WebElement

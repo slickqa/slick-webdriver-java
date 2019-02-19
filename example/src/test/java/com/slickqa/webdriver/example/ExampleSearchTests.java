@@ -5,10 +5,7 @@ import com.slickqa.webdriver.WebDriverWrapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.io.File;
 
 import static org.junit.Assert.assertTrue;
 
