@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                sh 'mvn test'
+                sh 'mvn -DheadlessBrowser=true test'
             }
             post {
                 always {
