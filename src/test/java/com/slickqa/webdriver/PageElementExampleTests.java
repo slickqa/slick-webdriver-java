@@ -1,25 +1,24 @@
 package com.slickqa.webdriver;
 
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.DriverManagerType;
-import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 

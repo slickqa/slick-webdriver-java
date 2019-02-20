@@ -4,11 +4,11 @@
  */
 package com.slickqa.webdriver;
 
-import java.util.List;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
+
+import java.util.List;
 
 /**
  *

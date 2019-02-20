@@ -1,7 +1,5 @@
 package com.slickqa.webdriver;
 
-import com.slickqa.webdriver.*;
-
 /**
  * Created by slambson on 8/30/17.
  */
