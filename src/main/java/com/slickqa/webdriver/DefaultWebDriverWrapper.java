@@ -567,13 +567,15 @@ public class DefaultWebDriverWrapper implements WebDriverWrapper {
         Date start_time = new Date();
         Calendar end_time = Calendar.getInstance();
         end_time.add(Calendar.SECOND, p_timeout);
-        while (Calendar.getInstance().before(end_time) && !page.isCurrentStep()) {
+        boolean found = page.isCurrentStep();
+        while (Calendar.getInstance().before(end_time) && !found) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException ex) {
             }
+            found = page.isCurrentStep();
         }
-        if (!page.isCurrentStep()) {
+        if (!found) {
             logger.error("Waited for page '{}' for {} seconds, but still is not here.", page.getClass().getName(), p_timeout);
             logger.error("Current page URL: {}", driver.getCurrentUrl());
             logger.error("Current page title: {}", driver.getTitle());
